@@ -1,0 +1,37 @@
+## Interface: 11305
+## Title: SilentRotate |cff00aa000.3.0|r
+## Notes: Track spell rotation in raid
+## Author: Vinny
+## Version: 0.3.0
+## SavedVariables: SilentRotateDb
+## OptionalDeps: Ace3
+
+#@no-lib-strip@
+libs\LibStub\LibStub.lua
+libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
+libs\AceDB-3.0\AceDB-3.0.xml
+libs\AceDBOptions-3.0\AceDBOptions-3.0.xml
+libs\AceGUI-3.0\AceGUI-3.0.xml
+libs\AceConfig-3.0\AceConfig-3.0.xml
+libs\AceComm-3.0\AceComm-3.0.xml
+libs\AceSerializer-3.0\AceSerializer-3.0.xml
+#@end-no-lib-strip@
+
+locales\enUS.lua
+locales\frFR.lua
+locales\zhCN.lua
+locales\zhTW.lua
+locales\ruRU.lua
+
+src\silentRotate.lua
+src\events.lua
+src\rotation.lua
+src\constants.lua
+src\frames.lua
+src\gui.lua
+src\dragdrop.lua
+src\comms.lua
+src\defaults.lua
+src\settings.lua
+src\utils.lua
+src\modes.lua
