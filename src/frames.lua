@@ -1,4 +1,5 @@
 local SilentRotate = select(2, ...)
+local L = LibStub("AceLocale-3.0"):GetLocale("SilentRotate")
 
 -- Create main window
 function SilentRotate:createMainFrame()
@@ -137,15 +138,15 @@ function SilentRotate:createModeFrame()
     local wipRazuvious = false
     if wipRazuvious then
         local commonModeWidth = SilentRotate.constants.mainFrameWidth/4
-        SilentRotate:createSingleModeFrame("hunterz", SilentRotate.L["FILTER_SHOW_HUNTERS"], 0*commonModeWidth, 1*commonModeWidth, SilentRotate.currentMode == "hunterz" or not SilentRotate.currentMode)
-        SilentRotate:createSingleModeFrame("priestz", SilentRotate.L["FILTER_SHOW_PRIESTS"], 1*commonModeWidth, 2*commonModeWidth, SilentRotate.currentMode == "priestz")
-        SilentRotate:createSingleModeFrame("healerz", SilentRotate.L["FILTER_SHOW_HEALERS"], 2*commonModeWidth, 3*commonModeWidth, SilentRotate.currentMode == "healerz")
-        SilentRotate:createSingleModeFrame("roguez",  SilentRotate.L["FILTER_SHOW_ROGUES"] , 3*commonModeWidth, 4*commonModeWidth, SilentRotate.currentMode == "roguez" )
+        SilentRotate:createSingleModeFrame("hunterz", L["FILTER_SHOW_HUNTERS"], 0*commonModeWidth, 1*commonModeWidth, SilentRotate.currentMode == "hunterz" or not SilentRotate.currentMode)
+        SilentRotate:createSingleModeFrame("priestz", L["FILTER_SHOW_PRIESTS"], 1*commonModeWidth, 2*commonModeWidth, SilentRotate.currentMode == "priestz")
+        SilentRotate:createSingleModeFrame("healerz", L["FILTER_SHOW_HEALERS"], 2*commonModeWidth, 3*commonModeWidth, SilentRotate.currentMode == "healerz")
+        SilentRotate:createSingleModeFrame("roguez",  L["FILTER_SHOW_ROGUES"] , 3*commonModeWidth, 4*commonModeWidth, SilentRotate.currentMode == "roguez" )
     else
         local commonModeWidth = SilentRotate.constants.mainFrameWidth/3
-        SilentRotate:createSingleModeFrame("hunterz", SilentRotate.L["FILTER_SHOW_HUNTERS"], 0*commonModeWidth, 1*commonModeWidth, SilentRotate.currentMode == "hunterz" or not SilentRotate.currentMode)
-        SilentRotate:createSingleModeFrame("healerz", SilentRotate.L["FILTER_SHOW_HEALERS"], 1*commonModeWidth, 2*commonModeWidth, SilentRotate.currentMode == "healerz")
-        SilentRotate:createSingleModeFrame("roguez",  SilentRotate.L["FILTER_SHOW_ROGUES"] , 2*commonModeWidth, 3*commonModeWidth, SilentRotate.currentMode == "roguez" )
+        SilentRotate:createSingleModeFrame("hunterz", L["FILTER_SHOW_HUNTERS"], 0*commonModeWidth, 1*commonModeWidth, SilentRotate.currentMode == "hunterz" or not SilentRotate.currentMode)
+        SilentRotate:createSingleModeFrame("healerz", L["FILTER_SHOW_HEALERS"], 1*commonModeWidth, 2*commonModeWidth, SilentRotate.currentMode == "healerz")
+        SilentRotate:createSingleModeFrame("roguez",  L["FILTER_SHOW_ROGUES"] , 2*commonModeWidth, 3*commonModeWidth, SilentRotate.currentMode == "roguez" )
     end
 end
 

@@ -1,6 +1,5 @@
 local SilentRotate = select(2, ...)
-
-local L = SilentRotate.L
+local L = LibStub("AceLocale-3.0"):GetLocale("SilentRotate")
 
 -- Initialize GUI frames. Shouldn't be called more than once
 function SilentRotate:initGui()

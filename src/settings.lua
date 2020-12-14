@@ -3,7 +3,7 @@ local Addon = select(1, ...)
 local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 
-local L = SilentRotate.L
+local L = LibStub("AceLocale-3.0"):GetLocale("SilentRotate")
 
 function SilentRotate:CreateConfig()
 

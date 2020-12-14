@@ -1,0 +1,95 @@
+local L = LibStub("AceLocale-3.0"):NewLocale("SilentRotate", "zhTW", false, false)
+if not L then return end
+L["LOADED_MESSAGE"] = "SilentRotate 已加載, 輸入 /silentrotate 進入設定"
+L["TRANQ_WINDOW_HIDDEN"] = "SilentRotate 窗口隱藏. 輸入 /silentrotate toggle 顯示窗口"
+
+    -- Settings
+L["SETTING_GENERAL"] = "General"
+L["SETTING_GENERAL_REPORT"] = "請報告問題: "
+L["SETTING_GENERAL_DESC"] = "New : SilentRotate will now play a sound when you need to shoot your tranqshot ! There are also few more display options to make the addon less intrusive."
+
+L["LOCK_WINDOW"] = "鎖定窗口"
+L["LOCK_WINDOW_DESC"] = "鎖定窗口"
+L["HIDE_WINDOW_NOT_IN_RAID"] = "不在團隊時隱藏窗口"
+L["HIDE_WINDOW_NOT_IN_RAID_DESC"] = "不在團隊時隱藏窗口"
+L["DO_NOT_SHOW_WHEN_JOINING_RAID"] = "加入團隊時隱藏窗口"
+L["DO_NOT_SHOW_WHEN_JOINING_RAID_DESC"] = "如果您不想每次加入團隊時都顯示窗口，請選中此選項"
+L["SHOW_WHEN_TARGETING_BOSS"] = "當妳的目標是壹個可寧神的Boss時，顯示窗口"
+L["SHOW_WHEN_TARGETING_BOSS_DESC"] = "當妳的目標是壹個可寧神的Boss時，顯示窗口"
+L["WINDOW_LOCKED"] = "SilentRotate: 窗口已隱藏"
+L["WINDOW_UNLOCKED"] = "SilentRotate: 窗口已鎖定"
+
+L["TEST_MODE_HEADER"] = "測試模式"
+L["ENABLE_ARCANE_SHOT_TESTING"] = "切換測試模式"
+L["ENABLE_ARCANE_SHOT_TESTING_DESC"] =
+        "當測試模式啟用時, 秘法射擊將註冊為寧神射擊\n" ..
+        "測試模式將持續10分鐘, 除非妳提前關閉它\n" ..
+        "For Loatheb, testing consists in using the Recently Bandaged as the healer debuff"
+L["ARCANE_SHOT_TESTING_ENABLED"] = "奧術射擊測試模式已啟用, 持續10分鐘"
+L["ARCANE_SHOT_TESTING_DISABLED"] = "奧術射擊測試模式已禁用"
+
+    --- Announces
+L["SETTING_ANNOUNCES"] = "通告"
+L["ENABLE_ANNOUNCES"] = "啟用通告"
+L["ENABLE_ANNOUNCES_DESC"] = "啟用 / 禁用通告"
+
+    ---- Channels
+L["ANNOUNCES_CHANNEL_HEADER"] = "通告頻道"
+L["MESSAGE_CHANNEL_TYPE"] = "發送到"
+L["MESSAGE_CHANNEL_TYPE_DESC"] = "你想發送到哪個頻道"
+L["MESSAGE_CHANNEL_NAME"] = "頻道名或玩家名"
+L["MESSAGE_CHANNEL_NAME_DESC"] = "設置目標頻道的名稱"
+
+    ----- Channels types
+L["CHANNEL_CHANNEL"] = "頻道"
+L["CHANNEL_RAID_WARNING"] = "團隊警告"
+L["CHANNEL_SAY"] = "說"
+L["CHANNEL_YELL"] = "大喊"
+L["CHANNEL_PARTY"] = "小隊"
+L["CHANNEL_RAID"] = "團隊"
+L["CHANNEL_GUILD"] = "公會"
+
+    ---- Messages
+L["ANNOUNCES_MESSAGE_HEADER"] = "通告資訊"
+L["SUCCESS_MESSAGE_LABEL"] = "施放成功通告資訊"
+L["FAIL_MESSAGE_LABEL"] = "施放失敗通告資訊"
+L["FAIL_WHISPER_LABEL"] = "施放失敗私聊資訊"
+L["LOATHEB_MESSAGE_LABEL"] = "Loatheb debuff applied"
+
+L["DEFAULT_SUCCESS_ANNOUNCE_MESSAGE"] = "已對 %s 施放了寧神射擊!"
+L["DEFAULT_FAIL_ANNOUNCE_MESSAGE"] = "!!! 對 %s 寧神失敗!!!"
+L["DEFAULT_FAIL_WHISPER_MESSAGE"] = "寧神失敗 !! 趕緊補寧神!!"
+L["DEFAULT_LOATHEB_ANNOUNCE_MESSAGE"] = "Corrupted Mind on %s"
+
+L["TRANQ_NOW_LOCAL_ALERT_MESSAGE"] = "立即使用寧神 !!"
+
+L["TRANQ_SPELL_TEXT"] = "寧神射擊"
+L["MC_SPELL_TEXT"] = "精神控制"
+
+L["BROADCAST_MESSAGE_HEADER"] = "循環順序廣播頻道選擇"
+L["USE_MULTILINE_ROTATION_REPORT"] = "連續多行發送寧神通告"
+L["USE_MULTILINE_ROTATION_REPORT_DESC"] = "如果您想要更易於理解的順序顯示，請選中此選項"
+
+    --- Modes
+L["FILTER_SHOW_HUNTERS"] = "Tranq"
+L["FILTER_SHOW_PRIESTS"] = "Raz"
+L["FILTER_SHOW_HEALERS"] = "Loatheb"
+L["FILTER_SHOW_ROGUES"] = "Distract"
+
+    --- Sounds
+L["SETTING_SOUNDS"] = "音效"
+L["ENABLE_NEXT_TO_TRANQ_SOUND"] = "當下壹個寧神射擊是您時，播放提示音"
+L["ENABLE_TRANQ_NOW_SOUND"] = "當您需要立即寧神射擊時，播放提示音"
+L["TRANQ_NOW_SOUND_CHOICE"] = "選擇要用於“寧神射擊”提示的聲音"
+L["DBM_SOUND_WARNING"] = "DBM在瘋狂時播放的'flag taken'提示音，可能導致您無法聽到SilentRotate的提示音。建議選擇壹個響亮的提示音，或者在DBM中禁用瘋狂的警告。"
+
+    --- Profiles
+L["SETTING_PROFILES"] = "設定檔"
+
+    --- Raid broadcast messages
+L["BROADCAST_HEADER_TEXT"] = "獵人寧神順序"
+L["BROADCAST_HEADER_TEXT_RAZUVIOUS"] = "Priest MC setup"
+L["BROADCAST_HEADER_TEXT_LOATHEB"] = "Loatheb Healer setup"
+L["BROADCAST_HEADER_TEXT_DISTRACT"] = "Rogue distract setup"
+L["BROADCAST_ROTATION_PREFIX"] = "循環"
+L["BROADCAST_BACKUP_PREFIX"] = "替補"
