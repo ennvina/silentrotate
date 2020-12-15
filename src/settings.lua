@@ -29,13 +29,13 @@ function SilentRotate:CreateConfig()
                 order = 1,
                 args = {
 					descriptionText = {
-						name = "SilentRotate v" .. SilentRotate.version .. " by Vinny-Illidan, based on the TranqRotate code by Slivo-Sulfuron\n",
+						name = "SilentRotate " .. SilentRotate.version .. " by Vinny-Illidan, based on the TranqRotate code by Slivo-Sulfuron\n",
 						type = "description",
 						width = "full",
 						order = 1,
 					},
 					repoLink = {
-						name = L['SETTING_GENERAL_REPORT'] .. " https://github.com/Slivo-fr/TranqRotate\n",
+						name = L['SETTING_GENERAL_REPORT'] .. " https://github.com/ennvina/silentrotate\n",
 						type = "description",
 						width = "full",
 						order = 2,

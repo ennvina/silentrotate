@@ -126,7 +126,7 @@ function setHunterFrameColor(hunter)
 end
 
 function SilentRotate:startHunterCooldown(hunter, endTimeOfCooldown)
-    if not endTimeOfCooldown then
+    if not endTimeOfCooldown or endTimeOfCooldown == 0 then
         local duration = 20
         if SilentRotate:IsLoathebMode() then
             duration = 60

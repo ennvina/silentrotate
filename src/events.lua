@@ -91,25 +91,57 @@ function SilentRotate:PLAYER_TARGET_CHANGED()
 end
 
 -- One of the auras of the unitID has changed (gained, faded)
-function SilentRotate:UNIT_AURA(unitID)
-    -- UNIT_AURA is used exclusively for Loatheb
+function SilentRotate:UNIT_AURA(unitID, isEcho)
+
+    -- UNIT_AURA is used exclusively to Loatheb
     if not SilentRotate:IsLoathebMode() then return end
 
+    -- Whether the unit really got the debuff or not, it's pointless if the unit is not tracked (e.g. not a healer)
+    local hunter = SilentRotate:getHunter(nil, UnitGUID(unitID))
+    if not hunter then return end
+    local previousExpirationTime = hunter.frame.cooldownFrame.statusBar.expirationTime
+
+    if not isEcho then
+        -- Try again in 1 second to secure lags between UNIT_AURA and the actual aura applied
+        -- But set the isEcho flag so that the repetition will not be repeated over and over
+        C_Timer.After(1, function()
+            SilentRotate:UNIT_AURA(unitID, true)
+        end)
+    end
+
+    -- Loop through the unit's debuffs to check if s/he is affected by Loatheb's Corrupted Mind
     for i=1,16 do
         local name, _,_,_,_, endTime ,_,_,_, spellId = UnitDebuff(unitID, i)
-        if not name then break end
-        if (SilentRotate:isLoathebDebuff(spellId) or (SilentRotate.testMode and spellId == 11196)) then -- 11196 is the spell ID of "Recently Bandaged"
-            local hunter = SilentRotate:getHunter(nil, UnitGUID(unitID))
-            if (hunter.frame.cooldownFrame.statusBar.expirationTime == endTime) then
-                -- If the endTime matches exactly the expirationTime of the status bar, it means we are duplicating an already registered rotation
-                break
-            end
-            SilentRotate:rotate(hunter, false, nil, endTime)
-            if (UnitIsUnit(unitID, "player")) then
-                SilentRotate:sendAnnounceMessage(SilentRotate.db.profile.announceLoathebMessage, UnitName(unitID))
-            end
+        if not name then
+            -- name is not defined, meaning there is no other debuff left
             break
         end
+        -- At this point:
+        -- name and spellId correspond to the debuff at index i
+        -- endTime knows exactly when the debuff ends if unitID is the player, i.e. if UnitIsUnit(unitID, "player")
+        -- endTime is set to 0 is unitID is not the player ; this is a known limitation in WoW Classic that makes buff/debuff duration much harder to track
+        if (SilentRotate:isLoathebDebuff(spellId) or (SilentRotate.testMode and spellId == 11196)) then -- 11196 is the spell ID of "Recently Bandaged"
+            if (endTime and endTime > 0 and previousExpirationTime == endTime) then
+                -- If the endTime matches exactly the previous expirationTime of the status bar, it means we are duplicating an already registered rotation
+                return
+            end
+            if (previousExpirationTime and GetTime() < previousExpirationTime) then
+                -- If the current time is before the previously seen expirationTime for this player, it means the debuff was already registered
+                return
+            end
+            -- Send the rotate order, this is the most important part of the addon
+            SilentRotate:rotate(hunter, false, nil, endTime)
+            if (UnitIsUnit(unitID, "player")) then
+                -- Announce to the channel selected in the addon options, but announce only ourselves
+                SilentRotate:sendAnnounceMessage(SilentRotate.db.profile.announceLoathebMessage, UnitName(unitID))
+            end
+            return
+        end
+    end
+
+    -- The unit is not affected by Corrupted Mind: reset its expiration time
+    if previousExpirationTime and previousExpirationTime > 0 then
+        hunter.frame.cooldownFrame.statusBar.expirationTime = 0
     end
 end
 

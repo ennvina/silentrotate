@@ -1,5 +1,10 @@
 ## SilentRotate Changelog
 
+#### v0.3.2-alpha
+
+- Fixed Loatheb tracking of other units due to WoW Classic limitation
+- Reset Loatheb tracking in case of events such as player death
+
 #### v0.3.1-alpha
 
 - Localization should now be compatible with CurseForge

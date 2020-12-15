@@ -248,9 +248,21 @@ end
 -- Return our hunter object from name or GUID
 function SilentRotate:getHunter(name, GUID)
 
-    for key,hunter in pairs(SilentRotate.hunterTable) do
-        if ((GUID ~= nil and hunter.GUID == GUID) or (name ~= nil and hunter.name == name)) then
-            return hunter
+    -- Known limitation: if both name and GUID are set but do not correspond to the same unit, results are undefined
+
+    if (GUID ~= nil) then
+        for key,hunter in pairs(SilentRotate.hunterTable) do
+            if (hunter.GUID == GUID) then
+                return hunter
+            end
+        end
+    end
+
+    if (name ~= nil) then
+        for key,hunter in pairs(SilentRotate.hunterTable) do
+            if (hunter.name == name) then
+                return hunter
+            end
         end
     end
 
