@@ -1,4 +1,4 @@
-local L = SilentRotate.L
+local L = LibStub("AceLocale-3.0"):GetLocale("SilentRotate")
 
 function SilentRotate:LoadDefaults()
 	self.defaults = {

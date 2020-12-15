@@ -1,6 +1,6 @@
 SilentRotate = select(2, ...)
 
-local L = SilentRotate.L
+local L = LibStub("AceLocale-3.0"):GetLocale("SilentRotate")
 
 local parent = ...
 SilentRotate.version = GetAddOnMetadata(parent, "Version")

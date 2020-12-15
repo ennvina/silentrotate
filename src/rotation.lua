@@ -1,6 +1,5 @@
 local SilentRotate = select(2, ...)
-
-local L = SilentRotate.L
+local L = LibStub("AceLocale-3.0"):GetLocale("SilentRotate")
 
 -- Adds hunter to global table and one of the two rotation tables
 function SilentRotate:registerHunter(hunterName)
