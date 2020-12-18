@@ -1,5 +1,9 @@
 ## SilentRotate Changelog
 
+#### v0.3.3-beta
+
+- After more tests, the addon is qualified as Beta
+
 #### v0.3.2-alpha
 
 - Fixed Loatheb tracking of other units due to WoW Classic limitation
