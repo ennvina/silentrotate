@@ -1,0 +1,60 @@
+<h1>SilentRotate</h1>
+<p>&nbsp;</p>
+<p>This addon helps setting up rotations for specific classes or specific roles in raid.</p>
+<p>&nbsp;</p>
+<p><img src="https://cdn.discordapp.com/attachments/630388534087385099/785647216873701417/unknown.png" alt="Loatheb Mode" width="181" height="336" /></p>
+<p>While it is more efficient if all involved players can view the list by themselves, ultimately not all raid members need to install the addon, considering a raid leader/assistant is willing to tell the rotation e.g. with voice comm.</p>
+<p>&nbsp;</p>
+<p>This addon is heavily based on the work of Slivo for the <a href="https://www.curseforge.com/wow/addons/tranqrotate">TranqRotate addon</a>, which you might want to install if you are interested only in Hunter&rsquo;s Tranquilizing Shot rotation.</p>
+<p>&nbsp;</p>
+<h2>Preparation</h2>
+<ul>
+<li>Before the fight begins, choose the correct mode you want to setup (Tranq, Loatheb, Distract). The mode is selected automatically depending on your class upon login, e.g. healers will have the Loatheb mode selected by default.</li>
+<li>The SilentRotate window displays the list of raid members who may be part of the rotation. Only relevant members are displayed for a given rotation, e.g. only hunters are displayed in Tranq mode.</li>
+<li>Players in the list can be drag'n'dropped to change their order. Members pushed to the very bottom are <i>backup</i> players who do not enter the normal rotation.</li>
+<li>The list may be setup by another class. For example, a warrior raid leader may select the "Loatheb" mode and change the order of players, even though the warrior will not be in the list.</li>
+<li>The list is shared across all raid members who have installed the addon. Every player can choose its own mode, in which case the list is shared between players who have selected the same mode.</li>
+</ul>
+<p>&nbsp;</p>
+<h2>Combat</h2>
+<ul>
+<li>The next player in the rotation is highlighted in the list.</li>
+<li>Once a player has cast a spell that triggers the rotation, a cooldown bar is shown in this player&rsquo;s bar and the next player in the rotation is highlighted.</li>
+<li>Disconnected players and dead players do not take part in the rotation anymore and appear as gray or red, respectively.</li>
+</ul>
+<p>&nbsp;</p>
+<h2>Modes</h2>
+<p>There are 3 modes available: Tranq, Loatheb and Distract. The mode is selected automatically upon login and can be changed by clicking on top of the SilentRotate window.</p>
+<p>&nbsp;</p>
+<h3>Tranq</h3>
+<ul>
+<li>Displays Hunters only</li>
+<li>Tracks when a tranq-able boss goes into Frenzy and shows an alert to the hunter who should cast Tranquilizing Shot</li>
+<li>The rotation switches to the next hunter when a hunter has cast or missed a Tranq Shot</li>
+<li>For more information, please check the <a href="https://www.curseforge.com/wow/addons/tranqrotate">TranqRotate details</a></li>
+</ul>
+<h3>Loatheb</h3>
+<ul>
+<li>Displays healer classes only (Druids, Paladins, Priests, Shamans)</li>
+<li>Tracks when Loatheb&rsquo;s Corrupted mind prevents a healer from casting a healing spell for 60 seconds</li>
+<li>This feature is still in development, so feel free to report any bugs</li>
+</ul>
+<h3>Distract</h3>
+<ul>
+<li>Displays Rogues only</li>
+<li>Tracks when a distract spell has been cast</li>
+</ul>
+<p>&nbsp;</p>
+<h2>Known Limitations</h2>
+<ul>
+<li>Please keep in mind <b>the addon is very new and needs extensive testing</b>, thank you for your understanding :)</li>
+<li>The mode is not saved in user settings, resulting in selecting the default mode when logging in or when reloading the UI</li>
+<li>Switching back and forth between modes may not restore the correct order of raid members</li>
+<li>Loatheb mode does not filter out non-healer specs, such as Feral Druids</li>
+<li>Any raid member can change the order of players in the list</li>
+<li>Raid members who have not installed the addon must be in the range of 45-ish yards to detect their activity</li>
+<li>Localization is incomplete (see below)</li>
+</ul>
+<p>&nbsp;</p>
+<h2>Localization</h2>
+<p>The addon fully support English (enUS) and French (frFR). The other languages are mostly supported though TranqRotate translations, which cover about 80% of SilentRotate texts.</p>

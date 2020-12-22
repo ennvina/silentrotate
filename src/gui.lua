@@ -112,10 +112,10 @@ end
 -- Set the hunter frame color regarding it's status
 function setHunterFrameColor(hunter)
 
-    local color = SilentRotate.colors.green
+    local color = SilentRotate.colors.lightGray
 
     if (not SilentRotate:isHunterOnline(hunter)) then
-        color = SilentRotate.colors.gray
+        color = SilentRotate.colors.darkGray
     elseif (not SilentRotate:isHunterAlive(hunter)) then
         color = SilentRotate.colors.red
     elseif (hunter.nextTranq) then
