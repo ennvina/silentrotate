@@ -1,5 +1,11 @@
 ## SilentRotate Changelog
 
+#### v0.3.4-beta
+
+- Text color is now based on the class color, instead of white
+- The default background color is now light-gray, instead of green
+- The background was green because the addon initially focused on hunters
+
 #### v0.3.3-beta
 
 - After more tests, the addon is qualified as Beta
