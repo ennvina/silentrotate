@@ -53,6 +53,11 @@ function SilentRotate:CreateConfig()
         refreshFrameColors()
     end
 
+    local function setNameTag(...)
+        set(...)
+        refreshNames()
+    end
+
 	local options = {
 		name = "SilentRotate",
 		type = "group",
@@ -263,7 +268,7 @@ function SilentRotate:CreateConfig()
                         type = "toggle",
                         order = 2,
                         width = "full",
-                        hidden = refreshNames,
+                        set = setNameTag,
                     },
                     useNameOutline = {
                         name = L["USE_NAME_OUTLINE"],
@@ -271,7 +276,7 @@ function SilentRotate:CreateConfig()
                         type = "toggle",
                         order = 3,
                         width = "full",
-                        hidden = refreshNames,
+                        set = setNameTag,
                     },
                     appendGroup = {
                         name = L["APPEND_GROUP"],
@@ -279,7 +284,7 @@ function SilentRotate:CreateConfig()
                         type = "toggle",
                         order = 4,
                         width = "full",
-                        hidden = refreshNames,
+                        set = setNameTag,
                     },
                     groupSuffix = {
                         name = L["GROUP_SUFFIX_LABEL"],
@@ -287,6 +292,8 @@ function SilentRotate:CreateConfig()
                         type = "input",
                         order = 5,
                         width = "half",
+                        set = setNameTag,
+                        hidden = function() return not SilentRotate.db.profile.appendGroup end,
                     },
                     groupSuffixColor = {
                         name = L["GROUP_SUFFIX_COLOR"],
@@ -295,6 +302,7 @@ function SilentRotate:CreateConfig()
                         order = 6,
                         get = getColor,
                         set = setFgColor,
+                        hidden = function() return not SilentRotate.db.profile.appendGroup end,
                     },
                     backgroundHeader = {
                         name = L["BACKGROUND_HEADER"],
