@@ -1,3 +1,4 @@
+local Addon = select(1, ...)
 local SilentRotate = select(2, ...)
 local L = LibStub("AceLocale-3.0"):GetLocale("SilentRotate")
 
@@ -51,6 +52,8 @@ function SilentRotate:activateMode(modeName)
         SilentRotate.db.profile.currentMode = modeName
         newFrame.texture:SetColorTexture(SilentRotate.colors.blue:GetRGB())
         SilentRotate:updateRaidStatus()
+        local AceConfigDialog = LibStub("AceConfigDialog-3.0")
+        AceConfigDialog:ConfigTableChanged("", Addon)
     end
 end
 
