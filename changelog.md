@@ -1,5 +1,24 @@
 ## SilentRotate Changelog
 
+#### v0.4.0-beta
+
+- Name tags are now customizable
+- Option to enable class colors
+- Option to append group index, plus options to choose its text and color
+- Options to select the background colors (neutral, active, dead, offline)
+
+#### v0.3.5-beta
+
+- Activating Test mode will now show your own unit even if not in a raid group
+- Activating Test mode will now show party units even if not in a raid group
+- Either way Test mode will only show units which class fits the selected mode
+
+#### v0.3.4-beta
+
+- Text color is now based on the class color, instead of white
+- The default background color is now light-gray, instead of green
+- The background was green because the addon initially focused on hunters
+
 #### v0.3.3-beta
 
 - After more tests, the addon is qualified as Beta

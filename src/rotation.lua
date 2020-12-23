@@ -276,7 +276,7 @@ function SilentRotate:purgeHunterList()
     local huntersToRemove = {}
 
     for key,hunter in pairs(SilentRotate.hunterTable) do
-        if (not UnitInParty(hunter.name) or not SilentRotate:IsClassWanted(select(2,UnitClass(hunter.name)))) then
+        if ((not UnitInParty(hunter.name) and not UnitIsUnit(hunter.name, "player")) or not SilentRotate:IsClassWanted(select(2,UnitClass(hunter.name)))) then
             table.insert(huntersToRemove, hunter)
         end
     end
@@ -291,6 +291,35 @@ function SilentRotate:purgeHunterList()
 
 end
 
+-- Update the status of one hunter
+function SilentRotate:updateUnitStatus(name, classFilename, subgroup)
+
+    local GUID = UnitGUID(name)
+    local hunter
+
+    if SilentRotate:IsClassWanted(classFilename) then
+
+        local registered = SilentRotate:isHunterRegistered(GUID)
+
+        if (not registered) then
+            if (not InCombatLockdown()) then
+                hunter = SilentRotate:registerHunter(name)
+                SilentRotate:registerUnitEvents(hunter)
+                registered = true
+            end
+        else
+            hunter = SilentRotate:getHunter(nil, GUID)
+        end
+
+        if (registered) then
+            hunter.subgroup = subgroup
+            SilentRotate:updateHunterStatus(hunter)
+        end
+
+    end
+
+end
+
 -- Iterate over all raid members to find hunters and update their status
 function SilentRotate:updateRaidStatus()
 
@@ -298,34 +327,25 @@ function SilentRotate:updateRaidStatus()
 
         local playerCount = GetNumGroupMembers()
 
-        for index = 1, playerCount, 1 do
+        if (playerCount > 0) then
+            for index = 1, playerCount, 1 do
+                local name, rank, subgroup, level, class, classFilename, zone, online, isDead, role, isML = GetRaidRosterInfo(index)
 
-            local name, rank, subgroup, level, class, fileName, zone, online, isDead, role, isML = GetRaidRosterInfo(index)
-
-            -- Players name might be nil at loading
-            if (name ~= nil) then
-                local GUID = UnitGUID(name)
-                local hunter
-
-                if SilentRotate:IsClassWanted(select(2,UnitClass(name))) then
-
-                    local registered = SilentRotate:isHunterRegistered(GUID)
-
-                    if (not registered) then
-                        if (not InCombatLockdown()) then
-                            hunter = SilentRotate:registerHunter(name)
-                            SilentRotate:registerUnitEvents(hunter)
-                            registered = true
-                        end
-                    else
-                        hunter = SilentRotate:getHunter(nil, GUID)
-                    end
-
-                    if (registered) then
-                        SilentRotate:updateHunterStatus(hunter)
-                    end
+                -- Players name might be nil at loading
+                if (name ~= nil) then
+                    SilentRotate:updateUnitStatus(name, classFilename, subgroup)
                 end
-
+            end
+        else
+            local name = UnitName("player")
+            local classFilename = select(2,UnitClass("player"))
+            SilentRotate:updateUnitStatus(name, classFilename, 1)
+            for i = 1, 4 do
+                local name = UnitName("party"..i)
+                if (name) then
+                    classFilename = select(2,UnitClass("party"..i))
+                    SilentRotate:updateUnitStatus(name, classFilename, 1)
+                end
             end
         end
 

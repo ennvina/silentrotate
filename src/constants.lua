@@ -6,9 +6,16 @@ SilentRotate.colors = {
     ['darkBlue'] = CreateColor(0.1, 0.1, 0.4),
     ['blue'] = CreateColor(0.3, 0.3, 0.7),
     ['red'] = CreateColor(0.7, 0.3, 0.3),
-    ['gray'] = CreateColor(0.3, 0.3, 0.3),
+    ['darkGray'] = CreateColor(0.3, 0.3, 0.3),
+    ['lightGray'] = CreateColor(0.8, 0.8, 0.8),
     ['purple'] = CreateColor(0.71,0.45,0.75),
     ['white'] = CreateColor(1,1,1),
+    -- Below are user-defined colors
+    ['groupSuffix'] = nil,
+    ['neutral'] = nil,
+    ['active'] = nil,
+    ['dead'] = nil,
+    ['offline'] = nil,
 }
 
 SilentRotate.constants = {

@@ -234,9 +234,8 @@ function SilentRotate:createHunterFrame(hunter, parentFrame)
 
     -- Set Text
     hunter.frame.text = hunter.frame:CreateFontString(nil, "ARTWORK")
-    hunter.frame.text:SetFont(SilentRotate:getPlayerNameFont(), 12)
     hunter.frame.text:SetPoint("LEFT",5,0)
-    hunter.frame.text:SetText(hunter.name)
+    SilentRotate:setHunterName(hunter)
 
     SilentRotate:createCooldownFrame(hunter)
     SilentRotate:configureHunterFrameDrag(hunter)

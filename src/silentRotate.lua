@@ -238,4 +238,6 @@ function SilentRotate:toggleArcaneShotTesting(disable)
         SilentRotate.testMode = false
         SilentRotate:printPrefixedMessage(L['ARCANE_SHOT_TESTING_DISABLED'])
     end
+
+    SilentRotate:updateRaidStatus()
 end
