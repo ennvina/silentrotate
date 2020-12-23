@@ -234,22 +234,8 @@ function SilentRotate:createHunterFrame(hunter, parentFrame)
 
     -- Set Text
     hunter.frame.text = hunter.frame:CreateFontString(nil, "ARTWORK")
-    hunter.frame.text:SetFont(SilentRotate:getPlayerNameFont(), 12)
     hunter.frame.text:SetPoint("LEFT",5,0)
-    hunter.frame.text:SetText(hunter.name)
-    local _, _classFilename, _ = UnitClass(hunter.name)
-    if (_classFilename) then
-        local shadowOpacity = 0.6
-        if (_classFilename == "PRIEST") then
-            shadowOpacity = 1.0
-        elseif (_classFilename == "ROGUE" or _classFilename == "PALADIN") then
-            shadowOpacity = 0.8
-        end
-        local _, _, _, _classColorHex = GetClassColor(_classFilename)
-        hunter.frame.text:SetText(WrapTextInColorCode(hunter.name, _classColorHex))
-        hunter.frame.text:SetShadowColor(0, 0, 0, shadowOpacity)
-        hunter.frame.text:SetShadowOffset(1, -1)
-    end
+    SilentRotate:setHunterName(hunter)
 
     SilentRotate:createCooldownFrame(hunter)
     SilentRotate:configureHunterFrameDrag(hunter)

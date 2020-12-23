@@ -10,6 +10,8 @@ SilentRotate.colors = {
     ['lightGray'] = CreateColor(0.8, 0.8, 0.8),
     ['purple'] = CreateColor(0.71,0.45,0.75),
     ['white'] = CreateColor(1,1,1),
+    -- Below are user-defined colors
+    ['groupSuffix'] = nil,
 }
 
 SilentRotate.constants = {

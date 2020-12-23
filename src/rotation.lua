@@ -300,14 +300,14 @@ function SilentRotate:updateRaidStatus()
 
         for index = 1, playerCount, 1 do
 
-            local name, rank, subgroup, level, class, fileName, zone, online, isDead, role, isML = GetRaidRosterInfo(index)
+            local name, rank, subgroup, level, class, classFilename, zone, online, isDead, role, isML = GetRaidRosterInfo(index)
 
             -- Players name might be nil at loading
             if (name ~= nil) then
                 local GUID = UnitGUID(name)
                 local hunter
 
-                if SilentRotate:IsClassWanted(select(2,UnitClass(name))) then
+                if SilentRotate:IsClassWanted(classFilename) then
 
                     local registered = SilentRotate:isHunterRegistered(GUID)
 
@@ -322,6 +322,7 @@ function SilentRotate:updateRaidStatus()
                     end
 
                     if (registered) then
+                        hunter.subgroup = subgroup
                         SilentRotate:updateHunterStatus(hunter)
                     end
                 end

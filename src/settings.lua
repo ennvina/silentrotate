@@ -16,6 +16,23 @@ function SilentRotate:CreateConfig()
         SilentRotate:applySettings()
 	end
 
+    local function getColor(info)
+        return SilentRotate.db.profile[info[#info]][1], SilentRotate.db.profile[info[#info]][2], SilentRotate.db.profile[info[#info]][3]
+    end
+
+    local function setColor(info, r, g, b, colorName)
+print(info, r, g, b, colorName)
+SilentRotate.debug = info
+        set(info, {r,g,b})
+        if (colorName) then SilentRotate.colors[colorName] = CreateColor(r, g, b) end
+    end
+
+    local function refreshNames()
+        for _, hunter in pairs(SilentRotate.hunterTable) do
+            SilentRotate:setHunterName(hunter)
+        end
+    end
+
 	local options = {
 		name = "SilentRotate",
 		type = "group",
@@ -210,10 +227,69 @@ function SilentRotate:CreateConfig()
                     },
                 }
             },
+            names = {
+                name = L['SETTING_NAMES'],
+                type = "group",
+                order = 3,
+                args = {
+                    nameTagHeader = {
+                        name = L["NAME_TAG_HEADER"],
+                        type = "header",
+                        order = 1,
+                    },
+                    useClassColor = {
+                        name = L["USE_CLASS_COLOR"],
+                        desc = L["USE_CLASS_COLOR_DESC"],
+                        type = "toggle",
+                        order = 2,
+                        width = "full",
+                        hidden = refreshNames,
+                    },
+                    useNameOutline = {
+                        name = L["USE_NAME_OUTLINE"],
+                        desc = L["USE_NAME_OUTLINE_DESC"],
+                        type = "toggle",
+                        order = 3,
+                        width = "full",
+                        hidden = refreshNames,
+                    },
+                    appendGroup = {
+                        name = L["APPEND_GROUP"],
+                        desc = L["APPEND_GROUP_DESC"],
+                        type = "toggle",
+                        order = 4,
+                        width = "full",
+                        hidden = refreshNames,
+                    },
+                    groupSuffix = {
+                        name = L["GROUP_SUFFIX_LABEL"],
+                        desc = L["GROUP_SUFFIX_LABEL_DESC"],
+                        type = "input",
+                        order = 5,
+                        width = "half",
+                    },
+                    groupSuffixColor = {
+                        name = L["GROUP_SUFFIX_COLOR"],
+                        desc = L["GROUP_SUFFIX_COLOR_DESC"],
+                        type = "color",
+                        order = 6,
+                        get = getColor,
+                        set = function(info, r, g, b)
+                            setColor(info, r, g, b, 'groupSuffix')
+                            refreshNames()
+                        end,
+                    },
+                    backgroundHeader = {
+                        name = L["BACKGROUND_HEADER"],
+                        type = "header",
+                        order = 7,
+                    },
+                }
+            },
             sounds = {
                 name = L['SETTING_SOUNDS'],
                 type = "group",
-                order = 3,
+                order = 4,
                 args = {
                     enableNextToTranqSound = {
                         name = L["ENABLE_NEXT_TO_TRANQ_SOUND"],
@@ -248,7 +324,7 @@ function SilentRotate:CreateConfig()
                         order = 4,
                     },
                 }
-            }
+            },
         }
 	}
 

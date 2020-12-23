@@ -88,7 +88,7 @@ function SilentRotate:drawList(hunterList, parentFrame)
         end
 
         -- SetColor
-        setHunterFrameColor(hunter)
+        SilentRotate:setHunterFrameColor(hunter)
 
         hunter.frame:Show()
         hunter.frame.hunter = hunter
@@ -106,11 +106,12 @@ end
 
 -- Refresh a single hunter frame
 function SilentRotate:refreshHunterFrame(hunter)
-    setHunterFrameColor(hunter)
+    SilentRotate:setHunterFrameColor(hunter)
+    SilentRotate:setHunterName(hunter)
 end
 
 -- Set the hunter frame color regarding it's status
-function setHunterFrameColor(hunter)
+function SilentRotate:setHunterFrameColor(hunter)
 
     local color = SilentRotate.colors.lightGray
 
@@ -123,6 +124,71 @@ function setHunterFrameColor(hunter)
     end
 
     hunter.frame.texture:SetVertexColor(color:GetRGB())
+end
+
+-- Set the hunter's name regarding its class and group index
+function SilentRotate:setHunterName(hunter)
+
+    local currentText = hunter.frame.text:GetText()
+    local currentFont, _, currentOutline = hunter.frame.text:GetFont()
+
+    local newText = hunter.name
+    local newFont = SilentRotate:getPlayerNameFont()
+    local newOutline = SilentRotate.db.profile.useNameOutline and "OUTLINE" or ""
+    local hasClassColor = false
+    local shadowOpacity = 1.0
+
+    if (SilentRotate.db.profile.useClassColor) then
+        local _, _classFilename, _ = UnitClass(hunter.name)
+        if (_classFilename) then
+            if (_classFilename == "PRIEST") then
+                shadowOpacity = 1.0
+            elseif (_classFilename == "ROGUE" or _classFilename == "PALADIN") then
+                shadowOpacity = 0.8
+            else
+                shadowOpacity = 0.6
+            end
+            local _, _, _, _classColorHex = GetClassColor(_classFilename)
+            newText = WrapTextInColorCode(hunter.name, _classColorHex)
+            hasClassColor = true
+        end
+    end
+
+    if (SilentRotate.db.profile.appendGroup and hunter.subgroup) then
+        local groupText = string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup)
+        local color = SilentRotate.colors.groupSuffix
+        if (not color) then
+print("groupSuffix color is created")
+            -- Create the color based on profile
+            -- This should happen once, at start
+            color = CreateColor(
+                SilentRotate.db.profile.groupSuffixColor[1],
+                SilentRotate.db.profile.groupSuffixColor[2],
+                SilentRotate.db.profile.groupSuffixColor[3]
+            )
+            SilentRotate.colors.groupSuffix = color
+        end
+        newText = newText.." "..color:WrapTextInColorCode(groupText)
+    end
+
+    if (newFont ~= currentFont or newOutline ~= currentOutline) then
+print("Updating font of", hunter.name)
+        hunter.frame.text:SetFont(newFont, 12, newOutline)
+    end
+    if (newText ~= currentText) then
+print("Updating text of", hunter.name)
+        hunter.frame.text:SetText(newText)
+    end
+    if (newText ~= currentText or newOutline ~= currentOutline) then
+print("Updating shadow of", hunter.name)
+        if (SilentRotate.db.profile.useNameOutline) then
+            hunter.frame.text:SetShadowOffset(0, 0)
+        else
+            hunter.frame.text:SetShadowColor(0, 0, 0, shadowOpacity)
+            hunter.frame.text:SetShadowOffset(1, -1)
+        end
+    end
+
 end
 
 function SilentRotate:startHunterCooldown(hunter, endTimeOfCooldown)
