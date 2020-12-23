@@ -1,5 +1,12 @@
 ## SilentRotate Changelog
 
+#### v0.4.0-beta
+
+- Name tags are now customizable
+- Option to enable class colors
+- Option to append group index, plus options to choose its text and color
+- Options to select the background colors (neutral, active, dead, offline)
+
 #### v0.3.4-beta
 
 - Text color is now based on the class color, instead of white
