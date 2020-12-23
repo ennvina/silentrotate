@@ -55,7 +55,7 @@ end
 -- Broadcast a given message to the commsChannel with the commsPrefix
 function SilentRotate:sendAddonMessage(message, channel, name)
     AceComm:SendCommMessage(
-        SilentRotate.constants.commsPrefix[SilentRotate.currentMode or 'hunterz'],
+        SilentRotate.constants.commsPrefix[SilentRotate.db.profile.currentMode or 'hunterz'],
         AceSerializer:Serialize(message),
         channel,
         name

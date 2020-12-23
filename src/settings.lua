@@ -58,6 +58,11 @@ function SilentRotate:CreateConfig()
         refreshNames()
     end
 
+    local function setForMode(...)
+        set(...)
+        SilentRotate:applyModeFrameSettings()
+    end
+
 	local options = {
 		name = "SilentRotate",
 		type = "group",
@@ -155,10 +160,135 @@ function SilentRotate:CreateConfig()
                     }
                 }
             },
+            modes = {
+                name = L['SETTING_MODES'],
+                type = "group",
+                order = 2,
+                args = {
+                    tranqModeHeader = {
+                        type = "header",
+                        order = 10,
+                    },
+                    tranqModeButton = {
+                        name = L["TRANQ_MODE_FULL_NAME"],
+                        desc = string.format(L["MODE_BUTTON_DESC"], L["TRANQ_MODE_FULL_NAME"])..".\n"..L["TRANQ_MODE_DETAILED_DESC"],
+                        type = "toggle",
+                        order = 11,
+                        width = "full",
+                        set = setForMode,
+                    },
+                    tranqModeText = {
+                        name = L["MODE_LABEL"],
+                        desc = string.format(L["MODE_LABEL_DESC"], L["TRANQ_MODE_FULL_NAME"]),
+                        type = "input",
+                        order = 12,
+                        width = "half",
+                        set = setForMode,
+                        hidden = function() return not SilentRotate.db.profile.tranqModeButton end,
+                    },
+                    tranqModeInvisible = {
+                        name = SilentRotate.colors.lightRed:WrapTextInColorCode(L["MODE_INVISIBLE"]),
+                        type = "description",
+                        fontSize = "medium",
+                        width = "full",
+                        order = 13,
+                        hidden = function() return SilentRotate.db.profile.tranqModeButton or not SilentRotate:isTranqMode() end,
+                    },
+                    loathebModeHeader = {
+                        type = "header",
+                        order = 20,
+                    },
+                    loathebModeButton = {
+                        name = L["LOATHEB_MODE_FULL_NAME"],
+                        desc = string.format(L["MODE_BUTTON_DESC"], L["LOATHEB_MODE_FULL_NAME"])..".\n"..L["LOATHEB_MODE_DETAILED_DESC"],
+                        type = "toggle",
+                        order = 21,
+                        width = "full",
+                        set = setForMode,
+                    },
+                    loathebModeText = {
+                        name = L["MODE_LABEL"],
+                        desc = string.format(L["MODE_LABEL_DESC"], L["LOATHEB_MODE_FULL_NAME"]),
+                        type = "input",
+                        order = 22,
+                        width = "half",
+                        set = setForMode,
+                        hidden = function() return not SilentRotate.db.profile.loathebModeButton end,
+                    },
+                    loathebModeInvisible = {
+                        name = SilentRotate.colors.lightRed:WrapTextInColorCode(L["MODE_INVISIBLE"]),
+                        type = "description",
+                        fontSize = "medium",
+                        width = "full",
+                        order = 23,
+                        hidden = function() return SilentRotate.db.profile.loathebModeButton or not SilentRotate:isLoathebMode() end,
+                    },
+                    distractModeHeader = {
+                        type = "header",
+                        order = 30,
+                    },
+                    distractModeButton = {
+                        name = L["DISTRACT_MODE_FULL_NAME"],
+                        desc = string.format(L["MODE_BUTTON_DESC"], L["DISTRACT_MODE_FULL_NAME"])..".\n"..L["DISTRACT_MODE_DETAILED_DESC"],
+                        type = "toggle",
+                        order = 31,
+                        width = "full",
+                        set = setForMode,
+                    },
+                    distractModeText = {
+                        name = L["MODE_LABEL"],
+                        desc = string.format(L["MODE_LABEL_DESC"], L["DISTRACT_MODE_FULL_NAME"]),
+                        type = "input",
+                        order = 32,
+                        width = "half",
+                        set = setForMode,
+                        hidden = function() return not SilentRotate.db.profile.distractModeButton end,
+                    },
+                    distractModeInvisible = {
+                        name = SilentRotate.colors.lightRed:WrapTextInColorCode(L["MODE_INVISIBLE"]),
+                        type = "description",
+                        fontSize = "medium",
+                        width = "full",
+                        order = 33,
+                        hidden = function() return SilentRotate.db.profile.distractModeButton or not SilentRotate:isDistractMode() end,
+                    },
+                    --[[ Do not allow Razuvious mode for now
+                    razModeHeader = {
+                        type = "header",
+                        order = 40,
+                    },
+                    razModeButton = {
+                        name = L["RAZ_MODE_FULL_NAME"],
+                        desc = string.format(L["MODE_BUTTON_DESC"], L["RAZ_MODE_FULL_NAME"])..".\n"..L["RAZ_MODE_DETAILED_DESC"],
+                        type = "toggle",
+                        order = 41,
+                        width = "full",
+                        set = setForMode,
+                    },
+                    razModeText = {
+                        name = L["MODE_LABEL"],
+                        desc = string.format(L["MODE_LABEL_DESC"], L["RAZ_MODE_FULL_NAME"]),
+                        type = "input",
+                        order = 42,
+                        width = "half",
+                        set = setForMode,
+                        hidden = function() return not SilentRotate.db.profile.razModeButton end,
+                    },
+                    razModeInvisible = {
+                        name = SilentRotate.colors.lightRed:WrapTextInColorCode(L["MODE_INVISIBLE"]),
+                        type = "description",
+                        fontSize = "medium",
+                        width = "full",
+                        order = 13,
+                        hidden = function() return SilentRotate.db.profile.razModeButton or not SilentRotate:isRazMode() end,
+                    },
+                    ]]
+                }
+            },
             announces = {
                 name = L['SETTING_ANNOUNCES'],
                 type = "group",
-                order = 2,
+                order = 3,
                 args = {
                     enableAnnounces = {
                         name = L["ENABLE_ANNOUNCES"],
@@ -255,7 +385,7 @@ function SilentRotate:CreateConfig()
             names = {
                 name = L['SETTING_NAMES'],
                 type = "group",
-                order = 3,
+                order = 4,
                 args = {
                     nameTagHeader = {
                         name = L["NAME_TAG_HEADER"],
@@ -350,7 +480,7 @@ function SilentRotate:CreateConfig()
             sounds = {
                 name = L['SETTING_SOUNDS'],
                 type = "group",
-                order = 4,
+                order = 5,
                 args = {
                     enableNextToTranqSound = {
                         name = L["ENABLE_NEXT_TO_TRANQ_SOUND"],

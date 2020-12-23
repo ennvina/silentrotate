@@ -152,7 +152,7 @@ end
 function SilentRotate:printRotationSetup()
 
     if (IsInRaid()) then
-        SilentRotate:sendRotationSetupBroacastMessage('--- ' .. SilentRotate.constants.printPrefix .. SilentRotate:GetBroadcastHeaderText() .. ' ---', channel)
+        SilentRotate:sendRotationSetupBroacastMessage('--- ' .. SilentRotate.constants.printPrefix .. SilentRotate:getBroadcastHeaderText() .. ' ---', channel)
 
         if (SilentRotate.db.profile.useMultilineRotationReport) then
             SilentRotate:printMultilineRotation(SilentRotate.rotationTables.rotation)

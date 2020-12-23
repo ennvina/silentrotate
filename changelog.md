@@ -1,5 +1,11 @@
 ## SilentRotate Changelog
 
+#### v0.4.1-beta
+
+- The selected mode is now stored in user settings
+- Options to enable which modes are selectable
+- By default, modes are selectable based on your class
+
 #### v0.4.0-beta
 
 - Name tags are now customizable

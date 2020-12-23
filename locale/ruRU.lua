@@ -71,10 +71,24 @@ L["USE_MULTILINE_ROTATION_REPORT"] = "Использовать многостр�
 L["USE_MULTILINE_ROTATION_REPORT_DESC"] = "Выберите для более понятного порядка отображения очередности"
 
     --- Modes
+L["SETTING_MODES"] = "Modes"
 L["FILTER_SHOW_HUNTERS"] = "Tranq"
 L["FILTER_SHOW_PRIESTS"] = "Raz"
 L["FILTER_SHOW_HEALERS"] = "Loatheb"
 L["FILTER_SHOW_ROGUES"] = "Distract"
+L["NO_MODE_AVAILABLE"] = "<Choose modes in settings>"
+L["MODE_INVISIBLE"] = "This is the currently selected mode and it will stay that way even though the button is not visible.\nYou may want to click a visible button mode in order to select another mode."
+L["TRANQ_MODE_FULL_NAME"] = "Tranquilizing Shot"
+L["LOATHEB_MODE_FULL_NAME"] = "Loatheb"
+L["DISTRACT_MODE_FULL_NAME"] = "Distract"
+L["RAZ_MODE_FULL_NAME"] = "Razuvious"
+L["TRANQ_MODE_DETAILED_DESC"] = "This mode tracks raid bosses when they enter a Frenzy status and tell hunters to cast the Tranquilizing Shot ability."
+L["LOATHEB_MODE_DETAILED_DESC"] = "This mode tracks Loatheb's ability that prevents healers from casting healing spells for 60 seconds."
+L["DISTRACT_MODE_DETAILED_DESC"] = "This mode tracks whenever a rogue has cast the Distract ability."
+L["RAZ_MODE_DETAILED_DESC"] = "This mode tracks priests who are casting Mind Control on Razuvious' adds, a.k.a. Death Knight Understudy."
+L["MODE_BUTTON_DESC"] = "Show the button for activating the mode '%s'"
+L["MODE_LABEL"] = "Button Text"
+L["MODE_LABEL_DESC"] = "Text that appears in the button for activating the mode '%s'"
 
     --- Names
 L["SETTING_NAMES"] = "Names"

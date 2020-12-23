@@ -276,7 +276,14 @@ function SilentRotate:purgeHunterList()
     local huntersToRemove = {}
 
     for key,hunter in pairs(SilentRotate.hunterTable) do
-        if ((not UnitInParty(hunter.name) and not UnitIsUnit(hunter.name, "player")) or not SilentRotate:IsClassWanted(select(2,UnitClass(hunter.name)))) then
+        if  (
+                -- Is unit in the party? "player" is always accepted
+                ( not UnitInParty(hunter.name) and not UnitIsUnit(hunter.name, "player") )
+            or
+                -- Is the class required for the current mode?
+                -- The 'select' result must be in parentheses to prevent argument bleeding
+                not SilentRotate:isClassWanted( (select(2,UnitClass(hunter.name))) )
+            ) then
             table.insert(huntersToRemove, hunter)
         end
     end
@@ -297,7 +304,7 @@ function SilentRotate:updateUnitStatus(name, classFilename, subgroup)
     local GUID = UnitGUID(name)
     local hunter
 
-    if SilentRotate:IsClassWanted(classFilename) then
+    if SilentRotate:isClassWanted(classFilename) then
 
         local registered = SilentRotate:isHunterRegistered(GUID)
 

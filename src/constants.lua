@@ -6,6 +6,7 @@ SilentRotate.colors = {
     ['darkBlue'] = CreateColor(0.1, 0.1, 0.4),
     ['blue'] = CreateColor(0.3, 0.3, 0.7),
     ['red'] = CreateColor(0.7, 0.3, 0.3),
+    ['lightRed'] = CreateColor(1.0, 0.4, 0.4),
     ['darkGray'] = CreateColor(0.3, 0.3, 0.3),
     ['lightGray'] = CreateColor(0.8, 0.8, 0.8),
     ['purple'] = CreateColor(0.71,0.45,0.75),
@@ -23,6 +24,8 @@ SilentRotate.constants = {
     ['hunterFrameSpacing'] = 4,
     ['titleBarHeight'] = 18,
     ['modeBarHeight'] = 18,
+    ['modeFrameFontSize'] = 12,
+    ['modeFrameMargin'] = 2,
     ['mainFrameWidth'] = 130,
     ['rotationFramesBaseHeight'] = 20,
 

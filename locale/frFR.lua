@@ -71,10 +71,24 @@ L["USE_MULTILINE_ROTATION_REPORT"] = "Utiliser plusieurs lignes pour la rotation
 L["USE_MULTILINE_ROTATION_REPORT_DESC"] = "Chaque chasseur de la rotation apparaitra sur une ligne numérotée"
 
     --- Modes
+L["SETTING_MODES"] = "Modes"
 L["FILTER_SHOW_HUNTERS"] = "Tranq"
 L["FILTER_SHOW_PRIESTS"] = "Razu"
 L["FILTER_SHOW_HEALERS"] = "Horreb"
 L["FILTER_SHOW_ROGUES"] = "Distract"
+L["NO_MODE_AVAILABLE"] = "<Choisissez le mode dans la config>"
+L["MODE_INVISIBLE"] = "C'est le mode actuellement sélectionné et il le restera bien que le bouton ne soit plus visible.\nVous souhaitez peut-être cliquer sur un bouton de mode visible afin de sélectionner un autre mode."
+L["TRANQ_MODE_FULL_NAME"] = "Tir tranquilisant"
+L["LOATHEB_MODE_FULL_NAME"] = "Horreb"
+L["DISTRACT_MODE_FULL_NAME"] = "Distraction"
+L["RAZ_MODE_FULL_NAME"] = "Razuvious"
+L["TRANQ_MODE_DETAILED_DESC"] = "Ce mode détecte quand un boss de raid devient Enragé et prévient les chasseur de lancer la technique Tir tranquilisant."
+L["LOATHEB_MODE_DETAILED_DESC"] = "Ce mode détecte la technique de Loatheb qui empêche les soigneurs de lancer des sorts de soin pendant 60 secondes."
+L["DISTRACT_MODE_DETAILED_DESC"] = "Ce mode détecte lorsqu'un voleur lance la technique Distraction."
+L["RAZ_MODE_DETAILED_DESC"] = "Ce mode suit le Contrôle Mental lancé par les prêtres sur les adds de Razuvious, à savoir les Doublures de chevalier de la mort."
+L["MODE_BUTTON_DESC"] = "Affiche le bouton pour activer le mode '%s'"
+L["MODE_LABEL"] = "Texte du bouton"
+L["MODE_LABEL_DESC"] = "Texte écrit dans le bouton pour activer le mode '%s'"
 
     --- Names
 L["SETTING_NAMES"] = "Noms"
