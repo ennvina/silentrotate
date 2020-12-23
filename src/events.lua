@@ -40,7 +40,7 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
     local spellId, spellName, spellSchool, amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing, isOffHand = select(12, CombatLogGetCurrentEventInfo())
 
     -- @todo try to refactor a bit
-    if SilentRotate:IsTranqMode() then
+    if SilentRotate:isTranqMode() then
         if (spellName == tranqShot or (SilentRotate.testMode and spellName == arcaneShot)) then
             local hunter = SilentRotate:getHunter(nil, sourceGUID)
             if (event == "SPELL_CAST_SUCCESS") then
@@ -61,9 +61,9 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
         elseif event == "UNIT_DIED" and SilentRotate:isTranqableBoss(destGUID) then
             SilentRotate:resetRotation()
         end
-    elseif SilentRotate:IsRazMode() then
+    elseif SilentRotate:isRazMode() then
         -- TODO
-    elseif SilentRotate:IsDistractMode() then
+    elseif SilentRotate:isDistractMode() then
         if (event == "SPELL_CAST_SUCCESS" and SilentRotate:isDistractSpell(spellName)) then
             local hunter = SilentRotate:getHunter(nil, sourceGUID)
             SilentRotate:rotate(hunter, false)
@@ -94,7 +94,7 @@ end
 function SilentRotate:UNIT_AURA(unitID, isEcho)
 
     -- UNIT_AURA is used exclusively to Loatheb
-    if not SilentRotate:IsLoathebMode() then return end
+    if not SilentRotate:isLoathebMode() then return end
 
     -- Whether the unit really got the debuff or not, it's pointless if the unit is not tracked (e.g. not a healer)
     local hunter = SilentRotate:getHunter(nil, UnitGUID(unitID))

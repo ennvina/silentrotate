@@ -14,10 +14,10 @@ function SilentRotate:LoadDefaults()
 	        announceLoathebMessage = L["DEFAULT_LOATHEB_ANNOUNCE_MESSAGE"],
 
 			-- Modes
-			tranqModeButton    = SilentRotate:IsClassWanted(select(2,UnitClass("player")), 'hunterz'),
-			loathebModeButton  = SilentRotate:IsClassWanted(select(2,UnitClass("player")), 'healerz'),
-			distractModeButton = SilentRotate:IsClassWanted(select(2,UnitClass("player")), 'roguez'),
-			razModeButton = false, -- SilentRotate:IsClassWanted(select(2,UnitClass("player")), 'priestz'), -- Do not allow Razuvious mode for now
+			tranqModeButton    = SilentRotate:isClassWanted(select(2,UnitClass("player")), 'hunterz'),
+			loathebModeButton  = SilentRotate:isClassWanted(select(2,UnitClass("player")), 'healerz'),
+			distractModeButton = SilentRotate:isClassWanted(select(2,UnitClass("player")), 'roguez'),
+			razModeButton = false, -- SilentRotate:isClassWanted(select(2,UnitClass("player")), 'priestz'), -- Do not allow Razuvious mode for now
 			tranqModeText    = L["FILTER_SHOW_HUNTERS"],
 			loathebModeText  = L["FILTER_SHOW_HEALERS"],
 			distractModeText = L["FILTER_SHOW_ROGUES"],

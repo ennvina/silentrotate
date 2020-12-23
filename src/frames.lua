@@ -129,26 +129,26 @@ function SilentRotate:createModeFrame()
     if (not SilentRotate.currentMode) then
         local myClass = select(2,UnitClass("player"))
         if (myClass == 'HUNTER') then
-            SilentRotate.currentMode = "hunterz"
+            SilentRotate:setTranqMode()
         elseif (myClass == 'ROGUE') then
-            SilentRotate.currentMode = "roguez"
+            SilentRotate:setDistractMode()
         else
-            SilentRotate.currentMode = "healerz"
+            SilentRotate:setLoathebMode()
         end
     end
     SilentRotate.mainFrame.modeFrames = { ["hunterz"] = nil, ["priestz"] = nil, ["healerz"] = nil, ["roguez"] = nil }
     local wipRazuvious = false
     if wipRazuvious then
         local commonModeWidth = SilentRotate.constants.mainFrameWidth/4
-        SilentRotate:createSingleModeFrame("hunterz", L["FILTER_SHOW_HUNTERS"], 0*commonModeWidth, 1*commonModeWidth, SilentRotate.currentMode == "hunterz" or not SilentRotate.currentMode)
-        SilentRotate:createSingleModeFrame("priestz", L["FILTER_SHOW_PRIESTS"], 1*commonModeWidth, 2*commonModeWidth, SilentRotate.currentMode == "priestz")
-        SilentRotate:createSingleModeFrame("healerz", L["FILTER_SHOW_HEALERS"], 2*commonModeWidth, 3*commonModeWidth, SilentRotate.currentMode == "healerz")
-        SilentRotate:createSingleModeFrame("roguez",  L["FILTER_SHOW_ROGUES"] , 3*commonModeWidth, 4*commonModeWidth, SilentRotate.currentMode == "roguez" )
+        SilentRotate:createSingleModeFrame("hunterz", L["FILTER_SHOW_HUNTERS"], 0*commonModeWidth, 1*commonModeWidth, SilentRotate:isTranqMode())
+        SilentRotate:createSingleModeFrame("priestz", L["FILTER_SHOW_PRIESTS"], 1*commonModeWidth, 2*commonModeWidth, SilentRotate:isRazMode())
+        SilentRotate:createSingleModeFrame("healerz", L["FILTER_SHOW_HEALERS"], 2*commonModeWidth, 3*commonModeWidth, SilentRotate:isLoathebMode())
+        SilentRotate:createSingleModeFrame("roguez",  L["FILTER_SHOW_ROGUES"] , 3*commonModeWidth, 4*commonModeWidth, SilentRotate:isDistractMode())
     else
         local commonModeWidth = SilentRotate.constants.mainFrameWidth/3
-        SilentRotate:createSingleModeFrame("hunterz", L["FILTER_SHOW_HUNTERS"], 0*commonModeWidth, 1*commonModeWidth, SilentRotate.currentMode == "hunterz" or not SilentRotate.currentMode)
-        SilentRotate:createSingleModeFrame("healerz", L["FILTER_SHOW_HEALERS"], 1*commonModeWidth, 2*commonModeWidth, SilentRotate.currentMode == "healerz")
-        SilentRotate:createSingleModeFrame("roguez",  L["FILTER_SHOW_ROGUES"] , 2*commonModeWidth, 3*commonModeWidth, SilentRotate.currentMode == "roguez" )
+        SilentRotate:createSingleModeFrame("hunterz", L["FILTER_SHOW_HUNTERS"], 0*commonModeWidth, 1*commonModeWidth, SilentRotate:isTranqMode())
+        SilentRotate:createSingleModeFrame("healerz", L["FILTER_SHOW_HEALERS"], 1*commonModeWidth, 2*commonModeWidth, SilentRotate:isLoathebMode())
+        SilentRotate:createSingleModeFrame("roguez",  L["FILTER_SHOW_ROGUES"] , 2*commonModeWidth, 3*commonModeWidth, SilentRotate:isDistractMode())
     end
 end
 
