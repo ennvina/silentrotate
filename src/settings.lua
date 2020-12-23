@@ -171,7 +171,7 @@ function SilentRotate:CreateConfig()
                     },
                     tranqModeButton = {
                         name = L["TRANQ_MODE_FULL_NAME"],
-                        desc = string.format(L["MODE_BUTTON_DESC"], L["TRANQ_MODE_FULL_NAME"]),
+                        desc = string.format(L["MODE_BUTTON_DESC"], L["TRANQ_MODE_FULL_NAME"])..".\n"..L["TRANQ_MODE_DETAILED_DESC"],
                         type = "toggle",
                         order = 11,
                         width = "full",
@@ -200,7 +200,7 @@ function SilentRotate:CreateConfig()
                     },
                     loathebModeButton = {
                         name = L["LOATHEB_MODE_FULL_NAME"],
-                        desc = string.format(L["MODE_BUTTON_DESC"], L["LOATHEB_MODE_FULL_NAME"]),
+                        desc = string.format(L["MODE_BUTTON_DESC"], L["LOATHEB_MODE_FULL_NAME"])..".\n"..L["LOATHEB_MODE_DETAILED_DESC"],
                         type = "toggle",
                         order = 21,
                         width = "full",
@@ -229,7 +229,7 @@ function SilentRotate:CreateConfig()
                     },
                     distractModeButton = {
                         name = L["DISTRACT_MODE_FULL_NAME"],
-                        desc = string.format(L["MODE_BUTTON_DESC"], L["DISTRACT_MODE_FULL_NAME"]),
+                        desc = string.format(L["MODE_BUTTON_DESC"], L["DISTRACT_MODE_FULL_NAME"])..".\n"..L["DISTRACT_MODE_DETAILED_DESC"],
                         type = "toggle",
                         order = 31,
                         width = "full",
@@ -259,7 +259,7 @@ function SilentRotate:CreateConfig()
                     },
                     razModeButton = {
                         name = L["RAZ_MODE_FULL_NAME"],
-                        desc = string.format(L["MODE_BUTTON_DESC"], L["RAZ_MODE_FULL_NAME"]),
+                        desc = string.format(L["MODE_BUTTON_DESC"], L["RAZ_MODE_FULL_NAME"])..".\n"..L["RAZ_MODE_DETAILED_DESC"],
                         type = "toggle",
                         order = 41,
                         width = "full",
