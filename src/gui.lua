@@ -161,15 +161,12 @@ function SilentRotate:setHunterName(hunter)
     end
 
     if (newFont ~= currentFont or newOutline ~= currentOutline) then
-print("Updating font of", hunter.name)
         hunter.frame.text:SetFont(newFont, 12, newOutline)
     end
     if (newText ~= currentText) then
-print("Updating text of", hunter.name)
         hunter.frame.text:SetText(newText)
     end
     if (newText ~= currentText or newOutline ~= currentOutline) then
-print("Updating shadow of", hunter.name)
         if (SilentRotate.db.profile.useNameOutline) then
             hunter.frame.text:SetShadowOffset(0, 0)
         else
