@@ -23,6 +23,8 @@ SilentRotate.constants = {
     ['hunterFrameSpacing'] = 4,
     ['titleBarHeight'] = 18,
     ['modeBarHeight'] = 18,
+    ['modeFrameFontSize'] = 12,
+    ['modeFrameMargin'] = 2,
     ['mainFrameWidth'] = 130,
     ['rotationFramesBaseHeight'] = 20,
 

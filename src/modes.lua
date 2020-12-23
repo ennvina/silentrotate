@@ -7,48 +7,48 @@ function SilentRotate:isTranqMode(mode)
 end
 
 function SilentRotate:isRazMode(mode)
-    if (not mode) then mode = SilentRotate.currentMode end
+    if (not mode) then mode = SilentRotate.db.profile.currentMode end
     return mode == 'priestz'
 end
 
 function SilentRotate:isLoathebMode(mode)
-    if (not mode) then mode = SilentRotate.currentMode end
+    if (not mode) then mode = SilentRotate.db.profile.currentMode end
     return mode == 'healerz'
 end
 
 function SilentRotate:isDistractMode(mode)
-    if (not mode) then mode = SilentRotate.currentMode end
+    if (not mode) then mode = SilentRotate.db.profile.currentMode end
     return mode == 'roguez'
 end
 
 function SilentRotate:setTranqMode()
-    SilentRotate.currentMode = 'hunterz'
+    SilentRotate.db.profile.currentMode = 'hunterz'
 end
 
 function SilentRotate:setRazMode()
-    SilentRotate.currentMode = 'priestz'
+    SilentRotate.db.profile.currentMode = 'priestz'
 end
 
 function SilentRotate:setLoathebMode()
-    SilentRotate.currentMode = 'healerz'
+    SilentRotate.db.profile.currentMode = 'healerz'
 end
 
 function SilentRotate:setDistractMode()
-    SilentRotate.currentMode = 'roguez'
+    SilentRotate.db.profile.currentMode = 'roguez'
 end
 
 -- Activate the specific mode
 function SilentRotate:activateMode(modeName)
-    if modeName == SilentRotate.currentMode then return end
+    if modeName == SilentRotate.db.profile.currentMode then return end
 
-    oldFrame = SilentRotate.mainFrame.modeFrames[SilentRotate.currentMode]
+    oldFrame = SilentRotate.mainFrame.modeFrames[SilentRotate.db.profile.currentMode]
     if oldFrame then
         oldFrame.texture:SetColorTexture(SilentRotate.colors.darkBlue:GetRGB())
     end
 
     newFrame = SilentRotate.mainFrame.modeFrames[modeName]
     if newFrame then
-        SilentRotate.currentMode = modeName
+        SilentRotate.db.profile.currentMode = modeName
         newFrame.texture:SetColorTexture(SilentRotate.colors.blue:GetRGB())
         SilentRotate:updateRaidStatus()
     end
@@ -70,7 +70,7 @@ end
 -- Get the default duration known for a specific mode
 -- If mode is nil, use the current mode instead
 function SilentRotate:getModeDuration(mode)
-    if (not mode) then mode = SilentRotate.currentMode end
+    if (not mode) then mode = SilentRotate.db.profile.currentMode end
 
     local duration
     if SilentRotate:isTranqMode() then

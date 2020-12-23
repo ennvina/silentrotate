@@ -14,6 +14,7 @@ function SilentRotate:LoadDefaults()
 	        announceLoathebMessage = L["DEFAULT_LOATHEB_ANNOUNCE_MESSAGE"],
 
 			-- Modes
+			currentMode = nil, -- Will be set based on *modeButton flags at the end of this file
 			tranqModeButton    = SilentRotate:isClassWanted(select(2,UnitClass("player")), 'hunterz'),
 			loathebModeButton  = SilentRotate:isClassWanted(select(2,UnitClass("player")), 'healerz'),
 			distractModeButton = SilentRotate:isClassWanted(select(2,UnitClass("player")), 'roguez'),
@@ -47,5 +48,19 @@ function SilentRotate:LoadDefaults()
 			doNotShowWindowOnRaidJoin = false,
 			showWindowWhenTargetingBoss = false,
 	    },
+	
 	}
+	-- Find the default mode based on class compatibility
+	if (self.defaults.profile.tranqModeButton) then
+		self.defaults.profile.currentMode = 'hunterz'
+	elseif (self.defaults.profile.loathebModeButton) then
+		self.defaults.profile.currentMode = 'healerz'
+	elseif (self.defaults.profile.distractModeButton) then
+		self.defaults.profile.currentMode = 'roguez'
+	else
+		-- Use Loatheb mode by default for classes who cannot fit other roles
+		-- Also enable this option by default
+		self.defaults.profile.tranqModeButton = true
+		self.defaults.profile.currentMode = 'hunterz'
+	end
 end

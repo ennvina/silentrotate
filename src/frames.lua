@@ -118,44 +118,19 @@ function SilentRotate:createModeFrame()
     SilentRotate.mainFrame.modeFrame.texture:SetColorTexture(SilentRotate.colors.darkBlue:GetRGB())
     SilentRotate.mainFrame.modeFrame.texture:SetAllPoints()
 
-    SilentRotate.mainFrame.modeFrame.text = SilentRotate.mainFrame.modeFrame:CreateFontString(nil, "ARTWORK")
-    SilentRotate.mainFrame.modeFrame.text:SetFont("Fonts\\ARIALN.ttf", 12)
-    SilentRotate.mainFrame.modeFrame.text:SetShadowColor(0,0,0,0.5)
-    SilentRotate.mainFrame.modeFrame.text:SetShadowOffset(1,-1)
-    SilentRotate.mainFrame.modeFrame.text:SetPoint("LEFT",5,0)
-    SilentRotate.mainFrame.modeFrame.text:SetText('Mode:')
-    SilentRotate.mainFrame.modeFrame.text:SetTextColor(1,1,1,1)
-
-    if (not SilentRotate.currentMode) then
-        local myClass = select(2,UnitClass("player"))
-        if (myClass == 'HUNTER') then
-            SilentRotate:setTranqMode()
-        elseif (myClass == 'ROGUE') then
-            SilentRotate:setDistractMode()
-        else
-            SilentRotate:setLoathebMode()
-        end
-    end
     SilentRotate.mainFrame.modeFrames = { ["hunterz"] = nil, ["priestz"] = nil, ["healerz"] = nil, ["roguez"] = nil }
-    local wipRazuvious = false
-    if wipRazuvious then
-        local commonModeWidth = SilentRotate.constants.mainFrameWidth/4
-        SilentRotate:createSingleModeFrame("hunterz", L["FILTER_SHOW_HUNTERS"], 0*commonModeWidth, 1*commonModeWidth, SilentRotate:isTranqMode())
-        SilentRotate:createSingleModeFrame("priestz", L["FILTER_SHOW_PRIESTS"], 1*commonModeWidth, 2*commonModeWidth, SilentRotate:isRazMode())
-        SilentRotate:createSingleModeFrame("healerz", L["FILTER_SHOW_HEALERS"], 2*commonModeWidth, 3*commonModeWidth, SilentRotate:isLoathebMode())
-        SilentRotate:createSingleModeFrame("roguez",  L["FILTER_SHOW_ROGUES"] , 3*commonModeWidth, 4*commonModeWidth, SilentRotate:isDistractMode())
-    else
-        local commonModeWidth = SilentRotate.constants.mainFrameWidth/3
-        SilentRotate:createSingleModeFrame("hunterz", L["FILTER_SHOW_HUNTERS"], 0*commonModeWidth, 1*commonModeWidth, SilentRotate:isTranqMode())
-        SilentRotate:createSingleModeFrame("healerz", L["FILTER_SHOW_HEALERS"], 1*commonModeWidth, 2*commonModeWidth, SilentRotate:isLoathebMode())
-        SilentRotate:createSingleModeFrame("roguez",  L["FILTER_SHOW_ROGUES"] , 2*commonModeWidth, 3*commonModeWidth, SilentRotate:isDistractMode())
-    end
+    local commonModeWidth = SilentRotate.constants.mainFrameWidth/4
+    SilentRotate:createSingleModeFrame("hunterz", L["FILTER_SHOW_HUNTERS"], 0*commonModeWidth, 1*commonModeWidth, SilentRotate:isTranqMode())
+    SilentRotate:createSingleModeFrame("healerz", L["FILTER_SHOW_HEALERS"], 1*commonModeWidth, 2*commonModeWidth, SilentRotate:isLoathebMode())
+    SilentRotate:createSingleModeFrame("roguez",  L["FILTER_SHOW_ROGUES"] , 2*commonModeWidth, 3*commonModeWidth, SilentRotate:isDistractMode())
+    SilentRotate:createSingleModeFrame("priestz", L["FILTER_SHOW_PRIESTS"], 3*commonModeWidth, 4*commonModeWidth, SilentRotate:isRazMode())
+    SilentRotate:applyModeFrameSettings()
 end
 
 -- Create single mode button
 function SilentRotate:createSingleModeFrame(name, text, minX, maxX, enabled)
-    local fontSize = 12
-    local margin = 2
+    local fontSize = SilentRotate.constants.modeFrameFontSize
+    local margin = SilentRotate.constants.modeFrameMargin
     local mode = CreateFrame("Frame", nil, SilentRotate.mainFrame.modeFrame)
     mode:SetPoint('TOPLEFT', minX+margin, -(SilentRotate.constants.modeBarHeight-2*margin-fontSize)/2)
     mode:SetWidth(maxX-minX-2*margin)
@@ -188,6 +163,86 @@ function SilentRotate:createSingleModeFrame(name, text, minX, maxX, enabled)
     )
 
     SilentRotate.mainFrame.modeFrames[name] = mode
+end
+
+-- Setup mode frame appearance, based on user-defined settings
+function SilentRotate:applyModeFrameSettings()
+    local modeFrameMapping = {
+        {
+            modeName = "hunterz",
+            visibilityFlag = "tranqModeButton",
+            textVariable = "tranqModeText",
+        },
+        {
+            modeName = "healerz",
+            visibilityFlag = "loathebModeButton",
+            textVariable = "loathebModeText",
+        },
+        {
+            modeName = "roguez",
+            visibilityFlag = "distractModeButton",
+            textVariable = "distractModeText",
+        },
+        {
+            modeName = "priestz",
+            visibilityFlag = "razModeButton",
+            textVariable = "razModeText",
+        },
+    }
+
+    -- First, count how many buttons should be visible
+    local nbButtonsVisible = 0
+    for _, mapping in ipairs(modeFrameMapping) do
+        local isVisible = SilentRotate.db.profile[mapping.visibilityFlag]
+        if (isVisible) then nbButtonsVisible = nbButtonsVisible+1 end
+    end
+
+    if (nbButtonsVisible == 0) then
+        -- Special case: no buttons visible
+        if (not SilentRotate.mainFrame.modeFrame.text) then
+            SilentRotate.mainFrame.modeFrame.text = SilentRotate.mainFrame.modeFrame:CreateFontString(nil, "ARTWORK")
+            SilentRotate.mainFrame.modeFrame.text:SetPoint("LEFT",2,0)
+            SilentRotate.mainFrame.modeFrame.text:SetTextColor(1,1,1,1)
+            SilentRotate.mainFrame.modeFrame.text:SetFont("Fonts\\ARIALN.ttf", 11)
+            SilentRotate.mainFrame.modeFrame.text:SetShadowColor(0,0,0,0.5)
+            SilentRotate.mainFrame.modeFrame.text:SetShadowOffset(1,-1)
+        else
+            SilentRotate.mainFrame.modeFrame.text:Show()
+        end
+        SilentRotate.mainFrame.modeFrame.text:SetText(L["NO_MODE_AVAILABLE"])
+        for _, mapping in ipairs(modeFrameMapping) do
+            local modeName = mapping.modeName
+            SilentRotate.mainFrame.modeFrames[modeName]:Hide()
+        end
+        return
+    end
+
+    if SilentRotate.mainFrame.modeFrame.text then
+        SilentRotate.mainFrame.modeFrame.text:Hide()
+    end
+
+    local commonModeWidth = SilentRotate.constants.mainFrameWidth/nbButtonsVisible
+    local minX = 0
+    local maxX = commonModeWidth
+    local fontSize = SilentRotate.constants.modeFrameFontSize
+    local margin = SilentRotate.constants.modeFrameMargin
+
+    for _, mapping in ipairs(modeFrameMapping) do
+        local modeName = mapping.modeName
+        local isVisible = SilentRotate.db.profile[mapping.visibilityFlag]
+        local mode = SilentRotate.mainFrame.modeFrames[modeName]
+        if (isVisible) then
+            mode:Show()
+            local text = SilentRotate.db.profile[mapping.textVariable]
+            mode.text:SetText(text)
+            mode:SetPoint('TOPLEFT', minX+margin, -(SilentRotate.constants.modeBarHeight-2*margin-fontSize)/2)
+            mode:SetWidth(maxX-minX-2*margin)
+            minX = maxX
+            maxX = maxX + commonModeWidth
+        else
+            mode:Hide()
+        end
+    end
 end
 
 -- Create rotation frame

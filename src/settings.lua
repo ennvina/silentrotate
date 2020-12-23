@@ -58,6 +58,11 @@ function SilentRotate:CreateConfig()
         refreshNames()
     end
 
+    local function setForMode(...)
+        set(...)
+        SilentRotate:applyModeFrameSettings()
+    end
+
 	local options = {
 		name = "SilentRotate",
 		type = "group",
@@ -170,6 +175,7 @@ function SilentRotate:CreateConfig()
                         type = "toggle",
                         order = 2,
                         width = "full",
+                        set = setForMode,
                     },
                     tranqModeText = {
                         name = L["MODE_LABEL"],
@@ -177,6 +183,7 @@ function SilentRotate:CreateConfig()
                         type = "input",
                         order = 3,
                         width = "half",
+                        set = setForMode,
                         hidden = function() return not SilentRotate.db.profile.tranqModeButton end,
                     },
                     loathebModeHeader = {
@@ -189,6 +196,7 @@ function SilentRotate:CreateConfig()
                         type = "toggle",
                         order = 5,
                         width = "full",
+                        set = setForMode,
                     },
                     loathebModeText = {
                         name = L["MODE_LABEL"],
@@ -196,6 +204,7 @@ function SilentRotate:CreateConfig()
                         type = "input",
                         order = 6,
                         width = "half",
+                        set = setForMode,
                         hidden = function() return not SilentRotate.db.profile.loathebModeButton end,
                     },
                     distractModeHeader = {
@@ -208,6 +217,7 @@ function SilentRotate:CreateConfig()
                         type = "toggle",
                         order = 8,
                         width = "full",
+                        set = setForMode,
                     },
                     distractModeText = {
                         name = L["MODE_LABEL"],
@@ -215,6 +225,7 @@ function SilentRotate:CreateConfig()
                         type = "input",
                         order = 9,
                         width = "half",
+                        set = setForMode,
                         hidden = function() return not SilentRotate.db.profile.distractModeButton end,
                     },
                     --[[ Do not allow Razuvious mode for now
@@ -228,6 +239,7 @@ function SilentRotate:CreateConfig()
                         type = "toggle",
                         order = 11,
                         width = "full",
+                        set = setForMode,
                     },
                     razModeText = {
                         name = L["MODE_LABEL"],
@@ -235,6 +247,7 @@ function SilentRotate:CreateConfig()
                         type = "input",
                         order = 12,
                         width = "half",
+                        set = setForMode,
                         hidden = function() return not SilentRotate.db.profile.razModeButton end,
                     },
                     ]]
