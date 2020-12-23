@@ -18,13 +18,13 @@ function SilentRotate:LoadDefaults()
 			useNameOutline = false,
 			appendGroup = false,
 			groupSuffix = L["DEFAULT_GROUP_SUFFIX_MESSAGE"],
-			groupSuffixColor = SilentRotate.colors.lightGray:GetRGB(),
+			groupSuffixColor = {SilentRotate.colors.lightGray:GetRGB()},
 
 			-- Background
-			neutralBackgroundColor = SilentRotate.colors.lightGray:GetRGB(),
-			activeBackgroundColor  = SilentRotate.colors.purple:GetRGB(),
-			deadBackgroundColor    = SilentRotate.colors.red:GetRGB(),
-			offlineBackgroundColor = SilentRotate.colors.darkGray:GetRGB(),
+			neutralBackgroundColor = {SilentRotate.colors.lightGray:GetRGB()},
+			activeBackgroundColor  = {SilentRotate.colors.purple:GetRGB()},
+			deadBackgroundColor    = {SilentRotate.colors.red:GetRGB()},
+			offlineBackgroundColor = {SilentRotate.colors.darkGray:GetRGB()},
 
 			-- Sounds
 			enableNextToTranqSound = true,

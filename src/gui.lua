@@ -113,14 +113,14 @@ end
 -- Set the hunter frame color regarding it's status
 function SilentRotate:setHunterFrameColor(hunter)
 
-    local color = SilentRotate.colors.lightGray
+    local color = SilentRotate:getUserDefinedColor('neutral')
 
     if (not SilentRotate:isHunterOnline(hunter)) then
-        color = SilentRotate.colors.darkGray
+        color = SilentRotate:getUserDefinedColor('offline')
     elseif (not SilentRotate:isHunterAlive(hunter)) then
-        color = SilentRotate.colors.red
+        color = SilentRotate:getUserDefinedColor('dead')
     elseif (hunter.nextTranq) then
-        color = SilentRotate.colors.purple
+        color = SilentRotate:getUserDefinedColor('active')
     end
 
     hunter.frame.texture:SetVertexColor(color:GetRGB())
@@ -156,18 +156,7 @@ function SilentRotate:setHunterName(hunter)
 
     if (SilentRotate.db.profile.appendGroup and hunter.subgroup) then
         local groupText = string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup)
-        local color = SilentRotate.colors.groupSuffix
-        if (not color) then
-print("groupSuffix color is created")
-            -- Create the color based on profile
-            -- This should happen once, at start
-            color = CreateColor(
-                SilentRotate.db.profile.groupSuffixColor[1],
-                SilentRotate.db.profile.groupSuffixColor[2],
-                SilentRotate.db.profile.groupSuffixColor[3]
-            )
-            SilentRotate.colors.groupSuffix = color
-        end
+        local color = SilentRotate:getUserDefinedColor('groupSuffix')
         newText = newText.." "..color:WrapTextInColorCode(groupText)
     end
 

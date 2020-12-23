@@ -12,6 +12,10 @@ SilentRotate.colors = {
     ['white'] = CreateColor(1,1,1),
     -- Below are user-defined colors
     ['groupSuffix'] = nil,
+    ['neutral'] = nil,
+    ['active'] = nil,
+    ['dead'] = nil,
+    ['offline'] = nil,
 }
 
 SilentRotate.constants = {

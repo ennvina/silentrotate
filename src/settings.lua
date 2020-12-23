@@ -16,21 +16,41 @@ function SilentRotate:CreateConfig()
         SilentRotate:applySettings()
 	end
 
-    local function getColor(info)
-        return SilentRotate.db.profile[info[#info]][1], SilentRotate.db.profile[info[#info]][2], SilentRotate.db.profile[info[#info]][3]
-    end
-
-    local function setColor(info, r, g, b, colorName)
-print(info, r, g, b, colorName)
-SilentRotate.debug = info
-        set(info, {r,g,b})
-        if (colorName) then SilentRotate.colors[colorName] = CreateColor(r, g, b) end
-    end
-
     local function refreshNames()
         for _, hunter in pairs(SilentRotate.hunterTable) do
             SilentRotate:setHunterName(hunter)
         end
+    end
+
+    local function refreshFrameColors()
+        for _, hunter in pairs(SilentRotate.hunterTable) do
+            SilentRotate:setHunterFrameColor(hunter)
+        end
+    end
+
+    local function getColor(info)
+        return SilentRotate.db.profile[info[#info]][1], SilentRotate.db.profile[info[#info]][2], SilentRotate.db.profile[info[#info]][3]
+    end
+
+    local function setColor(info, r, g, b, suffix)
+        local colorName = info[#info]
+        local suffixIndex = string.find(colorName, suffix)
+        if suffixIndex > 0 then
+            -- Exclude the trailing suffix string
+            colorName = string.sub(colorName, 1, suffixIndex-1)
+        end
+        SilentRotate.colors[colorName] = CreateColor(r, g, b)
+        set(info, {r,g,b})
+    end
+
+    local function setFgColor(info, r, g, b)
+        setColor(info, r, g, b, "Color")
+        refreshNames()
+    end
+
+    local function setBgColor(info, r, g, b)
+        setColor(info, r, g, b, "BackgroundColor")
+        refreshFrameColors()
     end
 
 	local options = {
@@ -274,15 +294,48 @@ SilentRotate.debug = info
                         type = "color",
                         order = 6,
                         get = getColor,
-                        set = function(info, r, g, b)
-                            setColor(info, r, g, b, 'groupSuffix')
-                            refreshNames()
-                        end,
+                        set = setFgColor,
                     },
                     backgroundHeader = {
                         name = L["BACKGROUND_HEADER"],
                         type = "header",
                         order = 7,
+                    },
+                    neutralBackgroundColor = {
+                        name = L["NEUTRAL_BG"],
+                        desc = L["NEUTRAL_BG_DESC"],
+                        type = "color",
+                        order = 8,
+                        width = "full",
+                        get = getColor,
+                        set = setBgColor,
+                    },
+                    activeBackgroundColor = {
+                        name = L["ACTIVE_BG"],
+                        desc = L["ACTIVE_BG_DESC"],
+                        type = "color",
+                        order = 9,
+                        width = "full",
+                        get = getColor,
+                        set = setBgColor,
+                    },
+                    deadBackgroundColor = {
+                        name = L["DEAD_BG"],
+                        desc = L["DEAD_BG_DESC"],
+                        type = "color",
+                        order = 10,
+                        width = "full",
+                        get = getColor,
+                        set = setBgColor,
+                    },
+                    offlineBackgroundColor = {
+                        name = L["OFFLINE_BG"],
+                        desc = L["OFFLINE_BG_DESC"],
+                        type = "color",
+                        order = 11,
+                        width = "full",
+                        get = getColor,
+                        set = setBgColor,
                     },
                 }
             },

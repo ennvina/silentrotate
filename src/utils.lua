@@ -129,3 +129,34 @@ end
 function SilentRotate:isDistractSpell(spellName)
     return spellName == SilentRotate.constants.distract
 end
+
+-- Get a user-defined color or create it now
+function SilentRotate:getUserDefinedColor(colorName)
+
+    local color = SilentRotate.colors[colorName]
+
+    if (not color) then
+        -- Create the color based on profile
+        -- This should happen once, at start
+        local profileColorName
+        if (colorName == "groupSuffix") then
+            profileColorName = "groupSuffixColor"
+        else
+            profileColorName = (colorName or "").."BackgroundColor"
+        end
+
+        if (SilentRotate.db.profile[profileColorName]) then
+            color = CreateColor(
+                SilentRotate.db.profile[profileColorName][1],
+                SilentRotate.db.profile[profileColorName][2],
+                SilentRotate.db.profile[profileColorName][3]
+            )
+        else
+            print("[SilentRotate] Unknown color constant "..(colorName or "''"))
+        end
+
+        SilentRotate.colors[colorName] = color
+    end
+
+    return color
+end
