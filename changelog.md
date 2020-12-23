@@ -7,6 +7,12 @@
 - Option to append group index, plus options to choose its text and color
 - Options to select the background colors (neutral, active, dead, offline)
 
+#### v0.3.5-beta
+
+- Activating Test mode will now show your own unit even if not in a raid group
+- Activating Test mode will now show party units even if not in a raid group
+- Either way Test mode will only show units which class fits the selected mode
+
 #### v0.3.4-beta
 
 - Text color is now based on the class color, instead of white
