@@ -155,10 +155,95 @@ function SilentRotate:CreateConfig()
                     }
                 }
             },
+            modes = {
+                name = L['SETTING_MODES'],
+                type = "group",
+                order = 2,
+                args = {
+                    tranqModeHeader = {
+                        type = "header",
+                        order = 1,
+                    },
+                    tranqModeButton = {
+                        name = L["TRANQ_MODE_FULL_NAME"],
+                        desc = string.format(L["MODE_BUTTON_DESC"], L["TRANQ_MODE_FULL_NAME"]),
+                        type = "toggle",
+                        order = 2,
+                        width = "full",
+                    },
+                    tranqModeText = {
+                        name = L["MODE_LABEL"],
+                        desc = string.format(L["MODE_LABEL_DESC"], L["TRANQ_MODE_FULL_NAME"]),
+                        type = "input",
+                        order = 3,
+                        width = "half",
+                        hidden = function() return not SilentRotate.db.profile.tranqModeButton end,
+                    },
+                    loathebModeHeader = {
+                        type = "header",
+                        order = 4,
+                    },
+                    loathebModeButton = {
+                        name = L["LOATHEB_MODE_FULL_NAME"],
+                        desc = string.format(L["MODE_BUTTON_DESC"], L["LOATHEB_MODE_FULL_NAME"]),
+                        type = "toggle",
+                        order = 5,
+                        width = "full",
+                    },
+                    loathebModeText = {
+                        name = L["MODE_LABEL"],
+                        desc = string.format(L["MODE_LABEL_DESC"], L["LOATHEB_MODE_FULL_NAME"]),
+                        type = "input",
+                        order = 6,
+                        width = "half",
+                        hidden = function() return not SilentRotate.db.profile.loathebModeButton end,
+                    },
+                    distractModeHeader = {
+                        type = "header",
+                        order = 7,
+                    },
+                    distractModeButton = {
+                        name = L["DISTRACT_MODE_FULL_NAME"],
+                        desc = string.format(L["MODE_BUTTON_DESC"], L["DISTRACT_MODE_FULL_NAME"]),
+                        type = "toggle",
+                        order = 8,
+                        width = "full",
+                    },
+                    distractModeText = {
+                        name = L["MODE_LABEL"],
+                        desc = string.format(L["MODE_LABEL_DESC"], L["DISTRACT_MODE_FULL_NAME"]),
+                        type = "input",
+                        order = 9,
+                        width = "half",
+                        hidden = function() return not SilentRotate.db.profile.distractModeButton end,
+                    },
+                    --[[ Do not allow Razuvious mode for now
+                    razModeHeader = {
+                        type = "header",
+                        order = 10,
+                    },
+                    razModeButton = {
+                        name = L["RAZ_MODE_FULL_NAME"],
+                        desc = string.format(L["MODE_BUTTON_DESC"], L["RAZ_MODE_FULL_NAME"]),
+                        type = "toggle",
+                        order = 11,
+                        width = "full",
+                    },
+                    razModeText = {
+                        name = L["MODE_LABEL"],
+                        desc = string.format(L["MODE_LABEL_DESC"], L["RAZ_MODE_FULL_NAME"]),
+                        type = "input",
+                        order = 12,
+                        width = "half",
+                        hidden = function() return not SilentRotate.db.profile.razModeButton end,
+                    },
+                    ]]
+                }
+            },
             announces = {
                 name = L['SETTING_ANNOUNCES'],
                 type = "group",
-                order = 2,
+                order = 3,
                 args = {
                     enableAnnounces = {
                         name = L["ENABLE_ANNOUNCES"],
@@ -255,7 +340,7 @@ function SilentRotate:CreateConfig()
             names = {
                 name = L['SETTING_NAMES'],
                 type = "group",
-                order = 3,
+                order = 4,
                 args = {
                     nameTagHeader = {
                         name = L["NAME_TAG_HEADER"],
@@ -350,7 +435,7 @@ function SilentRotate:CreateConfig()
             sounds = {
                 name = L['SETTING_SOUNDS'],
                 type = "group",
-                order = 4,
+                order = 5,
                 args = {
                     enableNextToTranqSound = {
                         name = L["ENABLE_NEXT_TO_TRANQ_SOUND"],

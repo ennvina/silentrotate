@@ -6,16 +6,19 @@ function SilentRotate:IsTranqMode()
     return not SilentRotate:IsRazMode() and not SilentRotate:IsLoathebMode() and not SilentRotate:IsDistractMode()
 end
 
-function SilentRotate:IsRazMode()
-    return SilentRotate.currentMode == 'priestz'
+function SilentRotate:IsRazMode(mode)
+    if (not mode) then mode = SilentRotate.currentMode end
+    return mode == 'priestz'
 end
 
-function SilentRotate:IsLoathebMode()
-    return SilentRotate.currentMode == 'healerz'
+function SilentRotate:IsLoathebMode(mode)
+    if (not mode) then mode = SilentRotate.currentMode end
+    return mode == 'healerz'
 end
 
-function SilentRotate:IsDistractMode()
-    return SilentRotate.currentMode == 'roguez'
+function SilentRotate:IsDistractMode(mode)
+    if (not mode) then mode = SilentRotate.currentMode end
+    return mode == 'roguez'
 end
 
 -- Activate the specific mode
@@ -35,12 +38,14 @@ function SilentRotate:activateMode(modeName)
     end
 end
 
-function SilentRotate:IsClassWanted(className)
-    if SilentRotate:IsRazMode() then
+-- Return true if the class is recommended for a specific mode
+-- If mode is nil, use the current mode instead
+function SilentRotate:IsClassWanted(className, mode)
+    if SilentRotate:IsRazMode(mode) then
         return className == 'PRIEST'
-    elseif SilentRotate:IsLoathebMode() then
+    elseif SilentRotate:IsLoathebMode(mode) then
         return className == 'PRIEST' or className == 'PALADIN' or className == 'SHAMAN' or className == 'DRUID'
-    elseif SilentRotate:IsDistractMode() then
+    elseif SilentRotate:IsDistractMode(mode) then
         return className == 'ROGUE'
     end
     return className == 'HUNTER' -- hunter is the default mode

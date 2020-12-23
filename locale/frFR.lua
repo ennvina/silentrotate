@@ -71,10 +71,18 @@ L["USE_MULTILINE_ROTATION_REPORT"] = "Utiliser plusieurs lignes pour la rotation
 L["USE_MULTILINE_ROTATION_REPORT_DESC"] = "Chaque chasseur de la rotation apparaitra sur une ligne numérotée"
 
     --- Modes
+L["SETTING_MODES"] = "Modes"
 L["FILTER_SHOW_HUNTERS"] = "Tranq"
 L["FILTER_SHOW_PRIESTS"] = "Razu"
 L["FILTER_SHOW_HEALERS"] = "Horreb"
 L["FILTER_SHOW_ROGUES"] = "Distract"
+L["TRANQ_MODE_FULL_NAME"] = "Tir tranquilisant"
+L["LOATHEB_MODE_FULL_NAME"] = "Horreb"
+L["DISTRACT_MODE_FULL_NAME"] = "Distraction"
+L["RAZ_MODE_FULL_NAME"] = "Razuvious"
+L["MODE_BUTTON_DESC"] = "Affiche le bouton pour activer le mode '%s'"
+L["MODE_LABEL"] = "Texte du bouton"
+L["MODE_LABEL_DESC"] = "Texte écrit dans le bouton pour activer le mode '%s'"
 
     --- Names
 L["SETTING_NAMES"] = "Noms"

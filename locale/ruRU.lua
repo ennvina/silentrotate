@@ -71,10 +71,18 @@ L["USE_MULTILINE_ROTATION_REPORT"] = "Использовать многостр�
 L["USE_MULTILINE_ROTATION_REPORT_DESC"] = "Выберите для более понятного порядка отображения очередности"
 
     --- Modes
+L["SETTING_MODES"] = "Modes"
 L["FILTER_SHOW_HUNTERS"] = "Tranq"
 L["FILTER_SHOW_PRIESTS"] = "Raz"
 L["FILTER_SHOW_HEALERS"] = "Loatheb"
 L["FILTER_SHOW_ROGUES"] = "Distract"
+L["TRANQ_MODE_FULL_NAME"] = "Tranquilizing Shot"
+L["LOATHEB_MODE_FULL_NAME"] = "Loatheb"
+L["DISTRACT_MODE_FULL_NAME"] = "Distract"
+L["RAZ_MODE_FULL_NAME"] = "Razuvious"
+L["MODE_BUTTON_DESC"] = "Show the button for activating the mode '%s'"
+L["MODE_LABEL"] = "Button Text"
+L["MODE_LABEL_DESC"] = "Text that appears in the button for activating the mode '%s'"
 
     --- Names
 L["SETTING_NAMES"] = "Names"

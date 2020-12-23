@@ -126,13 +126,15 @@ function SilentRotate:createModeFrame()
     SilentRotate.mainFrame.modeFrame.text:SetText('Mode:')
     SilentRotate.mainFrame.modeFrame.text:SetTextColor(1,1,1,1)
 
-    local myClass = select(2,UnitClass("player"))
-    if (myClass == 'HUNTER') then
-        SilentRotate.currentMode = "hunterz" 
-    elseif (myClass == 'ROGUE') then
-        SilentRotate.currentMode = "roguez" 
-    else
-        SilentRotate.currentMode = "healerz" 
+    if (not SilentRotate.currentMode) then
+        local myClass = select(2,UnitClass("player"))
+        if (myClass == 'HUNTER') then
+            SilentRotate.currentMode = "hunterz"
+        elseif (myClass == 'ROGUE') then
+            SilentRotate.currentMode = "roguez"
+        else
+            SilentRotate.currentMode = "healerz"
+        end
     end
     SilentRotate.mainFrame.modeFrames = { ["hunterz"] = nil, ["priestz"] = nil, ["healerz"] = nil, ["roguez"] = nil }
     local wipRazuvious = false
