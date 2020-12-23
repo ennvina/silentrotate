@@ -47,7 +47,7 @@ end
 
 -- Checks if a hunter is in a PvE raid
 function SilentRotate:isInPveRaid()
-    return IsInRaid() and not SilentRotate:isPlayerInBattleground()
+    return SilentRotate.testMode or IsInRaid() and not SilentRotate:isPlayerInBattleground()
 end
 
 function SilentRotate:getPlayerNameFont()
