@@ -15,14 +15,16 @@ function SilentRotate:LoadDefaults()
 
 			-- Modes
 			currentMode = nil, -- Will be set based on *modeButton flags at the end of this file
-			tranqModeButton    = SilentRotate:isClassWanted(select(2,UnitClass("player")), 'hunterz'),
-			loathebModeButton  = SilentRotate:isClassWanted(select(2,UnitClass("player")), 'healerz'),
-			distractModeButton = SilentRotate:isClassWanted(select(2,UnitClass("player")), 'roguez'),
-			razModeButton = false, -- SilentRotate:isClassWanted(select(2,UnitClass("player")), 'priestz'), -- Do not allow Razuvious mode for now
+			tranqModeButton    = SilentRotate:isPlayerWanted("player", nil, 'hunterz'),
+			loathebModeButton  = SilentRotate:isPlayerWanted("player", nil, 'healerz'),
+			distractModeButton = SilentRotate:isPlayerWanted("player", nil, 'roguez'),
+			razModeButton = false, -- SilentRotate:isPlayerWanted("player", nil, 'priestz'), -- Do not allow Razuvious mode for now
+			fearWardModeButton = SilentRotate:isPlayerWanted("player", nil, 'fearz'),
 			tranqModeText    = L["FILTER_SHOW_HUNTERS"],
 			loathebModeText  = L["FILTER_SHOW_HEALERS"],
 			distractModeText = L["FILTER_SHOW_ROGUES"],
 			razModeText      = L["FILTER_SHOW_PRIESTS"],
+			fearWardModeText = L["FILTER_SHOW_DWARVES"],
 
 			-- Names
 			useClassColor = true,
@@ -57,6 +59,8 @@ function SilentRotate:LoadDefaults()
 		self.defaults.profile.currentMode = 'healerz'
 	elseif (self.defaults.profile.distractModeButton) then
 		self.defaults.profile.currentMode = 'roguez'
+	elseif (self.defaults.profile.fearWardModeButton) then
+		self.defaults.profile.currentMode = 'fearz'
 	else
 		-- Use Loatheb mode by default for classes who cannot fit other roles
 		-- Also enable this option by default

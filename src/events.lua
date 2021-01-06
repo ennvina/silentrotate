@@ -68,6 +68,11 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
             local hunter = SilentRotate:getHunter(nil, sourceGUID)
             SilentRotate:rotate(hunter, false)
         end
+    elseif SilentRotate:isFearWardMode() then
+        if (event == "SPELL_CAST_SUCCESS" and SilentRotate:isFearWardSpell(spellName)) then
+            local hunter = SilentRotate:getHunter(nil, sourceGUID)
+            SilentRotate:rotate(hunter, false)
+        end
     end
 end
 

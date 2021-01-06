@@ -118,12 +118,13 @@ function SilentRotate:createModeFrame()
     SilentRotate.mainFrame.modeFrame.texture:SetColorTexture(SilentRotate.colors.darkBlue:GetRGB())
     SilentRotate.mainFrame.modeFrame.texture:SetAllPoints()
 
-    SilentRotate.mainFrame.modeFrames = { ["hunterz"] = nil, ["priestz"] = nil, ["healerz"] = nil, ["roguez"] = nil }
+    SilentRotate.mainFrame.modeFrames = { ["hunterz"] = nil, ["priestz"] = nil, ["healerz"] = nil, ["roguez"] = nil, ["fearz"] = nil }
     local commonModeWidth = SilentRotate.constants.mainFrameWidth/4
     SilentRotate:createSingleModeFrame("hunterz", L["FILTER_SHOW_HUNTERS"], 0*commonModeWidth, 1*commonModeWidth, SilentRotate:isTranqMode())
     SilentRotate:createSingleModeFrame("healerz", L["FILTER_SHOW_HEALERS"], 1*commonModeWidth, 2*commonModeWidth, SilentRotate:isLoathebMode())
     SilentRotate:createSingleModeFrame("roguez",  L["FILTER_SHOW_ROGUES"] , 2*commonModeWidth, 3*commonModeWidth, SilentRotate:isDistractMode())
     SilentRotate:createSingleModeFrame("priestz", L["FILTER_SHOW_PRIESTS"], 3*commonModeWidth, 4*commonModeWidth, SilentRotate:isRazMode())
+    SilentRotate:createSingleModeFrame("fearz",   L["FILTER_SHOW_DWARVES"], 4*commonModeWidth, 5*commonModeWidth, SilentRotate:isFearWardMode())
     SilentRotate:applyModeFrameSettings()
 end
 
@@ -187,6 +188,11 @@ function SilentRotate:applyModeFrameSettings()
             modeName = "priestz",
             visibilityFlag = "razModeButton",
             textVariable = "razModeText",
+        },
+        {
+            modeName = "fearz",
+            visibilityFlag = "fearWardModeButton",
+            textVariable = "fearWardModeText",
         },
     }
 
