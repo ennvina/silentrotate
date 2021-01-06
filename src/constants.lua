@@ -34,7 +34,8 @@ SilentRotate.constants = {
         ['priestz'] = 'srpriestz',
 --        ['healerz'] = 'srhealerz',
         ['healerz'] = 'silentrotate', -- for compatibility purposes
-        ['roguez' ] = 'srroguez'
+        ['roguez' ] = 'srroguez',
+        ['fearz' ] = 'srfearz',
     },
 
     ['commsChannel'] = 'RAID',
@@ -84,5 +85,7 @@ SilentRotate.constants = {
         29199, -- shaman debuff
     },
 
-    ['distract'] = GetSpellInfo(1725)
+    ['distract'] = GetSpellInfo(1725),
+
+    ['fearWard'] = GetSpellInfo(6346),
 }

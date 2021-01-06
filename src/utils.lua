@@ -130,6 +130,11 @@ function SilentRotate:isDistractSpell(spellName)
     return spellName == SilentRotate.constants.distract
 end
 
+-- Checks if the spell is the Priest Fear Ward
+function SilentRotate:isFearWardSpell(spellName)
+    return spellName == SilentRotate.constants.fearWard
+end
+
 -- Get a user-defined color or create it now
 function SilentRotate:getUserDefinedColor(colorName)
 

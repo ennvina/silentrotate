@@ -1,5 +1,9 @@
 ## SilentRotate Changelog
 
+#### v0.5.0-beta
+
+- New mode: Fear Ward
+
 #### v0.4.1-beta
 
 - The selected mode is now stored in user settings

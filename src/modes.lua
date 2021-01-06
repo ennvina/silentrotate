@@ -4,7 +4,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("SilentRotate")
 
 -- Is Tranqshot Mode? (default mode)
 function SilentRotate:isTranqMode(mode)
-    return not SilentRotate:isRazMode(mode) and not SilentRotate:isLoathebMode(mode) and not SilentRotate:isDistractMode(mode)
+    return not SilentRotate:isRazMode(mode) and not SilentRotate:isLoathebMode(mode) and not SilentRotate:isDistractMode(mode) and not SilentRotate:isFearWardMode(mode)
 end
 
 function SilentRotate:isRazMode(mode)
@@ -22,6 +22,11 @@ function SilentRotate:isDistractMode(mode)
     return mode == 'roguez'
 end
 
+function SilentRotate:isFearWardMode(mode)
+    if (not mode) then mode = SilentRotate.db.profile.currentMode end
+    return mode == 'fearz'
+end
+
 function SilentRotate:setTranqMode()
     SilentRotate.db.profile.currentMode = 'hunterz'
 end
@@ -36,6 +41,10 @@ end
 
 function SilentRotate:setDistractMode()
     SilentRotate.db.profile.currentMode = 'roguez'
+end
+
+function SilentRotate:setFearWardMode()
+    SilentRotate.db.profile.currentMode = 'fearz'
 end
 
 -- Activate the specific mode
@@ -57,15 +66,22 @@ function SilentRotate:activateMode(modeName)
     end
 end
 
--- Return true if the class is recommended for a specific mode
+-- Return true if the player is recommended for a specific mode
+-- If className is nil, the class is fetched from the unit
 -- If mode is nil, use the current mode instead
-function SilentRotate:isClassWanted(className, mode)
+function SilentRotate:isPlayerWanted(unit, className, mode)
+    if className == nil then
+        className = (select(2,UnitClass(unit)))
+    end
+
     if SilentRotate:isRazMode(mode) then
         return className == 'PRIEST'
     elseif SilentRotate:isLoathebMode(mode) then
         return className == 'PRIEST' or className == 'PALADIN' or className == 'SHAMAN' or className == 'DRUID'
     elseif SilentRotate:isDistractMode(mode) then
         return className == 'ROGUE'
+    elseif SilentRotate:isFearWardMode(mode) then
+        return className == 'PRIEST' and select(2,UnitRace(unit)) == 'Dwarf'
     end
     return className == 'HUNTER' -- hunter is the default mode
 end
@@ -82,6 +98,8 @@ function SilentRotate:getModeDuration(mode)
         duration = 60 -- Corrupted Mind debuff that prevents healing spells
     elseif SilentRotate:isDistractMode() then
         duration = 30 -- Cooldown of Rogue's Distract
+    elseif SilentRotate:isFearWardMode() then
+        duration = 30
     else
         duration = 0 -- Duration should have no meaning for other modes
     end
@@ -97,6 +115,8 @@ function SilentRotate:getBroadcastHeaderText()
         return L['BROADCAST_HEADER_TEXT_LOATHEB']
     elseif SilentRotate:isDistractMode() then
         return L['BROADCAST_HEADER_TEXT_DISTRACT']
+    elseif SilentRotate:isFearWardMode() then
+        return L['BROADCAST_HEADER_TEXT_FEARWARD']
     end
     return L['BROADCAST_HEADER_TEXT']
 end

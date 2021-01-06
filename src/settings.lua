@@ -283,6 +283,35 @@ function SilentRotate:CreateConfig()
                         hidden = function() return SilentRotate.db.profile.razModeButton or not SilentRotate:isRazMode() end,
                     },
                     ]]
+                    fearWardModeHeader = {
+                        type = "header",
+                        order = 50,
+                    },
+                    fearWardModeButton = {
+                        name = L["FEARWARD_MODE_FULL_NAME"],
+                        desc = string.format(L["MODE_BUTTON_DESC"], L["FEARWARD_MODE_FULL_NAME"])..".\n"..L["FEARWARD_MODE_DETAILED_DESC"],
+                        type = "toggle",
+                        order = 51,
+                        width = "full",
+                        set = setForMode,
+                    },
+                    fearWardModeText = {
+                        name = L["MODE_LABEL"],
+                        desc = string.format(L["MODE_LABEL_DESC"], L["FEARWARD_MODE_FULL_NAME"]),
+                        type = "input",
+                        order = 52,
+                        width = "half",
+                        set = setForMode,
+                        hidden = function() return not SilentRotate.db.profile.fearWardModeButton end,
+                    },
+                    fearWardModeInvisible = {
+                        name = SilentRotate.colors.lightRed:WrapTextInColorCode(L["MODE_INVISIBLE"]),
+                        type = "description",
+                        fontSize = "medium",
+                        width = "full",
+                        order = 53,
+                        hidden = function() return SilentRotate.db.profile.fearWardModeButton or not SilentRotate:isFearWardMode() end,
+                    },
                 }
             },
             announces = {
