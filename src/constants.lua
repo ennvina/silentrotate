@@ -29,14 +29,7 @@ SilentRotate.constants = {
     ['mainFrameWidth'] = 130,
     ['rotationFramesBaseHeight'] = 20,
 
-    ['commsPrefix'] = {
-        ['hunterz'] = 'srhunterz',
-        ['priestz'] = 'srpriestz',
---        ['healerz'] = 'srhealerz',
-        ['healerz'] = 'silentrotate', -- for compatibility purposes
-        ['roguez' ] = 'srroguez',
-        ['fearz' ] = 'srfearz',
-    },
+    ['commsPrefix'] = 'silentrotate',
 
     ['commsChannel'] = 'RAID',
 
