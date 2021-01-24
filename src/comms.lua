@@ -73,6 +73,7 @@ function SilentRotate:sendSyncTranq(hunter, fail, timestamp)
         ['timestamp'] = timestamp,
         ['player'] = hunter.name,
         ['fail'] = fail,
+        ['mode'] = SilentRotate.db.profile.currentMode,
     }
 
     SilentRotate:sendRaidAddonMessage(message)
@@ -114,11 +115,22 @@ end
 -- Tranqshot event received
 function SilentRotate:receiveSyncTranq(prefix, message, channel, sender)
 
+    if (message.mode =~ SilentRotate.db.profile.currentMode) then
+        -- Received a message from another mode
+        -- This may also happen if the message comes from an old version of the addon but it causes many problems so it's best to ignore the message
+        return
+    end
+
     local hunter = SilentRotate:getHunter(message.player)
+    if (hunter == nil) then
+        -- TODO maybe display a warning to the user because this should not happen in theory
+        return
+    end
+
     local notDuplicate = hunter.lastTranqTime <  GetTime() - SilentRotate.constants.duplicateTranqshotDelayThreshold
 
-    if (hunter ~= nil and notDuplicate) then
-        SilentRotate:rotate(SilentRotate:getHunter(message.player), message.fail)
+    if (notDuplicate) then
+        SilentRotate:rotate(hunter, message.fail)
     end
 end
 
