@@ -27,25 +27,22 @@ function SilentRotate:isFearWardMode(mode)
     return mode == 'fearz'
 end
 
-function SilentRotate:setTranqMode()
-    SilentRotate.db.profile.currentMode = 'hunterz'
-end
-
-function SilentRotate:setRazMode()
-    SilentRotate.db.profile.currentMode = 'priestz'
-end
-
-function SilentRotate:setLoathebMode()
-    SilentRotate.db.profile.currentMode = 'healerz'
-end
-
-function SilentRotate:setDistractMode()
-    SilentRotate.db.profile.currentMode = 'roguez'
-end
-
-function SilentRotate:setFearWardMode()
-    SilentRotate.db.profile.currentMode = 'fearz'
-end
+-- -- Setters shown here to list available modes, but no one should ever call these functions
+-- function SilentRotate:setTranqMode()
+--     SilentRotate.db.profile.currentMode = 'hunterz'
+-- end
+-- function SilentRotate:setRazMode()
+--     SilentRotate.db.profile.currentMode = 'priestz'
+-- end
+-- function SilentRotate:setLoathebMode()
+--     SilentRotate.db.profile.currentMode = 'healerz'
+-- end
+-- function SilentRotate:setDistractMode()
+--     SilentRotate.db.profile.currentMode = 'roguez'
+-- end
+-- function SilentRotate:setFearWardMode()
+--     SilentRotate.db.profile.currentMode = 'fearz'
+-- end
 
 -- Activate the specific mode
 function SilentRotate:activateMode(modeName)
