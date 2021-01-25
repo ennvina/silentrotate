@@ -351,28 +351,40 @@ function SilentRotate:CreateConfig()
                         width = "normal",
                         order = 22,
                     },
-                    announceSuccessMessage = {
-                        name = L["SUCCESS_MESSAGE_LABEL"],
+                    announceTranqshotSuccessMessage = {
+                        name = L["TRANQSHOT_SUCCESS_MESSAGE_LABEL"],
                         type = "input",
                         order = 23,
                         width = "double",
                     },
-                    announceFailMessage = {
-                        name = L["FAIL_MESSAGE_LABEL"],
+                    announceTranqshotFailMessage = {
+                        name = L["TRANQSHOT_FAIL_MESSAGE_LABEL"],
                         type = "input",
                         order = 24,
-                        width = "double",
-                    },
-                    whisperFailMessage = {
-                        name = L["FAIL_WHISPER_LABEL"],
-                        type = "input",
-                        order = 25,
                         width = "double",
                     },
                     announceLoathebMessage = {
                         name = L["LOATHEB_MESSAGE_LABEL"],
                         type = "input",
-                        order = 23,
+                        order = 25,
+                        width = "double",
+                    },
+                    announceDistractSuccessMessage = {
+                        name = L["DISTRACT_SUCCESS_MESSAGE_LABEL"],
+                        type = "input",
+                        order = 26,
+                        width = "double",
+                    },
+                    announceDistractFailMessage = {
+                        name = L["DISTRACT_FAIL_MESSAGE_LABEL"],
+                        type = "input",
+                        order = 27,
+                        width = "double",
+                    },
+                    announceFearWardMessage = {
+                        name = L["FEARWARD_MESSAGE_LABEL"],
+                        type = "input",
+                        order = 28,
                         width = "double",
                     },
                     setupBroadcastHeader = {

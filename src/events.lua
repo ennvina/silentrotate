@@ -46,14 +46,14 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
             if (event == "SPELL_CAST_SUCCESS") then
                 SilentRotate:sendSyncTranq(hunter, false, timestamp)
                 SilentRotate:rotate(hunter, false)
-                if  (sourceGUID == UnitGUID("player")) then
-                    SilentRotate:sendAnnounceMessage(SilentRotate.db.profile.announceSuccessMessage, destName)
+                if (sourceGUID == UnitGUID("player")) then
+                    SilentRotate:sendAnnounceMessage(SilentRotate.db.profile.announceTranqshotSuccessMessage, destName)
                 end
             elseif (event == "SPELL_MISSED") then
                 SilentRotate:sendSyncTranq(hunter, true, timestamp)
                 SilentRotate:rotate(hunter, true)
-                if  (sourceGUID == UnitGUID("player")) then
-                    SilentRotate:sendAnnounceMessage(SilentRotate.db.profile.announceFailMessage, destName)
+                if (sourceGUID == UnitGUID("player")) then
+                    SilentRotate:sendAnnounceMessage(SilentRotate.db.profile.announceTranqshotFailMessage, destName)
                 end
             end
         elseif (event == "SPELL_AURA_APPLIED" and SilentRotate:isBossFrenzy(spellName, sourceGUID) and SilentRotate:isPlayerNextTranq()) then
@@ -67,15 +67,27 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
         if SilentRotate:isDistractSpell(spellName) then
             local hunter = SilentRotate:getHunter(nil, sourceGUID)
             if (event == "SPELL_CAST_SUCCESS") then
+                SilentRotate:sendSyncTranq(hunter, false, timestamp)
                 SilentRotate:rotate(hunter, false)
+                if (sourceGUID == UnitGUID("player")) then
+                    SilentRotate:sendAnnounceMessage(SilentRotate.db.profile.announceDistractSuccessMessage)
+                end
             elseif (event == "SPELL_MISSED") then
+                SilentRotate:sendSyncTranq(hunter, true, timestamp)
                 SilentRotate:rotate(hunter, true)
+                if (sourceGUID == UnitGUID("player")) then
+                    SilentRotate:sendAnnounceMessage(SilentRotate.db.profile.announceDistractFailMessage)
+                end
             end
         end
     elseif SilentRotate:isFearWardMode() then
         if (event == "SPELL_CAST_SUCCESS" and SilentRotate:isFearWardSpell(spellName)) then
             local hunter = SilentRotate:getHunter(nil, sourceGUID)
+            SilentRotate:sendSyncTranq(hunter, false, timestamp)
             SilentRotate:rotate(hunter, false)
+            if (sourceGUID == UnitGUID("player")) then
+                SilentRotate:sendAnnounceMessage(SilentRotate.db.profile.announceFearWardMessage, destName)
+            end
         end
     end
 end

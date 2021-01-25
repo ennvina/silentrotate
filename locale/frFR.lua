@@ -51,15 +51,21 @@ L["CHANNEL_GUILD"] = "Guilde"
 
     ---- Messages
 L["ANNOUNCES_MESSAGE_HEADER"] = "Annonces de tir tranquilisant"
-L["SUCCESS_MESSAGE_LABEL"] = "Message de réussite"
-L["FAIL_MESSAGE_LABEL"] = "Message d'échec"
-L["FAIL_WHISPER_LABEL"] = "Message d'échec chuchoté"
+L["TRANQSHOT_SUCCESS_MESSAGE_LABEL"] = "Message de réussite de tir tranquilisant"
+L["TRANQSHOT_FAIL_MESSAGE_LABEL"] = "Message d'échec de tir tranquilisant"
+--L["FAIL_WHISPER_LABEL"] = "Message d'échec chuchoté"
 L["LOATHEB_MESSAGE_LABEL"] = "Message d'application du débuff de Loatheb"
+L["DISTRACT_SUCCESS_MESSAGE_LABEL"] = "Message de réussite de distraction"
+L["DISTRACT_FAIL_MESSAGE_LABEL"] = "Message d'échec de distraction"
+L["FEARWARD_MESSAGE_LABEL"] = "Message d'application de l'anti-fear"
 
-L["DEFAULT_SUCCESS_ANNOUNCE_MESSAGE"] = "Tir tranquilisant fait sur %s"
-L["DEFAULT_FAIL_ANNOUNCE_MESSAGE"] = "!!! TIR TRANQUILISANT RATÉ SUR %s !!!"
-L["DEFAULT_FAIL_WHISPER_MESSAGE"] = "TIR TRANQUILISANT RATE ! TRANQ MAINTENANT !"
+L["DEFAULT_TRANQSHOT_SUCCESS_ANNOUNCE_MESSAGE"] = "Tir tranquilisant fait sur %s"
+L["DEFAULT_TRANQSHOT_FAIL_ANNOUNCE_MESSAGE"] = "!!! TIR TRANQUILISANT RATÉ SUR %s !!!"
+L["DEFAULT_TRANQSHOT_FAIL_WHISPER_MESSAGE"] = "TIR TRANQUILISANT RATE ! TRANQ MAINTENANT !"
 L["DEFAULT_LOATHEB_ANNOUNCE_MESSAGE"] = "Psyché corrompue sur %s"
+L["DEFAULT_DISTRACT_SUCCESS_ANNOUNCE_MESSAGE"] = "Distraction lancée"
+L["DEFAULT_DISTRACT_FAIL_ANNOUNCE_MESSAGE"] = "!!! DISTRACTION RATE !!!"
+L["DEFAULT_FEARWARD_ANNOUNCE_MESSAGE"] = "Anti-fear lancé sur %s"
 
 L["TRANQ_NOW_LOCAL_ALERT_MESSAGE"] = "TRANQ MAINTENANT !"
 

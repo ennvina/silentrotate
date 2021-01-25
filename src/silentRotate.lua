@@ -97,7 +97,10 @@ function SilentRotate:sendMessage(message, targetName, channelType, targetChanne
     if channelType == "CHANNEL" then
         channelNumber = GetChannelName(targetChannel)
     end
-    SendChatMessage(string.format(message, targetName), channelType, nil, channelNumber or targetChannel)
+    if (targetName ~= nil) then
+        message = string.format(message, targetName)
+    end
+    SendChatMessage(message, channelType, nil, channelNumber or targetChannel)
 end
 
 SLASH_SILENTROTATE1 = "/sr"
@@ -111,8 +114,8 @@ SlashCmdList["SILENTROTATE"] = function(msg)
         SilentRotate:lock(true)
     elseif (cmd == 'unlock') then
         SilentRotate:lock(false)
-    elseif (cmd == 'backup') then
-        SilentRotate:whisperBackup()
+    -- elseif (cmd == 'backup') then
+    --     SilentRotate:whisperBackup()
     elseif (cmd == 'rotate') then -- @todo decide if this should be removed or not
         SilentRotate:testRotation()
     elseif (cmd == 'test') then -- @todo: remove this
@@ -199,7 +202,7 @@ function SilentRotate:printHelp()
     SilentRotate:printMessage(spacing .. SilentRotate:colorText('unlock') .. ' : Unlock the main window position')
     SilentRotate:printMessage(spacing .. SilentRotate:colorText('settings') .. ' : Open SilentRotate settings')
     SilentRotate:printMessage(spacing .. SilentRotate:colorText('report') .. ' : Print the rotation setup to the configured channel')
-    SilentRotate:printMessage(spacing .. SilentRotate:colorText('backup') .. ' : Whispers backup hunters to immediately tranq')
+--    SilentRotate:printMessage(spacing .. SilentRotate:colorText('backup') .. ' : Whispers backup hunters to immediately tranq')
 end
 
 -- Adds color to given text
