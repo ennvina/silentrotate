@@ -51,15 +51,21 @@ L["CHANNEL_GUILD"] = "公會"
 
     ---- Messages
 L["ANNOUNCES_MESSAGE_HEADER"] = "通告資訊"
-L["SUCCESS_MESSAGE_LABEL"] = "施放成功通告資訊"
-L["FAIL_MESSAGE_LABEL"] = "施放失敗通告資訊"
-L["FAIL_WHISPER_LABEL"] = "施放失敗私聊資訊"
+L["TRANQSHOT_SUCCESS_MESSAGE_LABEL"] = "施放成功通告資訊"
+L["TRANQSHOT_FAIL_MESSAGE_LABEL"] = "施放失敗通告資訊"
+--L["FAIL_WHISPER_LABEL"] = "施放失敗私聊資訊"
 L["LOATHEB_MESSAGE_LABEL"] = "Loatheb debuff applied"
+L["DISTRACT_SUCCESS_MESSAGE_LABEL"] = "Distract successful announce message"
+L["DISTRACT_FAIL_MESSAGE_LABEL"] = "Distract fail announce message"
+L["FEARWARD_MESSAGE_LABEL"] = "Fear ward announce message"
 
-L["DEFAULT_SUCCESS_ANNOUNCE_MESSAGE"] = "已對 %s 施放了寧神射擊!"
-L["DEFAULT_FAIL_ANNOUNCE_MESSAGE"] = "!!! 對 %s 寧神失敗!!!"
-L["DEFAULT_FAIL_WHISPER_MESSAGE"] = "寧神失敗 !! 趕緊補寧神!!"
+L["DEFAULT_TRANQSHOT_SUCCESS_ANNOUNCE_MESSAGE"] = "已對 %s 施放了寧神射擊!"
+L["DEFAULT_TRANQSHOT_FAIL_ANNOUNCE_MESSAGE"] = "!!! 對 %s 寧神失敗!!!"
+L["DEFAULT_TRANQSHOT_FAIL_WHISPER_MESSAGE"] = "寧神失敗 !! 趕緊補寧神!!"
 L["DEFAULT_LOATHEB_ANNOUNCE_MESSAGE"] = "Corrupted Mind on %s"
+L["DEFAULT_DISTRACT_SUCCESS_ANNOUNCE_MESSAGE"] = "Distract done"
+L["DEFAULT_DISTRACT_FAIL_ANNOUNCE_MESSAGE"] = "!!! DISTRACT FAILED !!!"
+L["DEFAULT_FEARWARD_ANNOUNCE_MESSAGE"] = "Fear Ward cast on %s"
 
 L["TRANQ_NOW_LOCAL_ALERT_MESSAGE"] = "立即使用寧神 !!"
 

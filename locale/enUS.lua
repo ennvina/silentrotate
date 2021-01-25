@@ -51,15 +51,21 @@ L["CHANNEL_GUILD"] = "Guild"
 
     ---- Messages
 L["ANNOUNCES_MESSAGE_HEADER"] = "Announce messages"
-L["SUCCESS_MESSAGE_LABEL"] = "Successful announce message"
-L["FAIL_MESSAGE_LABEL"] = "Fail announce message"
-L["FAIL_WHISPER_LABEL"] = "Fail whisper message"
+L["TRANQSHOT_SUCCESS_MESSAGE_LABEL"] = "Tranqshot successful announce message"
+L["TRANQSHOT_FAIL_MESSAGE_LABEL"] = "Tranqshot fail announce message"
+--L["FAIL_WHISPER_LABEL"] = "Fail whisper message"
 L["LOATHEB_MESSAGE_LABEL"] = "Loatheb debuff applied"
+L["DISTRACT_SUCCESS_MESSAGE_LABEL"] = "Distract successful announce message"
+L["DISTRACT_FAIL_MESSAGE_LABEL"] = "Distract fail announce message"
+L["FEARWARD_MESSAGE_LABEL"] = "Fear ward announce message"
 
-L["DEFAULT_SUCCESS_ANNOUNCE_MESSAGE"] = "Tranqshot done on %s"
-L["DEFAULT_FAIL_ANNOUNCE_MESSAGE"] = "!!! TRANQSHOT FAILED ON %s !!!"
-L["DEFAULT_FAIL_WHISPER_MESSAGE"] = "TRANQSHOT FAILED ! TRANQ NOW !"
+L["DEFAULT_TRANQSHOT_SUCCESS_ANNOUNCE_MESSAGE"] = "Tranqshot done on %s"
+L["DEFAULT_TRANQSHOT_FAIL_ANNOUNCE_MESSAGE"] = "!!! TRANQSHOT FAILED ON %s !!!"
+L["DEFAULT_TRANQSHOT_FAIL_WHISPER_MESSAGE"] = "TRANQSHOT FAILED ! TRANQ NOW !"
 L["DEFAULT_LOATHEB_ANNOUNCE_MESSAGE"] = "Corrupted Mind on %s"
+L["DEFAULT_DISTRACT_SUCCESS_ANNOUNCE_MESSAGE"] = "Distract done"
+L["DEFAULT_DISTRACT_FAIL_ANNOUNCE_MESSAGE"] = "!!! DISTRACT FAILED !!!"
+L["DEFAULT_FEARWARD_ANNOUNCE_MESSAGE"] = "Fear Ward cast on %s"
 
 L["TRANQ_NOW_LOCAL_ALERT_MESSAGE"] = "USE TRANQSHOT NOW !"
 

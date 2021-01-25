@@ -8,10 +8,13 @@ function SilentRotate:LoadDefaults()
 	        channelType = "YELL",
 	        rotationReportChannelType = "RAID",
 	        useMultilineRotationReport = false,
-	        announceSuccessMessage = L["DEFAULT_SUCCESS_ANNOUNCE_MESSAGE"],
-	        announceFailMessage = L["DEFAULT_FAIL_ANNOUNCE_MESSAGE"],
-			whisperFailMessage = L["DEFAULT_FAIL_WHISPER_MESSAGE"],
+	        announceTranqshotSuccessMessage = L["DEFAULT_TRANQSHOT_SUCCESS_ANNOUNCE_MESSAGE"],
+	        announceTranqshotFailMessage = L["DEFAULT_TRANQSHOT_FAIL_ANNOUNCE_MESSAGE"],
+			whisperFailMessage = L["DEFAULT_TRANQSHOT_FAIL_WHISPER_MESSAGE"], -- not used anymore, kept for compatibility
 	        announceLoathebMessage = L["DEFAULT_LOATHEB_ANNOUNCE_MESSAGE"],
+	        announceDistractSuccessMessage = L["DEFAULT_DISTRACT_SUCCESS_ANNOUNCE_MESSAGE"],
+	        announceDistractFailMessage = L["DEFAULT_DISTRACT_FAIL_ANNOUNCE_MESSAGE"],
+	        announceFearWardMessage = L["DEFAULT_FEARWARD_ANNOUNCE_MESSAGE"],
 
 			-- Modes
 			currentMode = nil, -- Will be set based on *modeButton flags at the end of this file

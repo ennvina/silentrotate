@@ -78,9 +78,9 @@ function SilentRotate:rotate(lastHunter, fail, rotateWithoutCooldown, endTimeOfC
 
             if (SilentRotate:isHunterTranqCooldownReady(nextHunter)) then
                 if (#SilentRotate.rotationTables.backup < 1) then
-                    if (hasPlayerFailed) then
-                        SendChatMessage(SilentRotate.db.profile.whisperFailMessage, 'WHISPER', nil, nextHunter.name)
-                    end
+                    -- if (hasPlayerFailed) then
+                    --     SendChatMessage(SilentRotate.db.profile.whisperFailMessage, 'WHISPER', nil, nextHunter.name)
+                    -- end
 
                     if (fail and nextHunter.name == playerName) then
                         SilentRotate:throwTranqAlert()
@@ -91,9 +91,9 @@ function SilentRotate:rotate(lastHunter, fail, rotateWithoutCooldown, endTimeOfC
     end
 
     if (fail) then
-        if (hasPlayerFailed) then
-            SilentRotate:whisperBackup()
-        end
+        -- if (hasPlayerFailed) then
+        --     SilentRotate:whisperBackup()
+        -- end
 
         if (SilentRotate:getHunterRotationTable(SilentRotate:getHunter(playerName)) == SilentRotate.rotationTables.backup) then
             SilentRotate:throwTranqAlert()

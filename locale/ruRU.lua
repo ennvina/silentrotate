@@ -51,15 +51,21 @@ L["CHANNEL_GUILD"] = "Гильдия"
 
     ---- Messages
 L["ANNOUNCES_MESSAGE_HEADER"] = "Сообщения оповещений"
-L["SUCCESS_MESSAGE_LABEL"] = "При успехе сообщить"
-L["FAIL_MESSAGE_LABEL"] = "При промахе сообщить"
-L["FAIL_WHISPER_LABEL"] = "При промахе шепнуть запасным"
+L["TRANQSHOT_SUCCESS_MESSAGE_LABEL"] = "При успехе сообщить"
+L["TRANQSHOT_FAIL_MESSAGE_LABEL"] = "При промахе сообщить"
+--L["FAIL_WHISPER_LABEL"] = "При промахе шепнуть запасным"
 L["LOATHEB_MESSAGE_LABEL"] = "Loatheb debuff applied"
+L["DISTRACT_SUCCESS_MESSAGE_LABEL"] = "Distract successful announce message"
+L["DISTRACT_FAIL_MESSAGE_LABEL"] = "Distract fail announce message"
+L["FEARWARD_MESSAGE_LABEL"] = "Fear ward announce message"
 
-L["DEFAULT_SUCCESS_ANNOUNCE_MESSAGE"] = "Усмиряющий выстрел в %s"
-L["DEFAULT_FAIL_ANNOUNCE_MESSAGE"] = "!!! Усмиряющий выстрел промах в %s !!!"
-L["DEFAULT_FAIL_WHISPER_MESSAGE"] = "!!! Усмиряющий выстрел промах !!! ! СТРЕЛЯЙ СЕЙЧАС !"
+L["DEFAULT_TRANQSHOT_SUCCESS_ANNOUNCE_MESSAGE"] = "Усмиряющий выстрел в %s"
+L["DEFAULT_TRANQSHOT_FAIL_ANNOUNCE_MESSAGE"] = "!!! Усмиряющий выстрел промах в %s !!!"
+L["DEFAULT_TRANQSHOT_FAIL_WHISPER_MESSAGE"] = "!!! Усмиряющий выстрел промах !!! ! СТРЕЛЯЙ СЕЙЧАС !"
 L["DEFAULT_LOATHEB_ANNOUNCE_MESSAGE"] = "Испорченный разум в %s"
+L["DEFAULT_DISTRACT_SUCCESS_ANNOUNCE_MESSAGE"] = "Distract done"
+L["DEFAULT_DISTRACT_FAIL_ANNOUNCE_MESSAGE"] = "!!! DISTRACT FAILED !!!"
+L["DEFAULT_FEARWARD_ANNOUNCE_MESSAGE"] = "Fear Ward cast on %s"
 
 L["TRANQ_NOW_LOCAL_ALERT_MESSAGE"] = "СТРЕЛЯЙ СЕЙЧАС !"
 
