@@ -366,25 +366,25 @@ function SilentRotate:CreateConfig()
                     announceLoathebMessage = {
                         name = L["LOATHEB_MESSAGE_LABEL"],
                         type = "input",
-                        order = 23,
+                        order = 25,
                         width = "double",
                     },
                     announceDistractSuccessMessage = {
                         name = L["DISTRACT_SUCCESS_MESSAGE_LABEL"],
                         type = "input",
-                        order = 23,
+                        order = 26,
                         width = "double",
                     },
                     announceDistractFailMessage = {
                         name = L["DISTRACT_FAIL_MESSAGE_LABEL"],
                         type = "input",
-                        order = 24,
+                        order = 27,
                         width = "double",
                     },
                     announceFearWardMessage = {
                         name = L["FEARWARD_MESSAGE_LABEL"],
                         type = "input",
-                        order = 23,
+                        order = 28,
                         width = "double",
                     },
                     setupBroadcastHeader = {
