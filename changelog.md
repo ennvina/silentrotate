@@ -1,5 +1,12 @@
 ## SilentRotate Changelog
 
+#### v0.6.0-beta
+
+- Everyone is invited to update the addon in order to avoid conflicts
+- All modes now share the same comm prefix
+- The lua error of 'receiveSyncTranq' should no longer happen
+- When a rogue misses a distract, an alert is sent to the next rogue
+
 #### v0.5.0-beta
 
 - New mode: Fear Ward
