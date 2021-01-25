@@ -9,9 +9,7 @@ function SilentRotate:initComms()
     SilentRotate.syncVersion = 0
     SilentRotate.syncLastSender = ''
 
-    for mode, prefix in pairs(SilentRotate.constants.commsPrefix) do
-        AceComm:RegisterComm(prefix, SilentRotate.OnCommReceived)
-    end
+    AceComm:RegisterComm(SilentRotate.constants.commsPrefix, SilentRotate.OnCommReceived)
 end
 
 -- Handle message reception and
@@ -22,6 +20,13 @@ function SilentRotate.OnCommReceived(prefix, data, channel, sender)
         local success, message = AceSerializer:Deserialize(data)
 
         if (success) then
+            if (message.mode =~ SilentRotate.db.profile.currentMode) then
+                -- Received a message from another mode
+                -- This may also happen if the message comes from an old version of the addon but it causes many problems so it's best to ignore the message
+                -- In a future version, all modes will be working simultaneously, but that will be in a distant future (probably not before v1.0)
+                return
+            end
+
             if (message.type == SilentRotate.constants.commsTypes.tranqshotDone) then
                 SilentRotate:receiveSyncTranq(prefix, message, channel, sender)
             elseif (message.type == SilentRotate.constants.commsTypes.syncOrder) then
@@ -55,7 +60,7 @@ end
 -- Broadcast a given message to the commsChannel with the commsPrefix
 function SilentRotate:sendAddonMessage(message, channel, name)
     AceComm:SendCommMessage(
-        SilentRotate.constants.commsPrefix[SilentRotate.db.profile.currentMode or 'hunterz'],
+        SilentRotate.constants.commsPrefix,
         AceSerializer:Serialize(message),
         channel,
         name
@@ -70,6 +75,7 @@ end
 function SilentRotate:sendSyncTranq(hunter, fail, timestamp)
     local message = {
         ['type'] = SilentRotate.constants.commsTypes.tranqshotDone,
+        ['mode'] = SilentRotate.db.profile.currentMode,
         ['timestamp'] = timestamp,
         ['player'] = hunter.name,
         ['fail'] = fail,
@@ -86,8 +92,9 @@ function SilentRotate:sendSyncOrder(whisper, name)
 
     local message = {
         ['type'] = SilentRotate.constants.commsTypes.syncOrder,
+        ['mode'] = SilentRotate.db.profile.currentMode,
         ['version'] = SilentRotate.syncVersion,
-        ['rotation'] = SilentRotate:getSimpleRotationTables()
+        ['rotation'] = SilentRotate:getSimpleRotationTables(),
     }
 
     if (whisper) then
@@ -102,6 +109,7 @@ function SilentRotate:sendSyncOrderRequest()
 
     local message = {
         ['type'] = SilentRotate.constants.commsTypes.syncRequest,
+        ['mode'] = SilentRotate.db.profile.currentMode,
     }
 
     SilentRotate:sendRaidAddonMessage(message)
@@ -115,10 +123,15 @@ end
 function SilentRotate:receiveSyncTranq(prefix, message, channel, sender)
 
     local hunter = SilentRotate:getHunter(message.player)
+    if (hunter == nil) then
+        -- TODO maybe display a warning to the user because this should not happen in theory
+        return
+    end
+
     local notDuplicate = hunter.lastTranqTime <  GetTime() - SilentRotate.constants.duplicateTranqshotDelayThreshold
 
-    if (hunter ~= nil and notDuplicate) then
-        SilentRotate:rotate(SilentRotate:getHunter(message.player), message.fail)
+    if (notDuplicate) then
+        SilentRotate:rotate(hunter, message.fail)
     end
 end
 

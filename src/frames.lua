@@ -160,6 +160,9 @@ function SilentRotate:createSingleModeFrame(name, text, minX, maxX, enabled)
         "OnMouseDown",
         function()
             SilentRotate:activateMode(name)
+            SilentRotate:updateRaidStatus()
+            SilentRotate:resetRotation()
+            SilentRotate:sendSyncOrderRequest()
         end
     )
 
