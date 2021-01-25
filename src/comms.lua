@@ -20,7 +20,7 @@ function SilentRotate.OnCommReceived(prefix, data, channel, sender)
         local success, message = AceSerializer:Deserialize(data)
 
         if (success) then
-            if (message.mode =~ SilentRotate.db.profile.currentMode) then
+            if (message.mode ~= SilentRotate.db.profile.currentMode) then
                 -- Received a message from another mode
                 -- This may also happen if the message comes from an old version of the addon but it causes many problems so it's best to ignore the message
                 -- In a future version, all modes will be working simultaneously, but that will be in a distant future (probably not before v1.0)
