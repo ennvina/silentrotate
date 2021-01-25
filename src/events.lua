@@ -64,9 +64,13 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
     elseif SilentRotate:isRazMode() then
         -- TODO
     elseif SilentRotate:isDistractMode() then
-        if (event == "SPELL_CAST_SUCCESS" and SilentRotate:isDistractSpell(spellName)) then
+        if SilentRotate:isDistractSpell(spellName) then
             local hunter = SilentRotate:getHunter(nil, sourceGUID)
-            SilentRotate:rotate(hunter, false)
+            if (event == "SPELL_CAST_SUCCESS") then
+                SilentRotate:rotate(hunter, false)
+            elseif (event == "SPELL_MISSED") then
+                SilentRotate:rotate(hunter, true)
+            end
         end
     elseif SilentRotate:isFearWardMode() then
         if (event == "SPELL_CAST_SUCCESS" and SilentRotate:isFearWardSpell(spellName)) then
