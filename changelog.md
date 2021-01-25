@@ -1,5 +1,10 @@
 ## SilentRotate Changelog
 
+#### v0.6.1-beta
+
+- All modes now send messages
+- This will fix some issues if an event happens more than 45 yards away
+
 #### v0.6.0-beta
 
 - Everyone is invited to update the addon in order to avoid conflicts
