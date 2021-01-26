@@ -146,6 +146,8 @@ function SilentRotate:getUserDefinedColor(colorName)
         local profileColorName
         if (colorName == "groupSuffix") then
             profileColorName = "groupSuffixColor"
+        elseif (colorName == "indexPrefix") then
+            profileColorName = "indexPrefixColor"
         else
             profileColorName = (colorName or "").."BackgroundColor"
         end

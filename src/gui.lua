@@ -154,6 +154,23 @@ function SilentRotate:setHunterName(hunter)
         end
     end
 
+    if (SilentRotate.db.profile.prependIndex) then
+        local rowIndex = 0
+        local rotationTable = SilentRotate.rotationTables.rotation
+        for index = 1, #rotationTable, 1 do
+            local candidate = rotationTable[index]
+            if (candidate ~= nil and candidate.name == hunter.name) then
+                rowIndex = index
+                break
+            end
+        end
+        if (rowIndex > 0) then
+            local indexText = string.format("%s.", rowIndex)
+            local color = SilentRotate:getUserDefinedColor('indexPrefix')
+            newText = color:WrapTextInColorCode(indexText)..newText
+        end
+    end
+
     if (SilentRotate.db.profile.appendGroup and hunter.subgroup) then
         local groupText = string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup)
         local color = SilentRotate:getUserDefinedColor('groupSuffix')
