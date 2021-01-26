@@ -32,9 +32,11 @@ function SilentRotate:LoadDefaults()
 			-- Names
 			useClassColor = true,
 			useNameOutline = false,
+			prependIndex = false,
+			indexPrefixColor = {SilentRotate.colors.lightCyan:GetRGB()},
 			appendGroup = false,
 			groupSuffix = L["DEFAULT_GROUP_SUFFIX_MESSAGE"],
-			groupSuffixColor = {SilentRotate.colors.lightGray:GetRGB()},
+			groupSuffixColor = {SilentRotate.colors.lightCyan:GetRGB()},
 
 			-- Background
 			neutralBackgroundColor = {SilentRotate.colors.lightGray:GetRGB()},
