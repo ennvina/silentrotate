@@ -1,5 +1,10 @@
 ## SilentRotate Changelog
 
+#### v0.6.2-beta
+
+- Option to preprend player index in the rotation
+- Updated Chinese translations (zh-CN)
+
 #### v0.6.1-beta
 
 - All modes now send messages
