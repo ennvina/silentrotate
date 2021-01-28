@@ -4,7 +4,11 @@ local L = LibStub("AceLocale-3.0"):GetLocale("SilentRotate")
 
 -- Is Tranqshot Mode? (default mode)
 function SilentRotate:isTranqMode(mode)
-    return not SilentRotate:isRazMode(mode) and not SilentRotate:isLoathebMode(mode) and not SilentRotate:isDistractMode(mode) and not SilentRotate:isFearWardMode(mode)
+    return not SilentRotate:isRazMode(mode)
+       and not SilentRotate:isLoathebMode(mode)
+       and not SilentRotate:isDistractMode(mode)
+       and not SilentRotate:isFearWardMode(mode)
+       and not SilentRotate:isAoeTauntMode(mode)
 end
 
 function SilentRotate:isRazMode(mode)
@@ -27,6 +31,11 @@ function SilentRotate:isFearWardMode(mode)
     return mode == 'fearz'
 end
 
+function SilentRotate:isAoeTauntMode(mode)
+    if (not mode) then mode = SilentRotate.db.profile.currentMode end
+    return mode == 'tauntz'
+end
+
 -- -- Setters shown here to list available modes, but no one should ever call these functions
 -- function SilentRotate:setTranqMode()
 --     SilentRotate.db.profile.currentMode = 'hunterz'
@@ -42,6 +51,9 @@ end
 -- end
 -- function SilentRotate:setFearWardMode()
 --     SilentRotate.db.profile.currentMode = 'fearz'
+-- end
+-- function SilentRotate:setAoeTauntMode()
+--     SilentRotate.db.profile.currentMode = 'tauntz'
 -- end
 
 -- Activate the specific mode
@@ -79,6 +91,8 @@ function SilentRotate:isPlayerWanted(unit, className, mode)
         return className == 'ROGUE'
     elseif SilentRotate:isFearWardMode(mode) then
         return className == 'PRIEST' and select(2,UnitRace(unit)) == 'Dwarf'
+    elseif SilentRotate:isAoeTauntMode(mode) then
+        return className == 'WARRIOR' or className == 'DRUID'
     end
     return className == 'HUNTER' -- hunter is the default mode
 end
@@ -97,6 +111,8 @@ function SilentRotate:getModeDuration(mode)
         duration = 30 -- Cooldown of Rogue's Distract
     elseif SilentRotate:isFearWardMode() then
         duration = 30
+    elseif SilentRotate:isAoeTauntMode() then
+        duration = 600 -- Cooldown of Warrior's Challenging Shout and Druid's Challenging Roar
     else
         duration = 0 -- Duration should have no meaning for other modes
     end
@@ -114,6 +130,8 @@ function SilentRotate:getBroadcastHeaderText()
         return L['BROADCAST_HEADER_TEXT_DISTRACT']
     elseif SilentRotate:isFearWardMode() then
         return L['BROADCAST_HEADER_TEXT_FEARWARD']
+    elseif SilentRotate:isAoeTauntMode() then
+        return L['BROADCAST_HEADER_TEXT_AOETAUNT']
     end
     return L['BROADCAST_HEADER_TEXT']
 end

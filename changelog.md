@@ -1,5 +1,9 @@
 ## SilentRotate Changelog
 
+#### v0.6.3-beta
+
+- Added AoE Taunt mode
+
 #### v0.6.2-beta
 
 - Option to preprend player index in the rotation
