@@ -312,6 +312,35 @@ function SilentRotate:CreateConfig()
                         order = 53,
                         hidden = function() return SilentRotate.db.profile.fearWardModeButton or not SilentRotate:isFearWardMode() end,
                     },
+                    aoeTauntModeHeader = {
+                        type = "header",
+                        order = 60,
+                    },
+                    aoeTauntModeButton = {
+                        name = L["AOETAUNT_MODE_FULL_NAME"],
+                        desc = string.format(L["MODE_BUTTON_DESC"], L["AOETAUNT_MODE_FULL_NAME"])..".\n"..L["AOETAUNT_MODE_DETAILED_DESC"],
+                        type = "toggle",
+                        order = 61,
+                        width = "full",
+                        set = setForMode,
+                    },
+                    aoeTauntModeText = {
+                        name = L["MODE_LABEL"],
+                        desc = string.format(L["MODE_LABEL_DESC"], L["AOETAUNT_MODE_FULL_NAME"]),
+                        type = "input",
+                        order = 62,
+                        width = "half",
+                        set = setForMode,
+                        hidden = function() return not SilentRotate.db.profile.aoeTauntModeButton end,
+                    },
+                    aoeTauntModeInvisible = {
+                        name = SilentRotate.colors.lightRed:WrapTextInColorCode(L["MODE_INVISIBLE"]),
+                        type = "description",
+                        fontSize = "medium",
+                        width = "full",
+                        order = 63,
+                        hidden = function() return SilentRotate.db.profile.aoeTauntModeButton or not SilentRotate:isAoeTauntMode() end,
+                    },
                 }
             },
             announces = {

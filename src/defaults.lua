@@ -15,6 +15,8 @@ function SilentRotate:LoadDefaults()
 	        announceDistractSuccessMessage = L["DEFAULT_DISTRACT_SUCCESS_ANNOUNCE_MESSAGE"],
 	        announceDistractFailMessage = L["DEFAULT_DISTRACT_FAIL_ANNOUNCE_MESSAGE"],
 	        announceFearWardMessage = L["DEFAULT_FEARWARD_ANNOUNCE_MESSAGE"],
+	        announceAoeTauntSuccessMessage = L["DEFAULT_AOETAUNT_SUCCESS_ANNOUNCE_MESSAGE"],
+	        announceAoeTauntFailMessage = L["DEFAULT_AOETAUNT_FAIL_ANNOUNCE_MESSAGE"],
 
 			-- Modes
 			currentMode = nil, -- Will be set based on *modeButton flags at the end of this file
@@ -23,11 +25,13 @@ function SilentRotate:LoadDefaults()
 			distractModeButton = SilentRotate:isPlayerWanted("player", nil, 'roguez'),
 			razModeButton = false, -- SilentRotate:isPlayerWanted("player", nil, 'priestz'), -- Do not allow Razuvious mode for now
 			fearWardModeButton = SilentRotate:isPlayerWanted("player", nil, 'fearz'),
+			aoeTauntModeButton = SilentRotate:isPlayerWanted("player", nil, 'tauntz'),
 			tranqModeText    = L["FILTER_SHOW_HUNTERS"],
 			loathebModeText  = L["FILTER_SHOW_HEALERS"],
 			distractModeText = L["FILTER_SHOW_ROGUES"],
 			razModeText      = L["FILTER_SHOW_PRIESTS"],
 			fearWardModeText = L["FILTER_SHOW_DWARVES"],
+			aoeTauntModeText = L["FILTER_SHOW_AOETAUNTERS"],
 
 			-- Names
 			useClassColor = true,
@@ -66,6 +70,8 @@ function SilentRotate:LoadDefaults()
 		self.defaults.profile.currentMode = 'roguez'
 	elseif (self.defaults.profile.fearWardModeButton) then
 		self.defaults.profile.currentMode = 'fearz'
+	elseif (self.defaults.profile.aoeTauntModeButton) then
+		self.defaults.profile.currentMode = 'tauntz'
 	else
 		-- Use Loatheb mode by default for classes who cannot fit other roles
 		-- Also enable this option by default
