@@ -135,6 +135,20 @@ function SilentRotate:isFearWardSpell(spellName)
     return spellName == SilentRotate.constants.fearWard
 end
 
+-- Checks if the spell is the Warrior Challenging Shout or Druid Challenging Road
+function SilentRotate:isAoeTauntSpell(spellName)
+
+    local names = SilentRotate.constants.aoeTaunt
+
+    for _, name in ipairs(names) do
+        if (spellName == name) then
+            return true
+        end
+    end
+
+    return false
+end
+
 -- Get a user-defined color or create it now
 function SilentRotate:getUserDefinedColor(colorName)
 

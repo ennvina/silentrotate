@@ -80,6 +80,23 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
                 end
             end
         end
+    elseif SilentRotate:isAoeTauntMode() then
+        if SilentRotate:isAoeTauntSpell(spellName) then
+            local hunter = SilentRotate:getHunter(nil, sourceGUID)
+            if (event == "SPELL_CAST_SUCCESS") then
+                SilentRotate:sendSyncTranq(hunter, false, timestamp)
+                SilentRotate:rotate(hunter, false)
+                if (sourceGUID == UnitGUID("player")) then
+                    SilentRotate:sendAnnounceMessage(SilentRotate.db.profile.announceAoeTauntSuccessMessage)
+                end
+            elseif (event == "SPELL_MISSED") then
+                SilentRotate:sendSyncTranq(hunter, true, timestamp)
+                SilentRotate:rotate(hunter, true)
+                if (sourceGUID == UnitGUID("player")) then
+                    SilentRotate:sendAnnounceMessage(SilentRotate.db.profile.announceAoeTauntFailMessage)
+                end
+            end
+        end
     elseif SilentRotate:isFearWardMode() then
         if (event == "SPELL_CAST_SUCCESS" and SilentRotate:isFearWardSpell(spellName)) then
             local hunter = SilentRotate:getHunter(nil, sourceGUID)

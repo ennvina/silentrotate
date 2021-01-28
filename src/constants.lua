@@ -83,4 +83,10 @@ SilentRotate.constants = {
     ['distract'] = GetSpellInfo(1725),
 
     ['fearWard'] = GetSpellInfo(6346),
+
+    ['aoeTaunt'] = {
+        GetSpellInfo(1161), -- warrior's challenging shout
+        GetSpellInfo(5209), -- druid's challenging roar
+    },
+
 }
