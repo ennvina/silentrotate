@@ -77,7 +77,7 @@ function SilentRotate:sendSyncTranq(hunter, fail, timestamp)
         ['type'] = SilentRotate.constants.commsTypes.tranqshotDone,
         ['mode'] = SilentRotate.db.profile.currentMode,
         ['timestamp'] = timestamp,
-        ['player'] = hunter.name,
+        ['player'] = hunter.GUID,
         ['fail'] = fail,
     }
 
