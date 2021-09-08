@@ -42,7 +42,7 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
     -- @todo try to refactor a bit
     if SilentRotate:isTranqMode() then
         if (spellName == tranqShot or (SilentRotate.testMode and spellName == arcaneShot)) then
-            local hunter = SilentRotate:getHunter(nil, sourceGUID)
+            local hunter = SilentRotate:getHunter(sourceGUID)
             if (event == "SPELL_CAST_SUCCESS") then
                 SilentRotate:sendSyncTranq(hunter, false, timestamp)
                 SilentRotate:rotate(hunter, false)
@@ -65,7 +65,7 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
         -- TODO
     elseif SilentRotate:isDistractMode() then
         if SilentRotate:isDistractSpell(spellName) then
-            local hunter = SilentRotate:getHunter(nil, sourceGUID)
+            local hunter = SilentRotate:getHunter(sourceGUID)
             if (event == "SPELL_CAST_SUCCESS") then
                 SilentRotate:sendSyncTranq(hunter, false, timestamp)
                 SilentRotate:rotate(hunter, false)
@@ -82,7 +82,7 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
         end
     elseif SilentRotate:isAoeTauntMode() then
         if SilentRotate:isAoeTauntSpell(spellName) then
-            local hunter = SilentRotate:getHunter(nil, sourceGUID)
+            local hunter = SilentRotate:getHunter(sourceGUID)
             if (event == "SPELL_CAST_SUCCESS") then
                 SilentRotate:sendSyncTranq(hunter, false, timestamp)
                 SilentRotate:rotate(hunter, false)
@@ -99,7 +99,7 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
         end
     elseif SilentRotate:isFearWardMode() then
         if (event == "SPELL_CAST_SUCCESS" and SilentRotate:isFearWardSpell(spellName)) then
-            local hunter = SilentRotate:getHunter(nil, sourceGUID)
+            local hunter = SilentRotate:getHunter(sourceGUID)
             SilentRotate:sendSyncTranq(hunter, false, timestamp)
             SilentRotate:rotate(hunter, false)
             if (sourceGUID == UnitGUID("player")) then
@@ -135,7 +135,7 @@ function SilentRotate:UNIT_AURA(unitID, isEcho)
     if not SilentRotate:isLoathebMode() then return end
 
     -- Whether the unit really got the debuff or not, it's pointless if the unit is not tracked (e.g. not a healer)
-    local hunter = SilentRotate:getHunter(nil, UnitGUID(unitID))
+    local hunter = SilentRotate:getHunter(UnitGUID(unitID))
     if not hunter then return end
     local previousExpirationTime = hunter.frame.cooldownFrame.statusBar.expirationTime
 

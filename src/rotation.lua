@@ -131,7 +131,7 @@ end
 -- Check if the player is the next in position to tranq
 function SilentRotate:isPlayerNextTranq()
 
-    local player = SilentRotate:getHunter(nil, UnitGUID("player"))
+    local player = SilentRotate:getHunter(UnitGUID("player"))
 
     -- Non hunter user
     if (player == nil) then
@@ -235,7 +235,7 @@ end
 -- Check if a hunter is already registered
 function SilentRotate:isHunterRegistered(GUID)
 
-    -- @todo refactor this using SilentRotate:getHunter(name, GUID)
+    -- @todo refactor this using SilentRotate:getHunter(GUID)
     for key,hunter in pairs(SilentRotate.hunterTable) do
         if (hunter.GUID == GUID) then
             return true
@@ -246,23 +246,11 @@ function SilentRotate:isHunterRegistered(GUID)
 end
 
 -- Return our hunter object from name or GUID
-function SilentRotate:getHunter(name, GUID)
+function TranqRotate:getHunter(searchTerm)
 
-    -- Known limitation: if both name and GUID are set but do not correspond to the same unit, results are undefined
-
-    if (GUID ~= nil) then
-        for key,hunter in pairs(SilentRotate.hunterTable) do
-            if (hunter.GUID == GUID) then
-                return hunter
-            end
-        end
-    end
-
-    if (name ~= nil) then
-        for key,hunter in pairs(SilentRotate.hunterTable) do
-            if (hunter.name == name) then
-                return hunter
-            end
+    for _, hunter in pairs(TranqRotate.hunterTable) do
+        if (searchTerm ~= nil and (hunter.GUID == searchTerm or hunter.name == searchTerm)) then
+            return hunter
         end
     end
 
@@ -316,7 +304,7 @@ function SilentRotate:updateUnitStatus(name, classFilename, subgroup)
                 registered = true
             end
         else
-            hunter = SilentRotate:getHunter(nil, GUID)
+            hunter = SilentRotate:getHunter(GUID)
         end
 
         if (registered) then
@@ -483,8 +471,8 @@ function SilentRotate:applyRotationConfiguration(rotationsTables)
             group = 'BACKUP'
         end
 
-        for index, hunterName in pairs(rotationTable) do
-            local hunter = SilentRotate:getHunter(hunterName)
+        for index, GUID in pairs(rotationTable) do
+            local hunter = SilentRotate:getHunter(GUID)
             if (hunter) then
                 SilentRotate:moveHunter(hunter, group, index)
             end
