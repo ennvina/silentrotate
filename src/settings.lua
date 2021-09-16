@@ -416,15 +416,27 @@ function SilentRotate:CreateConfig()
                         order = 28,
                         width = "double",
                     },
+                    announceAoeTauntSuccessMessage = {
+                        name = L["AOETAUNT_SUCCESS_MESSAGE_LABEL"],
+                        type = "input",
+                        order = 29,
+                        width = "double",
+                    },
+                    announceAoeTauntFailMessage = {
+                        name = L["AOETAUNT_FAIL_MESSAGE_LABEL"],
+                        type = "input",
+                        order = 30,
+                        width = "double",
+                    },
                     setupBroadcastHeader = {
                         name = L["BROADCAST_MESSAGE_HEADER"],
                         type = "header",
-                        order = 30,
+                        order = 40,
                     },
                     rotationReportChannelType = {
                         name = L["MESSAGE_CHANNEL_TYPE"],
                         type = "select",
-                        order = 31,
+                        order = 41,
                         values = {
                             ["CHANNEL"] = L["CHANNEL_CHANNEL"],
                             ["RAID_WARNING"] = L["CHANNEL_RAID_WARNING"],
@@ -440,14 +452,14 @@ function SilentRotate:CreateConfig()
                         name = L["MESSAGE_CHANNEL_NAME"],
                         desc = L["MESSAGE_CHANNEL_NAME_DESC"],
                         type = "input",
-                        order = 32,
+                        order = 42,
                         hidden = function() return not (SilentRotate.db.profile.rotationReportChannelType == "CHANNEL") end,
                     },
                     useMultilineRotationReport = {
                         name = L["USE_MULTILINE_ROTATION_REPORT"],
                         desc = L["USE_MULTILINE_ROTATION_REPORT_DESC"],
                         type = "toggle",
-                        order = 40,
+                        order = 43,
                         width = "full",
                     },
                 }
