@@ -15,6 +15,7 @@ libs\AceGUI-3.0\AceGUI-3.0.xml
 libs\AceConfig-3.0\AceConfig-3.0.xml
 libs\AceComm-3.0\AceComm-3.0.xml
 libs\AceSerializer-3.0\AceSerializer-3.0.xml
+libs\AceLocale-3.0\AceLocale-3.0.xml
 #@end-no-lib-strip@
 
 locale\enUS.lua
