@@ -110,6 +110,10 @@ SlashCmdList["SILENTROTATE"] = function(msg)
 
     if (cmd == 'toggle') then
         SilentRotate:toggleDisplay()
+    elseif (cmd == 'show') then
+        SilentRotate:showDisplay()
+    elseif (cmd == 'hide') then
+        SilentRotate:hideDisplay()
     elseif (cmd == 'lock') then
         SilentRotate:lock(true)
     elseif (cmd == 'unlock') then
@@ -130,8 +134,21 @@ SlashCmdList["SILENTROTATE"] = function(msg)
 end
 --SlashCmdList["SR"] = SlashCmdList["SILENTROTATE"]
 
+function SilentRotate:showDisplay()
+    if not SilentRotate.mainFrame:IsShown() then
+        SilentRotate.mainFrame:Show()
+    end
+end
+
+function SilentRotate:hideDisplay()
+    if SilentRotate.mainFrame:IsShown() then
+        SilentRotate.mainFrame:Hide()
+        SilentRotate:printMessage(L['TRANQ_WINDOW_HIDDEN'])
+    end
+end
+
 function SilentRotate:toggleDisplay()
-    if (SilentRotate.mainFrame:IsShown()) then
+    if SilentRotate.mainFrame:IsShown() then
         SilentRotate.mainFrame:Hide()
         SilentRotate:printMessage(L['TRANQ_WINDOW_HIDDEN'])
     else
