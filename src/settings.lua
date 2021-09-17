@@ -356,6 +356,37 @@ function SilentRotate:CreateConfig()
                         order = 63,
                         hidden = function() return SilentRotate.db.profile.aoeTauntModeButton or not SilentRotate:isAoeTauntMode() end,
                     },
+                    misdiModeHeader = {
+                        type = "header",
+                        order = 70,
+                        hidden = function() return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC end,
+                    },
+                    misdiModeButton = {
+                        name = L["MISDI_MODE_FULL_NAME"],
+                        desc = string.format(L["MODE_BUTTON_DESC"], L["MISDI_MODE_FULL_NAME"])..".\n"..L["MISDI_MODE_DETAILED_DESC"],
+                        type = "toggle",
+                        order = 71,
+                        width = "full",
+                        set = setForMode,
+                        hidden = function() return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC end,
+                    },
+                    misdiModeText = {
+                        name = L["MODE_LABEL"],
+                        desc = string.format(L["MODE_LABEL_DESC"], L["MISDI_MODE_FULL_NAME"]),
+                        type = "input",
+                        order = 72,
+                        width = "half",
+                        set = setForMode,
+                        hidden = function() return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC or not SilentRotate.db.profile.misdiModeButton end,
+                    },
+                    misdiModeInvisible = {
+                        name = SilentRotate.colors.lightRed:WrapTextInColorCode(L["MODE_INVISIBLE"]),
+                        type = "description",
+                        fontSize = "medium",
+                        width = "full",
+                        order = 73,
+                        hidden = function() return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC or SilentRotate.db.profile.misdiModeButton or not SilentRotate:isMisdiMode() end,
+                    },
                 }
             },
             announces = {
@@ -442,6 +473,13 @@ function SilentRotate:CreateConfig()
                         type = "input",
                         order = 30,
                         width = "double",
+                    },
+                    announceMisdiMessage = {
+                        name = L["MISDI_MESSAGE_LABEL"],
+                        type = "input",
+                        order = 31,
+                        width = "double",
+                        hidden = function() return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC end,
                     },
                     setupBroadcastHeader = {
                         name = L["BROADCAST_MESSAGE_HEADER"],

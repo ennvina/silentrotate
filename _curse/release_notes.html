@@ -9,7 +9,7 @@
 <p>&nbsp;</p>
 <h2>Preparation</h2>
 <ul>
-<li>Before the fight begins, choose the correct mode you want to setup (Tranq, Loatheb, Distract, FearWard, AoE Taunt). The mode is selected automatically depending on your class upon login, e.g. healers will have the Loatheb mode selected by default.</li>
+<li>Before the fight begins, choose the correct mode you want to setup (Tranq, Loatheb, Distract, FearWard, AoE Taunt, Misdirection). The mode is selected automatically depending on your class upon login, e.g. healers will have the Loatheb mode selected by default.</li>
 <li>The SilentRotate window displays the list of raid members who may be part of the rotation. Only relevant members are displayed for a given rotation, e.g. only hunters are displayed in Tranq mode.</li>
 <li>Players in the list can be drag'n'dropped to change their order. Members pushed to the very bottom are <i>backup</i> players who do not enter the normal rotation.</li>
 <li>The list may be setup by another class. For example, a warrior raid leader may select the "Loatheb" mode and change the order of players, even though the warrior will not be in the list.</li>
@@ -24,7 +24,7 @@
 </ul>
 <p>&nbsp;</p>
 <h2>Modes</h2>
-<p>There are 5 modes available: Tranq, Loatheb, Distract, FearWard and AoE Taunt. The mode is selected automatically upon login and can be changed by clicking on top of the SilentRotate window.</p>
+<p>There are 5 modes available: Tranq, Loatheb, Distract, FearWard, AoE Taunt and Misdirection. The mode is selected automatically upon login and can be changed by clicking on top of the SilentRotate window.</p>
 <p>&nbsp;</p>
 <h3>Tranq</h3>
 <ul>
@@ -44,10 +44,21 @@
 <li>Displays Rogues only</li>
 <li>Tracks when a distract spell has been cast</li>
 </ul>
+<h3>Fear Ward</h3>
+<ul>
+<li>Displays Priests only, and only Dwarf Priests in Classic Era</li>
+<li>Tracks when a fear ward spell has been cast</li>
+</ul>
 <h3>AoE Taunt</h3>
 <ul>
 <li>Displays Warriors and Druids only</li>
 <li>Tracks when a Challenging Shout or a Challenging Roar ability has been cast</li>
+</ul>
+<h3>Misdirection</h3>
+<ul>
+<li><i>This mode is not available in Classic Era because the spell does not exist</i></li>
+<li>Displays Hunters only</li>
+<li>Tracks when a misdirection spell has been cast</li>
 </ul>
 <p>&nbsp;</p>
 <h2>Known Limitations</h2>
@@ -56,6 +67,8 @@
 <li>Switching back and forth between modes may not restore the correct order of raid members</li>
 <li>Loatheb mode does not filter out non-healer specs, such as Feral Druids</li>
 <li>AoE Taunt mode does not filter out non-tank specs, such as Restoration Druids</li>
+<li>Tranq mode does not filter out hunters who have not learned the Tranquilizing Shot ability yet, e.g. løøted the book from Lucifron</li>
+<li>More generally, the addon does not check, and sometimes cannot check, if players have learned their abilities from their respective class trainers</li>
 <li>Any raid member can change the order of players in the list</li>
 <li>Raid members who have not installed the addon must be in the range of 45-ish yards to detect their activity</li>
 <li>Localization is incomplete (see below)</li>

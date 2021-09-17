@@ -135,6 +135,11 @@ function SilentRotate:isFearWardSpell(spellName)
     return spellName == SilentRotate.constants.fearWard
 end
 
+-- Checks if the spell is the Hunter Misdirection
+function SilentRotate:isMisdiSpell(spellName)
+    return spellName == SilentRotate.constants.misdi
+end
+
 -- Checks if the spell is the Warrior Challenging Shout or Druid Challenging Road
 function SilentRotate:isAoeTauntSpell(spellName)
 
