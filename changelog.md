@@ -1,6 +1,6 @@
 ## SilentRotate Changelog
 
-#### v0.7.0-beta
+#### v0.7.0-beta (2021-09-18)
 
 ALL USERS MUST UPDATE THE ADDON
 
@@ -12,7 +12,7 @@ compatibility between this version and older versions
 - Fixed drag'n'drop issue (TBC)
 - Added Misdirection mode (TBC)
 - Fear Ward cooldown adapts to the project ID (Era = 30 secs; TBC = 3 min)
-- AoE Taunt messages can now be configured
+- AoE Taunt messages are now customizable
 - The addon version is now shared between players in the same raid
 - A Blind icon is displayed next to players who have not installed the addon
 - Players with SilentRotate prior to v0.7 will be NOT be detected
@@ -22,72 +22,72 @@ compatibility between this version and older versions
 - Updated Chinese translations (zh-CN)
 - Updated Ace libraries to their latest version (30-jun-2021)
 
-#### v0.6.3-beta
+#### v0.6.3-beta (2021-01-28)
 
 - Added AoE Taunt mode
 
-#### v0.6.2-beta
+#### v0.6.2-beta (2021-01-27)
 
 - Option to preprend player index in the rotation
 - Updated Chinese translations (zh-CN)
 
-#### v0.6.1-beta
+#### v0.6.1-beta (2021-01-25)
 
 - All modes now send messages
 - This will fix some issues if an event happens more than 45 yards away
 
-#### v0.6.0-beta
+#### v0.6.0-beta (2021-01-25)
 
 - Everyone is invited to update the addon in order to avoid conflicts
 - All modes now share the same comm prefix
 - The lua error of 'receiveSyncTranq' should no longer happen
 - When a rogue misses a distract, an alert is sent to the next rogue
 
-#### v0.5.0-beta
+#### v0.5.0-beta (2021-01-06)
 
 - New mode: Fear Ward
 
-#### v0.4.1-beta
+#### v0.4.1-beta (2020-12-23)
 
 - The selected mode is now stored in user settings
 - Options to enable which modes are selectable
 - By default, modes are selectable based on your class
 
-#### v0.4.0-beta
+#### v0.4.0-beta (2020-12-23)
 
 - Name tags are now customizable
 - Option to enable class colors
 - Option to append group index, plus options to choose its text and color
 - Options to select the background colors (neutral, active, dead, offline)
 
-#### v0.3.5-beta
+#### v0.3.5-beta (2020-12-23)
 
 - Activating Test mode will now show your own unit even if not in a raid group
 - Activating Test mode will now show party units even if not in a raid group
 - Either way Test mode will only show units which class fits the selected mode
 
-#### v0.3.4-beta
+#### v0.3.4-beta (2020-12-22)
 
 - Text color is now based on the class color, instead of white
 - The default background color is now light-gray, instead of green
 - The background was green because the addon initially focused on hunters
 
-#### v0.3.3-beta
+#### v0.3.3-beta (2020-12-18)
 
 - After more tests, the addon is qualified as Beta
 
-#### v0.3.2-alpha
+#### v0.3.2-alpha (2020-12-16)
 
 - Fixed Loatheb tracking of other units due to WoW Classic limitation
 - Reset Loatheb tracking in case of events such as player death
 
-#### v0.3.1-alpha
+#### v0.3.1-alpha (2020-12-15)
 
 - Localization should now be compatible with CurseForge
 - Added missing translations for ru-RU, zh-CN and zh-TW
 - Phrases use the English version until they are properly translated
 
-#### v0.3.0-alpha
+#### v0.3.0-alpha (2020-12-14)
 
 - SilentRotate is now public!
 - Addon hosted on Curse https://www.curseforge.com/wow/addons/silentrotate
