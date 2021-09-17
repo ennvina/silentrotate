@@ -141,6 +141,17 @@ L["ENABLE_TRANQ_NOW_SOUND"] = "Проигрывать звук когда пор
 L["TRANQ_NOW_SOUND_CHOICE"] = "Выберите звук для Усмиряющего выстрела"
 L["DBM_SOUND_WARNING"] = "DBM проигрывает звук для каждого Бешенства, из-за этого вы можете не устышать оповещение от SilentRotate. Рекомендуется выбрать хорошо различимый звук для SilentRotate или отключить оповещение от DBM"
 
+    --- Icons
+L["DISPLAY_BLIND_ICON"] = "Show an icon for players without SilentRotate"
+L["DISPLAY_BLIND_ICON_DESC"] = "Adds a blind icon next to the player names who have not installed the addon. S/he will not be aware of the rotation and won't be synced if s/he's far from every other SilentRotate user."
+L["DISPLAY_BLIND_ICON_TOOLTIP"] = "Show the blind icon tooltip"
+L["DISPLAY_BLIND_ICON_TOOLTIP_DESC"] = "You can disable this options to disable the tooltip while still having the icon"
+
+    --- Tooltips
+L["TOOLTIP_PLAYER_WITHOUT_ADDON"] = "This player does not use SilentRotate"
+L["TOOLTIP_MAY_RUN_OUDATED_VERSION"] = "Or runs an outdated version, older than 0.7.0"
+L["TOOLTIP_DISABLE_SETTINGS"] = "(You can disable the icon and/or the tooltip in the settings)"
+
     --- Profiles
 L["SETTING_PROFILES"] = "Профили"
 
