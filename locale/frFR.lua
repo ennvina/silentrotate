@@ -153,8 +153,8 @@ L["TOOLTIP_MAY_RUN_OUDATED_VERSION"] = "Ou possède une version obsolète, infé
 L["TOOLTIP_DISABLE_SETTINGS"] = "(Vous pouvez désactiver l'icône et/ou l'info-bulle dans les paramètres)"
 
     --- Notifications
-L["UPDATE_AVAILABLE"] = "Une nouvelle version de SilentRotate est disponible, veuillez mettre à jour pour profiter des dernières fonctionnalités."
-L["BREAKING_UPDATE_AVAILABLE"] = "Une mise à jour IMPORTANTE de SilentRotate est disponible, vous DEVEZ mettre à jour le plus rapidement possible ! Des conflits sont possibles entre vous et les joueurs qui ont installé la version à jour de SilentRotate."
+L["UPDATE_AVAILABLE"] = "Une nouvelle version est disponible, veuillez mettre à jour pour profiter des dernières fonctionnalités."
+L["BREAKING_UPDATE_AVAILABLE"] = "Une mise à jour IMPORTANTE est disponible, vous DEVEZ mettre à jour le plus rapidement possible ! Des conflits sont possibles entre vous et les joueurs qui ont installé la version à jour de SilentRotate."
 
     --- Profiles
 L["SETTING_PROFILES"] = "Profils"
