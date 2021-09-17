@@ -454,7 +454,7 @@ function SilentRotate:getSimpleRotationTables()
 
     for key, rotationTable in pairs(SilentRotate.rotationTables) do
         for _, hunter in pairs(rotationTable) do
-            table.insert(simpleTables[key], hunter.name)
+            table.insert(simpleTables[key], hunter.GUID)
         end
     end
 
