@@ -13,7 +13,6 @@ function SilentRotate:initGui()
 
     SilentRotate:drawHunterFrames()
     SilentRotate:createDropHintFrame()
-    SilentRotate:createRulerFrame()
 
     SilentRotate:updateDisplay()
 end
