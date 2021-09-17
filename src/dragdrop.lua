@@ -59,7 +59,6 @@ function SilentRotate:configureHunterFrameDrag(hunter)
 end
 
 function SilentRotate:getDragFrameHeight(hunterFrame)
-    print(hunterFrame:GetTop() - SilentRotate.mainFrame.rotationFrame:GetTop())
     return math.abs(hunterFrame:GetTop() - SilentRotate.mainFrame.rotationFrame:GetTop())
 end
 
