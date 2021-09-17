@@ -95,6 +95,7 @@ function SilentRotate:sendSyncOrder(whisper, name)
         ['mode'] = SilentRotate.db.profile.currentMode,
         ['version'] = SilentRotate.syncVersion,
         ['rotation'] = SilentRotate:getSimpleRotationTables(),
+        ['addonVersion'] = SilentRotate.version,
     }
 
     if (whisper) then
@@ -110,6 +111,7 @@ function SilentRotate:sendSyncOrderRequest()
     local message = {
         ['type'] = SilentRotate.constants.commsTypes.syncRequest,
         ['mode'] = SilentRotate.db.profile.currentMode,
+        ['addonVersion'] = SilentRotate.version,
     }
 
     SilentRotate:sendRaidAddonMessage(message)
@@ -139,6 +141,7 @@ end
 function SilentRotate:receiveSyncOrder(prefix, message, channel, sender)
 
     SilentRotate:updateRaidStatus()
+    SilentRotate:updatePlayerAddonVersion(sender, message.addonVersion)
 
     if (SilentRotate:isVersionEligible(message.version, sender)) then
         SilentRotate.syncVersion = (message.version)
@@ -150,6 +153,7 @@ function SilentRotate:receiveSyncOrder(prefix, message, channel, sender)
 end
 
 -- Request to send current roration configuration received
-function SilentRotate:receiveSyncRequest(prefix, data, channel, sender)
+function SilentRotate:receiveSyncRequest(prefix, message, channel, sender)
+    SilentRotate:updatePlayerAddonVersion(sender, message.addonVersion)
     SilentRotate:sendSyncOrder(true, sender)
 end

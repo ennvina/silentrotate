@@ -19,6 +19,9 @@ function SilentRotate:configureHunterFrameDrag(hunter)
     hunter.frame:RegisterForDrag("LeftButton")
     hunter.frame:SetClampedToScreen(true)
 
+    hunter.frame.blindIconFrame:RegisterForDrag("LeftButton")
+    hunter.frame.blindIconFrame:SetClampedToScreen(true)
+
     hunter.frame:SetScript(
         "OnDragStart",
         function()

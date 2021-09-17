@@ -157,7 +157,22 @@ function SilentRotate:CreateConfig()
                         type = "execute",
                         order = 13,
                         func = function() SilentRotate.toggleArcaneShotTesting() end
-                    }
+                    },
+                    showBlindIcon = {
+                        name = L["DISPLAY_BLIND_ICON"],
+                        desc = L["DISPLAY_BLIND_ICON_DESC"],
+                        type = "toggle",
+                        order = 14,
+                        width = "full",
+                        set = function(info, value) set(info,value) SilentRotate:refreshBlindIcons() end
+                    },
+                    showBlindIconTooltip = {
+                        name = L["DISPLAY_BLIND_ICON_TOOLTIP"],
+                        desc = L["DISPLAY_BLIND_ICON_TOOLTIP_DESC"],
+                        type = "toggle",
+                        order = 15,
+                        width = "full",
+                    },
                 }
             },
             modes = {
