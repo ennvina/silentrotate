@@ -106,6 +106,15 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
                 SilentRotate:sendAnnounceMessage(SilentRotate.db.profile.announceFearWardMessage, destName)
             end
         end
+    elseif SilentRotate:isMisdiMode() then
+        if (event == "SPELL_CAST_SUCCESS" and SilentRotate:isMisdiSpell(spellName)) then
+            local hunter = SilentRotate:getHunter(sourceGUID)
+            SilentRotate:sendSyncTranq(hunter, false, timestamp)
+            SilentRotate:rotate(hunter, false)
+            if (sourceGUID == UnitGUID("player")) then
+                SilentRotate:sendAnnounceMessage(SilentRotate.db.profile.announceMisdiMessage, destName)
+            end
+        end
     end
 end
 

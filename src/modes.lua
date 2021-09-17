@@ -9,6 +9,7 @@ function SilentRotate:isTranqMode(mode)
        and not SilentRotate:isDistractMode(mode)
        and not SilentRotate:isFearWardMode(mode)
        and not SilentRotate:isAoeTauntMode(mode)
+       and not SilentRotate:isMisdiMode(mode)
 end
 
 function SilentRotate:isRazMode(mode)
@@ -36,6 +37,11 @@ function SilentRotate:isAoeTauntMode(mode)
     return mode == 'tauntz'
 end
 
+function SilentRotate:isMisdiMode(mode)
+    if (not mode) then mode = SilentRotate.db.profile.currentMode end
+    return mode == 'misdiz'
+end
+
 -- -- Setters shown here to list available modes, but no one should ever call these functions
 -- function SilentRotate:setTranqMode()
 --     SilentRotate.db.profile.currentMode = 'hunterz'
@@ -54,6 +60,9 @@ end
 -- end
 -- function SilentRotate:setAoeTauntMode()
 --     SilentRotate.db.profile.currentMode = 'tauntz'
+-- end
+-- function SilentRotate:setMisdiMode()
+--     SilentRotate.db.profile.currentMode = 'misdiz'
 -- end
 
 -- Activate the specific mode
@@ -93,6 +102,8 @@ function SilentRotate:isPlayerWanted(unit, className, mode)
         return className == 'PRIEST' and select(2,UnitRace(unit)) == 'Dwarf'
     elseif SilentRotate:isAoeTauntMode(mode) then
         return className == 'WARRIOR' or className == 'DRUID'
+    elseif SilentRotate:isMisdiMode(mode) then
+        return className == 'HUNTER'
     end
     return className == 'HUNTER' -- hunter is the default mode
 end
@@ -113,6 +124,8 @@ function SilentRotate:getModeDuration(mode)
         duration = 30
     elseif SilentRotate:isAoeTauntMode() then
         duration = 600 -- Cooldown of Warrior's Challenging Shout and Druid's Challenging Roar
+    elseif SilentRotate:isMisdiMode() then
+        duration = 120 -- Cooldown of Hunter's Misdirection
     else
         duration = 0 -- Duration should have no meaning for other modes
     end
@@ -132,6 +145,8 @@ function SilentRotate:getBroadcastHeaderText()
         return L['BROADCAST_HEADER_TEXT_FEARWARD']
     elseif SilentRotate:isAoeTauntMode() then
         return L['BROADCAST_HEADER_TEXT_AOETAUNT']
+    elseif SilentRotate:isMisdiMode() then
+        return L['BROADCAST_HEADER_TEXT_MISDI']
     end
     return L['BROADCAST_HEADER_TEXT']
 end

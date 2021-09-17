@@ -17,6 +17,7 @@ function SilentRotate:LoadDefaults()
 	        announceFearWardMessage = L["DEFAULT_FEARWARD_ANNOUNCE_MESSAGE"],
 	        announceAoeTauntSuccessMessage = L["DEFAULT_AOETAUNT_SUCCESS_ANNOUNCE_MESSAGE"],
 	        announceAoeTauntFailMessage = L["DEFAULT_AOETAUNT_FAIL_ANNOUNCE_MESSAGE"],
+			announceMisdiMessage = L["DEFAULT_MISDI_ANNOUNCE_MESSAGE"],
 
 			-- Modes
 			currentMode = nil, -- Will be set based on *modeButton flags at the end of this file
@@ -26,12 +27,14 @@ function SilentRotate:LoadDefaults()
 			razModeButton = false, -- SilentRotate:isPlayerWanted("player", nil, 'priestz'), -- Do not allow Razuvious mode for now
 			fearWardModeButton = SilentRotate:isPlayerWanted("player", nil, 'fearz'),
 			aoeTauntModeButton = SilentRotate:isPlayerWanted("player", nil, 'tauntz'),
+			misdiModeButton    = SilentRotate:isPlayerWanted("player", nil, 'misdiz'),
 			tranqModeText    = L["FILTER_SHOW_HUNTERS"],
 			loathebModeText  = L["FILTER_SHOW_HEALERS"],
 			distractModeText = L["FILTER_SHOW_ROGUES"],
 			razModeText      = L["FILTER_SHOW_PRIESTS"],
 			fearWardModeText = L["FILTER_SHOW_DWARVES"],
 			aoeTauntModeText = L["FILTER_SHOW_AOETAUNTERS"],
+			misdiModeText    = L["FILTER_SHOW_MISDIRECTORS"],
 
 			-- Names
 			useClassColor = true,
@@ -64,7 +67,7 @@ function SilentRotate:LoadDefaults()
 	
 	}
 	-- Find the default mode based on class compatibility
-	if (self.defaults.profile.tranqModeButton) then
+	if (self.defaults.profile.tranqModeButton and WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) then
 		self.defaults.profile.currentMode = 'hunterz'
 	elseif (self.defaults.profile.loathebModeButton) then
 		self.defaults.profile.currentMode = 'healerz'
@@ -74,6 +77,8 @@ function SilentRotate:LoadDefaults()
 		self.defaults.profile.currentMode = 'fearz'
 	elseif (self.defaults.profile.aoeTauntModeButton) then
 		self.defaults.profile.currentMode = 'tauntz'
+	elseif (self.defaults.profile.misdiModeButton) then
+		self.defaults.profile.currentMode = 'misdiz'
 	else
 		-- Use Loatheb mode by default for classes who cannot fit other roles
 		-- Also enable this option by default

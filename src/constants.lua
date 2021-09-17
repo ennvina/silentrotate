@@ -89,4 +89,6 @@ SilentRotate.constants = {
         GetSpellInfo(5209), -- druid's challenging roar
     },
 
+    ['misdi'] = GetSpellInfo(34477),
+
 }
