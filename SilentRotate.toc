@@ -1,10 +1,10 @@
-## Interface: 11305
+## Interface: 11307
 ## Title: SilentRotate |cff88aaff0.7.0-beta|r
 ## Notes: Track spell rotation in raid
 ## Author: Vinny
-## Version: v0.7.0-beta
+## Version: 0.7.0-beta
 ## SavedVariables: SilentRotateDb
-## OptionalDeps: Ace3
+## OptionalDeps: Ace3   
 
 #@no-lib-strip@
 libs\LibStub\LibStub.lua
