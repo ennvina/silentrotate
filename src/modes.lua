@@ -90,7 +90,7 @@ function SilentRotate:isPlayerWanted(unit, className, mode)
     elseif SilentRotate:isDistractMode(mode) then
         return className == 'ROGUE'
     elseif SilentRotate:isFearWardMode(mode) then
-        return className == 'PRIEST' and (select(2,UnitRace(unit)) == 'Dwarf' or WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC)
+        return className == 'PRIEST' and (select(2,UnitRace(unit)) == 'Dwarf' or WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC)
     elseif SilentRotate:isAoeTauntMode(mode) then
         return className == 'WARRIOR' or className == 'DRUID'
     end
