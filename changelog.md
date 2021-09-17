@@ -1,5 +1,27 @@
 ## SilentRotate Changelog
 
+#### v0.7.0-beta
+
+ALL USERS MUST UPDATE THE ADDON
+
+because the update fixes critical issues for Classic Era as well as
+The Burning Crusade Classic, and because the fixes will break the
+compatibility between this version and older versions
+
+- Fixed cross-realm names (Era)
+- Fixed drag'n'drop issue (TBC)
+- Added Misdirection mode (TBC)
+- Fear Ward cooldown adapts to the project ID (Era = 30 secs; TBC = 3 min)
+- AoE Taunt messages can now be configured
+- The addon version is now shared between players in the same raid
+- A Blind icon is displayed next to players who have not installed the addon
+- Players with SilentRotate prior to v0.7 will be NOT be detected
+- Users are notified when a new version is available
+- "/sr check" or "/sr version" checks the addon version of yourself and others
+- "/sr show" and "/sr hide" will show/hide the SilentRotate window
+- Updated Chinese translations (zh-CN)
+- Updated Ace libraries to their latest version (30-jun-2021)
+
 #### v0.6.3-beta
 
 - Added AoE Taunt mode
