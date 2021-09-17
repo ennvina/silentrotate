@@ -246,9 +246,9 @@ function SilentRotate:isHunterRegistered(GUID)
 end
 
 -- Return our hunter object from name or GUID
-function TranqRotate:getHunter(searchTerm)
+function SilentRotate:getHunter(searchTerm)
 
-    for _, hunter in pairs(TranqRotate.hunterTable) do
+    for _, hunter in pairs(SilentRotate.hunterTable) do
         if (searchTerm ~= nil and (hunter.GUID == searchTerm or hunter.name == searchTerm)) then
             return hunter
         end
