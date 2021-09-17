@@ -141,6 +141,17 @@ L["ENABLE_TRANQ_NOW_SOUND"] = "Jouer un son au moment ou vous devez tranq"
 L["TRANQ_NOW_SOUND_CHOICE"] = "Son à jouer au moment ou vous devez tranq"
 L["DBM_SOUND_WARNING"] = "DBM joue le son de capture de drapeau à chaque frénésie, cela pourrait couvrir un son trop doux. Je suggère de choisir un son assez marquant ou de désactiver les alertes de frénésie DBM si vous choisissez un son plus doux."
 
+    --- Icons
+L["DISPLAY_BLIND_ICON"] = "Afficher une icône pour les joueurs qui n'ont pas installé SilentRotate"
+L["DISPLAY_BLIND_ICON_DESC"] = "Ajoute une icône \"aveugle\" sur le joueur pour indiquer qu'il n'utilise pas l'addon. Il/elle ne connaitra pas la rotation affichée et ses actions ne seront pas synchronisées si le joueur se retrouve loin des utilisateurs de l'addon"
+L["DISPLAY_BLIND_ICON_TOOLTIP"] = "Afficher l'info-bulle pour l'icône \"aveugle\""
+L["DISPLAY_BLIND_ICON_TOOLTIP_DESC"] = "En désactivant cette option vous désactivez l'info-bulle tout en conservant l'icône"
+
+    --- Tooltips
+L["TOOLTIP_PLAYER_WITHOUT_ADDON"] = "Ce joueur n'utilise pas SilentRotate"
+L["TOOLTIP_MAY_RUN_OUDATED_VERSION"] = "Ou possède une version obsolète, inférieure à 0.7.0"
+L["TOOLTIP_DISABLE_SETTINGS"] = "(Vous pouvez désactiver l'icône et/ou l'info-bulle dans les paramètres)"
+
     --- Profiles
 L["SETTING_PROFILES"] = "Profils"
 

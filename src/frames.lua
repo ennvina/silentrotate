@@ -310,6 +310,7 @@ function SilentRotate:createHunterFrame(hunter, parentFrame)
     SilentRotate:setHunterName(hunter)
 
     SilentRotate:createCooldownFrame(hunter)
+    SilentRotate:createBlindIconFrame(hunter)
     SilentRotate:configureHunterFrameDrag(hunter)
 
     if (SilentRotate.enableDrag) then
@@ -353,4 +354,60 @@ function SilentRotate:createCooldownFrame(hunter)
     )
 
     hunter.frame.cooldownFrame:Hide()
+end
+
+-- Create the blind icon frame
+function SilentRotate:createBlindIconFrame(hunter)
+
+    -- Frame
+    hunter.frame.blindIconFrame = CreateFrame("Frame", nil, hunter.frame)
+    hunter.frame.blindIconFrame:SetPoint('RIGHT', -5, 0)
+    hunter.frame.blindIconFrame:SetPoint('CENTER', 0, 0)
+    hunter.frame.blindIconFrame:SetWidth(16)
+    hunter.frame.blindIconFrame:SetHeight(16)
+
+    -- Set Texture
+    hunter.frame.blindIconFrame.texture = hunter.frame.blindIconFrame:CreateTexture(nil, "ARTWORK")
+    local blind_filename = ""
+--  local relativeHeight = GetScreenHeight()*UIParent:GetEffectiveScale()
+    local relativeHeight = select(2,GetCurrentScaledResolution())*UIParent:GetEffectiveScale()
+    if relativeHeight <= 1080 then
+        blind_filename = "blind_32px.tga"
+    else
+        blind_filename = "blind_256px.tga"
+    end
+    hunter.frame.blindIconFrame.texture:SetTexture("Interface\\AddOns\\SilentRotate\\textures\\"..blind_filename)
+    hunter.frame.blindIconFrame.texture:SetAllPoints()
+--    hunter.frame.blindIconFrame.texture:SetTexCoord(0.15, 0.85, 0.15, 0.85);
+    hunter.frame.blindIconFrame.texture:SetTexCoord(0, 1, 0, 1);
+
+    -- Tooltip
+    hunter.frame.blindIconFrame:SetScript("OnEnter", SilentRotate.onBlindIconEnter)
+    hunter.frame.blindIconFrame:SetScript("OnLeave", SilentRotate.onBlindIconLeave)
+
+    -- Drag & drop handlers
+    hunter.frame.blindIconFrame:SetScript("OnDragStart", function(self, ...)
+        ExecuteFrameScript(self:GetParent(), "OnDragStart", ...);
+    end)
+    hunter.frame.blindIconFrame:SetScript("OnDragStop", function(self, ...)
+        ExecuteFrameScript(self:GetParent(), "OnDragStop", ...);
+    end)
+
+    hunter.frame.blindIconFrame:Hide()
+end
+
+-- Blind icon tooltip show
+function SilentRotate:onBlindIconEnter()
+    if (SilentRotate.db.profile.showBlindIconTooltip) then
+        GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
+        GameTooltip:SetText(L["TOOLTIP_PLAYER_WITHOUT_ADDON"])
+        GameTooltip:AddLine(L["TOOLTIP_MAY_RUN_OUDATED_VERSION"])
+        GameTooltip:AddLine(L["TOOLTIP_DISABLE_SETTINGS"])
+        GameTooltip:Show()
+    end
+end
+
+-- Blind icon tooltip hide
+function SilentRotate:onBlindIconLeave(self, motion)
+    GameTooltip:Hide()
 end

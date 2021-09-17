@@ -18,6 +18,7 @@ function SilentRotate:init()
     self:CreateConfig()
 
     SilentRotate.hunterTable = {}
+    SilentRotate.addonVersions = {}
     SilentRotate.rotationTables = { rotation = {}, backup = {} }
     SilentRotate.enableDrag = true
 
@@ -128,6 +129,8 @@ SlashCmdList["SILENTROTATE"] = function(msg)
         SilentRotate:printRotationSetup()
     elseif (cmd == 'settings') then
         SilentRotate:openSettings()
+    elseif (cmd == 'check' or cmd== 'version') then
+        SilentRotate:checkVersions()
     else
         SilentRotate:printHelp()
     end
@@ -220,6 +223,7 @@ function SilentRotate:printHelp()
     SilentRotate:printMessage(spacing .. SilentRotate:colorText('settings') .. ' : Open SilentRotate settings')
     SilentRotate:printMessage(spacing .. SilentRotate:colorText('report') .. ' : Print the rotation setup to the configured channel')
 --    SilentRotate:printMessage(spacing .. SilentRotate:colorText('backup') .. ' : Whispers backup hunters to immediately tranq')
+    SilentRotate:printMessage(spacing .. SilentRotate:colorText('check') .. ' : Print user versions of SilentRotate')
 end
 
 -- Adds color to given text
@@ -260,4 +264,39 @@ function SilentRotate:toggleArcaneShotTesting(disable)
     end
 
     SilentRotate:updateRaidStatus()
+end
+
+function SilentRotate:updatePlayerAddonVersion(player, version)
+
+    local hunter = SilentRotate:getHunter(player)
+    if (hunter) then
+        hunter.addonVersion = version
+        SilentRotate:updateBlindIcon(hunter)
+    else
+        SilentRotate.addonVersions[player] = version
+    end
+end
+
+function SilentRotate:checkVersions()
+    SilentRotate:printPrefixedMessage("## Version check ##")
+    SilentRotate:printPrefixedMessage("You - " .. SilentRotate.version)
+
+    for key, hunter in pairs(SilentRotate.hunterTable) do
+        if (hunter.name ~= UnitName("player")) then
+            SilentRotate:printPrefixedMessage(hunter.name .. " - " .. SilentRotate:formatAddonVersion(hunter.addonVersion))
+        end
+    end
+    for key, player in pairs(SilentRotate.addonVersions) do
+        if (player ~= UnitName("player")) then
+            SilentRotate:printPrefixedMessage(hunter.name .. " - " .. SilentRotate:formatAddonVersion(hunter.addonVersion))
+        end
+    end
+end
+
+function SilentRotate:formatAddonVersion(version)
+    if (version == nil) then
+        return "Not installed or older than 0.7.0"
+    else
+        return version
+    end
 end

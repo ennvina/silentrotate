@@ -11,6 +11,7 @@ function SilentRotate:registerHunter(hunterName)
     hunter.frame = nil
     hunter.nextTranq = false
     hunter.lastTranqTime = 0
+    hunter.addonVersion = nil
 
     -- Add to global list
     table.insert(SilentRotate.hunterTable, hunter)

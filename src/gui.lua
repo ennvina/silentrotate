@@ -107,6 +107,28 @@ end
 function SilentRotate:refreshHunterFrame(hunter)
     SilentRotate:setHunterFrameColor(hunter)
     SilentRotate:setHunterName(hunter)
+    SilentRotate:updateBlindIcon(hunter)
+end
+
+-- Toggle blind icon display based on addonVersion
+function SilentRotate:updateBlindIcon(hunter)
+    if (
+        not SilentRotate.db.profile.showBlindIcon or
+        hunter.addonVersion ~= nil or
+        hunter.name == UnitName('player') or
+        not SilentRotate:isHunterOnline(hunter)
+    ) then
+        hunter.frame.blindIconFrame:Hide()
+    else
+        hunter.frame.blindIconFrame:Show()
+    end
+end
+
+-- Refresh all blind icons
+function SilentRotate:refreshBlindIcons()
+    for _, hunter in pairs(SilentRotate.hunterTable) do
+        SilentRotate:updateBlindIcon(hunter)
+    end
 end
 
 -- Set the hunter frame color regarding it's status

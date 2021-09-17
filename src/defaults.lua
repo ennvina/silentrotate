@@ -58,7 +58,9 @@ function SilentRotate:LoadDefaults()
 			hideNotInRaid = false,
 			doNotShowWindowOnRaidJoin = false,
 			showWindowWhenTargetingBoss = false,
-	    },
+ 			showBlindIcon = true,
+			showBlindIconTooltip = true,
+		},
 	
 	}
 	-- Find the default mode based on class compatibility
