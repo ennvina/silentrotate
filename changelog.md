@@ -94,7 +94,7 @@ compatibility between this version and older versions
 - Source code is available on GitHub https://github.com/ennvina/silentrotate
 - This release mostly focuses on cleaning up some files before sharing them
 
-#### v0.2.0-alpha
+#### v0.2.0-alpha (2020-12-08)
 
 - Modes have been renamed to Tranq, Raz and Loatheb
 - New mode: Distract, for rogues’s Distract rotation
@@ -105,7 +105,7 @@ compatibility between this version and older versions
 - Fixed a bug with how lists are refreshed when switching modes
 - Each mode now has its own comm prefix to prevent conflict between modes
 
-#### v0.1.0-alpha
+#### v0.1.0-alpha (2020-12-07)
 
 - Fork from TranqRotate
 - Added buttons for choosing mode: Hunter, Priest, Healer
