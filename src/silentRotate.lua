@@ -275,6 +275,11 @@ function SilentRotate:updatePlayerAddonVersion(player, version)
     else
         SilentRotate.addonVersions[player] = version
     end
+
+    local updateRequired, breakingUpdate = SilentRotate:isUpdateRequired(version)
+    if (updateRequired) then
+        SilentRotate:notifyUserAboutAvailableUpdate(breakingUpdate)
+    end
 end
 
 function SilentRotate:checkVersions()
@@ -298,5 +303,59 @@ function SilentRotate:formatAddonVersion(version)
         return "Not installed or older than 0.7.0"
     else
         return version
+    end
+end
+
+-- Parse version string
+-- @return major, minor, fix, isStable
+function SilentRotate:parseVersionString(versionString)
+
+    local version, type = strsplit("-", versionString)
+    local major, minor, fix = strsplit( ".", version)
+
+    return tonumber(major), tonumber(minor), tonumber(fix), type == nil
+end
+
+-- Check if the given version would require updating
+-- @return requireUpdate, breakingUpdate
+function SilentRotate:isUpdateRequired(versionString)
+
+    local remoteMajor, remoteMinor, remoteFix, isRemoteStable = self:parseVersionString(versionString)
+    local localMajor, localMinor, localFix, isLocalStable = self:parseVersionString(SilentRotate.version)
+
+    if (isRemoteStable) then
+
+        if (remoteMajor > localMajor) then
+            return true, true
+        elseif (remoteMajor < localMajor) then
+            return false, false
+        end
+
+        if (remoteMinor > localMinor) then
+            return true, false
+        elseif (remoteMinor < localMinor) then
+            return false, false
+        end
+
+        if (remoteFix > localFix) then
+            return true, false
+        end
+    end
+
+    return false, false
+end
+
+-- Notify user about a new version available
+function SilentRotate:notifyUserAboutAvailableUpdate(isBreakingUpdate)
+    if (isBreakingUpdate) then
+        if (SilentRotate.notifiedBreakingUpdate ~= true) then
+            SilentRotate:printPrefixedMessage('|cffff3d3d' .. L['BREAKING_UPDATE_AVAILABLE'] .. '|r')
+            SilentRotate.notifiedBreakingUpdate = true
+        end
+    else
+        if (SilentRotate.notifiedUpdate ~= true and SilentRotate.notifiedBreakingUpdate ~= true) then
+            SilentRotate:printPrefixedMessage(L['UPDATE_AVAILABLE'])
+            SilentRotate.notifiedUpdate = true
+        end
     end
 end

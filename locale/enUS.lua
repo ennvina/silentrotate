@@ -152,6 +152,10 @@ L["TOOLTIP_PLAYER_WITHOUT_ADDON"] = "This player does not use SilentRotate"
 L["TOOLTIP_MAY_RUN_OUDATED_VERSION"] = "Or runs an outdated version, older than 0.7.0"
 L["TOOLTIP_DISABLE_SETTINGS"] = "(You can disable the icon and/or the tooltip in the settings)"
 
+    --- Notifications
+L["UPDATE_AVAILABLE"] = "A new version is available, please update to get the latest features."
+L["BREAKING_UPDATE_AVAILABLE"] = "A new, CRITICAL update is available, you MUST update AS SOON AS possible! SilentRotate may not work correctly between you and up-to-date players."
+
     --- Profiles
 L["SETTING_PROFILES"] = "Profiles"
 
