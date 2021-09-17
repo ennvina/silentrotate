@@ -110,7 +110,11 @@ function SilentRotate:getModeDuration(mode)
     elseif SilentRotate:isDistractMode() then
         duration = 30 -- Cooldown of Rogue's Distract
     elseif SilentRotate:isFearWardMode() then
-        duration = 30
+        if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+            duration = 30
+        else
+            duration = 180
+        end
     elseif SilentRotate:isAoeTauntMode() then
         duration = 600 -- Cooldown of Warrior's Challenging Shout and Druid's Challenging Roar
     else
