@@ -27,7 +27,7 @@ function SilentRotate:LoadDefaults()
 			razModeButton = false, -- SilentRotate:isPlayerWanted("player", nil, 'priestz'), -- Do not allow Razuvious mode for now
 			fearWardModeButton = SilentRotate:isPlayerWanted("player", nil, 'fearz'),
 			aoeTauntModeButton = SilentRotate:isPlayerWanted("player", nil, 'tauntz'),
-			misdiModeButton    = SilentRotate:isPlayerWanted("player", nil, 'misdiz'),
+			misdiModeButton    = (WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC) and SilentRotate:isPlayerWanted("player", nil, 'misdiz'),
 			tranqModeText    = L["FILTER_SHOW_HUNTERS"],
 			loathebModeText  = L["FILTER_SHOW_HEALERS"],
 			distractModeText = L["FILTER_SHOW_ROGUES"],

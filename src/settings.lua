@@ -359,6 +359,7 @@ function SilentRotate:CreateConfig()
                     misdiModeHeader = {
                         type = "header",
                         order = 70,
+                        hidden = function() return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC end,
                     },
                     misdiModeButton = {
                         name = L["MISDI_MODE_FULL_NAME"],
@@ -367,6 +368,7 @@ function SilentRotate:CreateConfig()
                         order = 71,
                         width = "full",
                         set = setForMode,
+                        hidden = function() return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC end,
                     },
                     misdiModeText = {
                         name = L["MODE_LABEL"],
@@ -375,7 +377,7 @@ function SilentRotate:CreateConfig()
                         order = 72,
                         width = "half",
                         set = setForMode,
-                        hidden = function() return not SilentRotate.db.profile.misdiModeButton end,
+                        hidden = function() return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC or not SilentRotate.db.profile.misdiModeButton end,
                     },
                     misdiModeInvisible = {
                         name = SilentRotate.colors.lightRed:WrapTextInColorCode(L["MODE_INVISIBLE"]),
@@ -383,7 +385,7 @@ function SilentRotate:CreateConfig()
                         fontSize = "medium",
                         width = "full",
                         order = 73,
-                        hidden = function() return SilentRotate.db.profile.misdiModeButton or not SilentRotate:isMisdiMode() end,
+                        hidden = function() return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC or SilentRotate.db.profile.misdiModeButton or not SilentRotate:isMisdiMode() end,
                     },
                 }
             },
@@ -477,6 +479,7 @@ function SilentRotate:CreateConfig()
                         type = "input",
                         order = 31,
                         width = "double",
+                        hidden = function() return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC end,
                     },
                     setupBroadcastHeader = {
                         name = L["BROADCAST_MESSAGE_HEADER"],
