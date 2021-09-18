@@ -137,6 +137,32 @@ function SilentRotate:getModeDuration(mode)
     return duration
 end
 
+-- Get the default duration known for a buff given by a specific mode
+-- If mode is nil, use the current mode instead
+-- If the mode provided no buff, the returned duration is zero
+function SilentRotate:getModeBuffDuration(mode)
+    if (not mode) then mode = SilentRotate.db.profile.currentMode end
+
+    local duration
+    if SilentRotate:isDistractMode() then
+        duration = 10
+    elseif SilentRotate:isFearWardMode() then
+        if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+            duration = 600
+        else
+            duration = 180
+        end
+    elseif SilentRotate:isAoeTauntMode() then
+        duration = 6
+    elseif SilentRotate:isMisdiMode() then
+        duration = 30
+    else
+        duration = 0 -- Other modes provide no specific buff/debuff
+    end
+
+    return duration
+end
+
 -- Each mode has a specific Broadcast text so that it does not conflict with other modes
 function SilentRotate:getBroadcastHeaderText()
     if SilentRotate:isRazMode() then

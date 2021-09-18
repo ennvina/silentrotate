@@ -192,10 +192,26 @@ function SilentRotate:setHunterName(hunter)
         end
     end
 
+    local targetName
+    if SilentRotate.db.profile.appendTarget and hunter.targetGUID then
+        if not SilentRotate.db.profile.appendTargetBuffOnly or not hunter.endTimeOfBuff or hunter.endTimeOfBuff == 0 or hunter.endTimeOfBuff > GetTime() then
+            targetName = select(6, GetPlayerInfoByGUID(hunter.targetGUID))
+        end
+    end
+    local hasTarget = targetName ~= nil and targetName ~= ""
+
     if (SilentRotate.db.profile.appendGroup and hunter.subgroup) then
-        local groupText = string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup)
-        local color = SilentRotate:getUserDefinedColor('groupSuffix')
-        newText = newText.." "..color:WrapTextInColorCode(groupText)
+        if not hasTarget or not SilentRotate.db.profile.appendTargetNoGroup then -- Do not append the group if the target name hides the group for clarity
+            local groupText = string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup)
+            local color = SilentRotate:getUserDefinedColor('groupSuffix')
+            newText = newText.." "..color:WrapTextInColorCode(groupText)
+        end
+    end
+
+    if hasTarget then
+        newText = newText..SilentRotate.colors['white']:WrapTextInColorCode(">")
+        local targetColor = SilentRotate.colors['white'] -- TODO detect if the spell was failed / buff faded / target died, and use a specific color
+        newText = newText..targetColor:WrapTextInColorCode(targetName)
     end
 
     if (newFont ~= currentFont or newOutline ~= currentOutline) then
@@ -215,7 +231,7 @@ function SilentRotate:setHunterName(hunter)
 
 end
 
-function SilentRotate:startHunterCooldown(hunter, endTimeOfCooldown)
+function SilentRotate:startHunterCooldown(hunter, endTimeOfCooldown, targetGUID, endTimeOfBuff)
     if not endTimeOfCooldown or endTimeOfCooldown == 0 then
         local duration = SilentRotate:getModeDuration()
         endTimeOfCooldown = GetTime() + duration
@@ -224,6 +240,30 @@ function SilentRotate:startHunterCooldown(hunter, endTimeOfCooldown)
     hunter.frame.cooldownFrame.statusBar:SetMinMaxValues(GetTime(), endTimeOfCooldown)
     hunter.frame.cooldownFrame.statusBar.expirationTime = endTimeOfCooldown
     hunter.frame.cooldownFrame:Show()
+
+    hunter.targetGUID = targetGUID
+    if targetGUID then
+        if not endTimeOfBuff or endTimeOfBuff == 0 then
+            local buffDuration = SilentRotate:getModeBuffDuration()
+            if buffDuration then
+                endTimeOfBuff = GetTime() + buffDuration
+            else
+                endTimeOfBuff = 0
+            end
+        end
+        hunter.endTimeOfBuff = endTimeOfBuff
+
+        if SilentRotate.db.profile.appendTarget then
+            SilentRotate:setHunterName(hunter)
+            if endTimeOfBuff > GetTime() then
+                -- Refresh the hunter name slightly after the buff expires in order to hide/recolor the target name
+                -- TODO replace this with a regular check and cancel the check if the buff is missing or if target is dead/disconnected
+                C_Timer.After(endTimeOfBuff - GetTime() + 1, function()
+                    SilentRotate:setHunterName(hunter)
+                end)
+            end
+        end
+    end
 end
 
 -- Lock/Unlock the mainFrame position

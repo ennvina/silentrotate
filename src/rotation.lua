@@ -53,8 +53,13 @@ function SilentRotate:removeHunter(deletedHunter)
 end
 
 -- Update the rotation list once a tranq has been done.
--- The parameter is the hunter that used it's tranq (successfully or not)
-function SilentRotate:rotate(lastHunter, fail, rotateWithoutCooldown, endTimeOfCooldown)
+-- @param lastHunter            player that used its tranq (successfully or not)
+-- @param fail                  flag that tells if the spell failed (false by default, i.e. success by default)
+-- @param rotateWithoutCooldown flag for unavailable players who are e.g. dead or disconnected
+-- @param endTimeOfCooldown     time when the cooldown ends (by default the time is calculated as now+cooldown)
+-- @param targetGUID            GUID of the only target or main target of the rotation, if such target exists
+-- @param endTimeOfBuff         time when the buff of the targetGUID fades (by default, time is now+duration)
+function SilentRotate:rotate(lastHunter, fail, rotateWithoutCooldown, endTimeOfCooldown, targetGUID, endTimeOfBuff)
 
     -- Default value to false
     fail = fail or false
@@ -67,7 +72,7 @@ function SilentRotate:rotate(lastHunter, fail, rotateWithoutCooldown, endTimeOfC
 
     -- Do not trigger cooldown when rotation from a dead or disconnected status
     if (rotateWithoutCooldown ~= true) then
-        SilentRotate:startHunterCooldown(lastHunter, endTimeOfCooldown)
+        SilentRotate:startHunterCooldown(lastHunter, endTimeOfCooldown, targetGUID, endTimeOfBuff)
     end
 
     if (hunterRotationTable == SilentRotate.rotationTables.rotation) then

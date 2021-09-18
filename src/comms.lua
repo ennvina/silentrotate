@@ -72,13 +72,14 @@ end
 -----------------------------------------------------------------------------------------------------------------------
 
 -- Broadcast a tranqshot event
-function SilentRotate:sendSyncTranq(hunter, fail, timestamp)
+function SilentRotate:sendSyncTranq(hunter, fail, timestamp, targetGUID)
     local message = {
         ['type'] = SilentRotate.constants.commsTypes.tranqshotDone,
         ['mode'] = SilentRotate.db.profile.currentMode,
         ['timestamp'] = timestamp,
         ['player'] = hunter.GUID,
         ['fail'] = fail,
+        ['target'] = targetGUID,
     }
 
     SilentRotate:sendRaidAddonMessage(message)
@@ -133,7 +134,7 @@ function SilentRotate:receiveSyncTranq(prefix, message, channel, sender)
     local notDuplicate = hunter.lastTranqTime <  GetTime() - SilentRotate.constants.duplicateTranqshotDelayThreshold
 
     if (notDuplicate) then
-        SilentRotate:rotate(hunter, message.fail)
+        SilentRotate:rotate(hunter, message.fail, nil, nil, message.targetGUID)
     end
 end
 
