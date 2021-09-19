@@ -1,5 +1,9 @@
 ## SilentRotate Changelog
 
+#### v0.7.2-beta (2021-xx-yy)
+
+- Added Bloodlust mode (TBC)
+
 #### v0.7.1-beta (2021-09-19)
 
 - Display a tick in the cooldown bar for the duration of the buff or effect

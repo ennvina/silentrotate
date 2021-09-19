@@ -98,4 +98,9 @@ SilentRotate.constants = {
 
     ['misdi'] = GetSpellInfo(34477),
 
+    ['bloodlust'] = {
+        GetSpellInfo(2825), -- Bloodlust
+        GetSpellInfo(32182), -- Heroism
+    },
+
 }

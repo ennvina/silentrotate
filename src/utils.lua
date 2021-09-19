@@ -180,6 +180,20 @@ function SilentRotate:isAoeTauntSpell(spellName)
     return false
 end
 
+-- Checks if the spell is the Shaman Bloodlust or Heroism
+function SilentRotate:isBloodlustSpell(spellName)
+
+    local names = SilentRotate.constants.bloodlust
+
+    for _, name in ipairs(names) do
+        if (spellName == name) then
+            return true
+        end
+    end
+
+    return false
+end
+
 -- Get a user-defined color or create it now
 function SilentRotate:getUserDefinedColor(colorName)
 

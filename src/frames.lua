@@ -127,6 +127,7 @@ function SilentRotate:createModeFrame()
     SilentRotate:createSingleModeFrame("fearz",   L["FILTER_SHOW_DWARVES"]     , 4*commonModeWidth, 5*commonModeWidth, SilentRotate:isFearWardMode())
     SilentRotate:createSingleModeFrame("tauntz",  L["FILTER_SHOW_AOETAUNTERS"] , 5*commonModeWidth, 6*commonModeWidth, SilentRotate:isAoeTauntMode())
     SilentRotate:createSingleModeFrame("misdiz",  L["FILTER_SHOW_MISDIRECTORS"], 6*commonModeWidth, 7*commonModeWidth, SilentRotate:isMisdiMode())
+    SilentRotate:createSingleModeFrame("shamanz", L["FILTER_SHOW_SHAMANS"]     , 7*commonModeWidth, 8*commonModeWidth, SilentRotate:isBloodlustMode())
     SilentRotate:applyModeFrameSettings()
 end
 
@@ -208,6 +209,11 @@ function SilentRotate:applyModeFrameSettings()
             modeName = "misdiz",
             visibilityFlag = "misdiModeButton",
             textVariable = "misdiModeText",
+        },
+        {
+            modeName = "shamanz",
+            visibilityFlag = "bloodlustModeButton",
+            textVariable = "bloodlustModeText",
         },
     }
 

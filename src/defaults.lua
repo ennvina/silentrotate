@@ -18,6 +18,7 @@ function SilentRotate:LoadDefaults()
 	        announceAoeTauntSuccessMessage = L["DEFAULT_AOETAUNT_SUCCESS_ANNOUNCE_MESSAGE"],
 	        announceAoeTauntFailMessage = L["DEFAULT_AOETAUNT_FAIL_ANNOUNCE_MESSAGE"],
 			announceMisdiMessage = L["DEFAULT_MISDI_ANNOUNCE_MESSAGE"],
+			announceBloodlustMessage = L["DEFAULT_BLOODLUST_ANNOUNCE_MESSAGE"],
 
 			-- Modes
 			currentMode = nil, -- Will be set based on *modeButton flags at the end of this file
@@ -28,6 +29,7 @@ function SilentRotate:LoadDefaults()
 			fearWardModeButton = SilentRotate:isPlayerWanted("player", nil, 'fearz'),
 			aoeTauntModeButton = SilentRotate:isPlayerWanted("player", nil, 'tauntz'),
 			misdiModeButton    = (WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC) and SilentRotate:isPlayerWanted("player", nil, 'misdiz'),
+			bloodlustModeButton= (WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC) and SilentRotate:isPlayerWanted("player", nil, 'shamanz'),
 			tranqModeText    = L["FILTER_SHOW_HUNTERS"],
 			loathebModeText  = L["FILTER_SHOW_HEALERS"],
 			distractModeText = L["FILTER_SHOW_ROGUES"],
@@ -35,6 +37,7 @@ function SilentRotate:LoadDefaults()
 			fearWardModeText = L["FILTER_SHOW_DWARVES"],
 			aoeTauntModeText = L["FILTER_SHOW_AOETAUNTERS"],
 			misdiModeText    = L["FILTER_SHOW_MISDIRECTORS"],
+			bloodlustModeText= L["FILTER_SHOW_SHAMANS"],
 
 			-- Names
 			useClassColor = true,
@@ -82,6 +85,8 @@ function SilentRotate:LoadDefaults()
 		self.defaults.profile.currentMode = 'tauntz'
 	elseif (self.defaults.profile.misdiModeButton) then
 		self.defaults.profile.currentMode = 'misdiz'
+	elseif (self.defaults.profile.bloodlustModeButton) then
+		self.defaults.profile.currentMode = 'shamanz'
 	else
 		-- Use Loatheb mode by default for classes who cannot fit other roles
 		-- Also enable this option by default

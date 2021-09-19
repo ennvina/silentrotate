@@ -115,6 +115,15 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
                 SilentRotate:sendAnnounceMessage(SilentRotate.db.profile.announceMisdiMessage, destName)
             end
         end
+    elseif SilentRotate:isBloodlustMode() then
+        if (event == "SPELL_CAST_SUCCESS" and SilentRotate:isBloodlustSpell(spellName)) then
+            local hunter = SilentRotate:getHunter(sourceGUID)
+            SilentRotate:sendSyncTranq(hunter, false, timestamp)
+            SilentRotate:rotate(hunter, false, nil, nil, nil, SilentRotate:getPlayerGuid(sourceGUID), spellName) -- Target is the caster itself
+            if (sourceGUID == UnitGUID("player")) then
+                SilentRotate:sendAnnounceMessage(SilentRotate.db.profile.announceMisdiMessage, hunter.subgroup or 0)
+            end
+        end
     end
 end
 
