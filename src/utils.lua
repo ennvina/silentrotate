@@ -59,8 +59,34 @@ function SilentRotate:getPlayerNameFont()
 end
 
 function SilentRotate:getIdFromGuid(guid)
-    local type, _, _, _, _, mobId, _ = strsplit("-", guid or "")
-    return type, tonumber(mobId)
+    local unitType, _, _, _, _, mobId, _ = strsplit("-", guid or "")
+    return unitType, tonumber(mobId)
+end
+
+-- Check if the GUID is a player and return the GUID, otherwise return nil
+function SilentRotate:getPlayerGuid(guid)
+    local unitType, _ = strsplit("-", guid or "")
+    return unitType == 'Player' and guid or nil
+end
+
+-- Find a buff or debuff on the specified unit
+-- Return the index of the first occurence, if found, otherwise return nil
+function SilentRotate:findAura(unitID, spellName)
+    local maxNbAuras = 99
+    for i=1,maxNbAuras do
+        local name = UnitAura(unitID, i)
+
+        if not name then
+            -- name is not defined, meaning there are no other buffs/debuffs left
+            return nil
+        end
+        
+        if name == spellName then
+            return i
+        end
+    end
+
+    return nil
 end
 
 -- Checks if the spell and the mob match a boss frenzy

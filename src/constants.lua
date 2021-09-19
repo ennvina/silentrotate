@@ -1,17 +1,24 @@
 local SilentRotate = select(2, ...)
 
 SilentRotate.colors = {
-    ['green'] = CreateColor(0.67, 0.83, 0.45),
-    ['darkGreen'] = CreateColor(0.1, 0.4, 0.1),
-    ['darkBlue'] = CreateColor(0.1, 0.1, 0.4),
-    ['blue'] = CreateColor(0.3, 0.3, 0.7),
-    ['red'] = CreateColor(0.7, 0.3, 0.3),
-    ['lightRed'] = CreateColor(1.0, 0.4, 0.4),
-    ['darkGray'] = CreateColor(0.3, 0.3, 0.3),
-    ['lightGray'] = CreateColor(0.8, 0.8, 0.8),
-    ['lightCyan'] = CreateColor(0.5, 0.8, 1),
-    ['purple'] = CreateColor(0.71,0.45,0.75),
-    ['white'] = CreateColor(1,1,1),
+    ['white']       = CreateColor(1,1,1),
+
+    ['lightRed']    = CreateColor(1.0, 0.4, 0.4),
+    ['red']         = CreateColor(0.7, 0.3, 0.3),
+
+    ['green']       = CreateColor(0.67, 0.83, 0.45),
+    ['darkGreen']   = CreateColor(0.1, 0.4, 0.1),
+
+    ['blue']        = CreateColor(0.3, 0.3, 0.7),
+    ['darkBlue']    = CreateColor(0.1, 0.1, 0.4),
+
+    ['lightGray']   = CreateColor(0.8, 0.8, 0.8),
+    ['darkGray']    = CreateColor(0.3, 0.3, 0.3),
+
+    ['lightCyan']   = CreateColor(0.5, 0.8, 1),
+
+    ['purple']      = CreateColor(0.71, 0.45, 0.75),
+
     -- Below are user-defined colors
     ['groupSuffix'] = nil,
     ['indexPrefix'] = nil,

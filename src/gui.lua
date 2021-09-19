@@ -192,10 +192,43 @@ function SilentRotate:setHunterName(hunter)
         end
     end
 
+    local targetName
+    local targetMode
+    if SilentRotate.db.profile.appendTarget and hunter.targetGUID then
+        targetName = SilentRotate:getPlayerGuid(hunter.targetGUID) and select(6, GetPlayerInfoByGUID(hunter.targetGUID))
+        if not targetName or targetName == '' then
+            -- The target is not available anymore, maybe the player left the raid or it was a non-raid player who moved too far
+            targetMode = nil
+        elseif not UnitIsPlayer(targetName) or not hunter.buffName or hunter.buffName == "" or not hunter.endTimeOfEffect or hunter.endTimeOfEffect == 0 then
+            targetMode = 'not_a_buff'
+        elseif GetTime() > hunter.endTimeOfEffect  then
+            targetMode = 'buff_expired'
+        elseif not SilentRotate:findAura(targetName, hunter.buffName) then
+            targetMode = 'buff_lost'
+        else
+            targetMode = 'has_buff'
+        end
+    end
+    local showTarget = targetName and targetName ~= "" and targetMode and (targetMode == 'not_a_buff' or targetMode == 'has_buff' or not SilentRotate.db.profile.appendTargetBuffOnly)
+    hunter.showingTarget = showTarget
+
     if (SilentRotate.db.profile.appendGroup and hunter.subgroup) then
-        local groupText = string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup)
-        local color = SilentRotate:getUserDefinedColor('groupSuffix')
-        newText = newText.." "..color:WrapTextInColorCode(groupText)
+        if not showTarget or not SilentRotate.db.profile.appendTargetNoGroup then -- Do not append the group if the target name hides the group for clarity
+            local groupText = string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup)
+            local color = SilentRotate:getUserDefinedColor('groupSuffix')
+            newText = newText.." "..color:WrapTextInColorCode(groupText)
+        end
+    end
+
+    if showTarget then
+        newText = newText..SilentRotate.colors['white']:WrapTextInColorCode(" > ")
+        local targetColorName
+        if      targetMode == 'buff_expired' then   targetColorName = 'darkGray'
+        elseif  targetMode == 'buff_lost' then      targetColorName = 'lightRed'
+        elseif  targetMode == 'has_buff' then       targetColorName = 'white'
+        else                                        targetColorName = 'white'
+        end
+        newText = newText..SilentRotate.colors[targetColorName]:WrapTextInColorCode(targetName)
     end
 
     if (newFont ~= currentFont or newOutline ~= currentOutline) then
@@ -215,15 +248,77 @@ function SilentRotate:setHunterName(hunter)
 
 end
 
-function SilentRotate:startHunterCooldown(hunter, endTimeOfCooldown)
+function SilentRotate:startHunterCooldown(hunter, endTimeOfCooldown, endTimeOfEffect, targetGUID, buffName)
     if not endTimeOfCooldown or endTimeOfCooldown == 0 then
         local duration = SilentRotate:getModeDuration()
         endTimeOfCooldown = GetTime() + duration
     end
 
+    if not endTimeOfEffect or endTimeOfEffect == 0 then
+        local effectDuration = SilentRotate:getModeEffectDuration()
+        if effectDuration then
+            endTimeOfEffect = GetTime() + effectDuration
+        else
+            endTimeOfEffect = 0
+        end
+    end
+    hunter.endTimeOfEffect = endTimeOfEffect
+
     hunter.frame.cooldownFrame.statusBar:SetMinMaxValues(GetTime(), endTimeOfCooldown)
     hunter.frame.cooldownFrame.statusBar.expirationTime = endTimeOfCooldown
+    if endTimeOfCooldown and endTimeOfEffect and GetTime() < endTimeOfCooldown and GetTime() < endTimeOfEffect and endTimeOfEffect < endTimeOfCooldown then
+        local tickWidth = 3
+        local x = hunter.frame.cooldownFrame:GetWidth()*(endTimeOfEffect-GetTime())/(endTimeOfCooldown-GetTime())
+        if x < 5 then
+            -- If the tick is too early, it is graphically undistinguishable from the beginning of the cooldown bar, so don't bother displaying the tick
+            hunter.frame.cooldownFrame.statusTick:Hide()
+        else
+            local xmin = x-tickWidth/2
+            local xmax = xmin + tickWidth
+            hunter.frame.cooldownFrame.statusTick:ClearAllPoints()
+            hunter.frame.cooldownFrame.statusTick:SetPoint('TOPLEFT', xmin, 0)
+            hunter.frame.cooldownFrame.statusTick:SetPoint('BOTTOMRIGHT', xmax-hunter.frame.cooldownFrame:GetWidth(), 0)
+            hunter.frame.cooldownFrame.statusTick:Show()
+        end
+    else
+        -- If there is no tick or the tick is beyond the cooldown bar, do not display the tick
+        hunter.frame.cooldownFrame.statusTick:Hide()
+    end
     hunter.frame.cooldownFrame:Show()
+
+    hunter.targetGUID = targetGUID
+    hunter.buffName = buffName
+    if targetGUID and SilentRotate.db.profile.appendTarget then
+        SilentRotate:setHunterName(hunter)
+        if buffName and endTimeOfEffect > GetTime() then
+
+            -- Create a ticker to refresh the name on a regular basis, for as long as the target name is displayed
+            if not hunter.nameRefreshTicker or hunter.nameRefreshTicker:IsCancelled() then
+                local nameRefreshInterval = 0.5
+                hunter.nameRefreshTicker = C_Timer.NewTicker(nameRefreshInterval, function()
+                    SilentRotate:setHunterName(hunter)
+                    -- hunter.showingTarget is computed in the setHunterName() call; use this variable to tell when to stop refreshing
+                    if not hunter.showingTarget then
+                        hunter.nameRefreshTicker:Cancel()
+                        hunter.nameRefreshTicker = nil
+                    end
+                end)
+            end
+
+            -- Also create a timer that will be triggered shortly after the expiration time of the buff
+            if hunter.nameRefreshTimer and not hunter.nameRefreshTimer:IsCancelled() then
+                hunter.nameRefreshTimer:Cancel()
+            end
+            hunter.nameRefreshTimer = C_Timer.NewTimer(endTimeOfEffect - GetTime() + 1, function()
+                SilentRotate:setHunterName(hunter)
+                hunter.nameRefreshTimer = nil
+            end)
+        end
+    else
+        hunter.buffName = ""
+        hunter.endTimeOfEffect = 0
+        endTimeOfEffect = 0
+    end
 end
 
 -- Lock/Unlock the mainFrame position

@@ -45,13 +45,13 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
             local hunter = SilentRotate:getHunter(sourceGUID)
             if (event == "SPELL_CAST_SUCCESS") then
                 SilentRotate:sendSyncTranq(hunter, false, timestamp)
-                SilentRotate:rotate(hunter, false)
+                SilentRotate:rotate(hunter, false, nil, nil, nil, SilentRotate:getPlayerGuid(destGUID))
                 if (sourceGUID == UnitGUID("player")) then
                     SilentRotate:sendAnnounceMessage(SilentRotate.db.profile.announceTranqshotSuccessMessage, destName)
                 end
             elseif (event == "SPELL_MISSED") then
                 SilentRotate:sendSyncTranq(hunter, true, timestamp)
-                SilentRotate:rotate(hunter, true)
+                SilentRotate:rotate(hunter, true, nil, nil, nil, SilentRotate:getPlayerGuid(destGUID))
                 if (sourceGUID == UnitGUID("player")) then
                     SilentRotate:sendAnnounceMessage(SilentRotate.db.profile.announceTranqshotFailMessage, destName)
                 end
@@ -68,13 +68,13 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
             local hunter = SilentRotate:getHunter(sourceGUID)
             if (event == "SPELL_CAST_SUCCESS") then
                 SilentRotate:sendSyncTranq(hunter, false, timestamp)
-                SilentRotate:rotate(hunter, false)
+                SilentRotate:rotate(hunter, false, nil, nil, nil, SilentRotate.testMode and SilentRotate:getPlayerGuid(destGUID) or nil)
                 if (sourceGUID == UnitGUID("player")) then
                     SilentRotate:sendAnnounceMessage(SilentRotate.db.profile.announceDistractSuccessMessage)
                 end
             elseif (event == "SPELL_MISSED") then
                 SilentRotate:sendSyncTranq(hunter, true, timestamp)
-                SilentRotate:rotate(hunter, true)
+                SilentRotate:rotate(hunter, true, nil, nil, nil, SilentRotate.testMode and SilentRotate:getPlayerGuid(destGUID) or nil)
                 if (sourceGUID == UnitGUID("player")) then
                     SilentRotate:sendAnnounceMessage(SilentRotate.db.profile.announceDistractFailMessage)
                 end
@@ -85,13 +85,13 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
             local hunter = SilentRotate:getHunter(sourceGUID)
             if (event == "SPELL_CAST_SUCCESS") then
                 SilentRotate:sendSyncTranq(hunter, false, timestamp)
-                SilentRotate:rotate(hunter, false)
+                SilentRotate:rotate(hunter, false, nil, nil, nil, SilentRotate.testMode and SilentRotate:getPlayerGuid(destGUID) or nil, SilentRotate.testMode and spellName or nil)
                 if (sourceGUID == UnitGUID("player")) then
                     SilentRotate:sendAnnounceMessage(SilentRotate.db.profile.announceAoeTauntSuccessMessage)
                 end
             elseif (event == "SPELL_MISSED") then
                 SilentRotate:sendSyncTranq(hunter, true, timestamp)
-                SilentRotate:rotate(hunter, true)
+                SilentRotate:rotate(hunter, true, nil, nil, nil, SilentRotate.testMode and SilentRotate:getPlayerGuid(destGUID) or nil, SilentRotate.testMode and spellName or nil)
                 if (sourceGUID == UnitGUID("player")) then
                     SilentRotate:sendAnnounceMessage(SilentRotate.db.profile.announceAoeTauntFailMessage)
                 end
@@ -101,7 +101,7 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
         if (event == "SPELL_CAST_SUCCESS" and SilentRotate:isFearWardSpell(spellName)) then
             local hunter = SilentRotate:getHunter(sourceGUID)
             SilentRotate:sendSyncTranq(hunter, false, timestamp)
-            SilentRotate:rotate(hunter, false)
+            SilentRotate:rotate(hunter, false, nil, nil, nil, SilentRotate:getPlayerGuid(destGUID), spellName)
             if (sourceGUID == UnitGUID("player")) then
                 SilentRotate:sendAnnounceMessage(SilentRotate.db.profile.announceFearWardMessage, destName)
             end
@@ -110,7 +110,7 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
         if (event == "SPELL_CAST_SUCCESS" and SilentRotate:isMisdiSpell(spellName)) then
             local hunter = SilentRotate:getHunter(sourceGUID)
             SilentRotate:sendSyncTranq(hunter, false, timestamp)
-            SilentRotate:rotate(hunter, false)
+            SilentRotate:rotate(hunter, false, nil, nil, nil, SilentRotate:getPlayerGuid(destGUID), spellName)
             if (sourceGUID == UnitGUID("player")) then
                 SilentRotate:sendAnnounceMessage(SilentRotate.db.profile.announceMisdiMessage, destName)
             end
@@ -157,7 +157,8 @@ function SilentRotate:UNIT_AURA(unitID, isEcho)
     end
 
     -- Loop through the unit's debuffs to check if s/he is affected by Loatheb's Corrupted Mind
-    for i=1,16 do
+    local maxNbDebuffs = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 16 or 40
+    for i=1,maxNbDebuffs do
         local name, _,_,_,_, endTime ,_,_,_, spellId = UnitDebuff(unitID, i)
         if not name then
             -- name is not defined, meaning there is no other debuff left
