@@ -300,6 +300,7 @@ function SilentRotate:startHunterCooldown(hunter, endTimeOfCooldown, endTimeOfEf
                     -- hunter.showingTarget is computed in the setHunterName() call; use this variable to tell when to stop refreshing
                     if not hunter.showingTarget then
                         hunter.nameRefreshTicker:Cancel()
+                        hunter.nameRefreshTicker = nil
                     end
                 end)
             end
@@ -310,6 +311,7 @@ function SilentRotate:startHunterCooldown(hunter, endTimeOfCooldown, endTimeOfEf
             end
             hunter.nameRefreshTimer = C_Timer.NewTimer(endTimeOfEffect - GetTime() + 1, function()
                 SilentRotate:setHunterName(hunter)
+                hunter.nameRefreshTimer = nil
             end)
         end
     else
