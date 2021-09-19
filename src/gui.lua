@@ -195,7 +195,7 @@ function SilentRotate:setHunterName(hunter)
     local targetName
     local targetMode
     if SilentRotate.db.profile.appendTarget and hunter.targetGUID then
-        targetName = select(6, GetPlayerInfoByGUID(hunter.targetGUID)) -- TODO fix the code for non-player targets (e.g. creatures)
+        targetName = SilentRotate:getPlayerGuid(hunter.targetGUID) and select(6, GetPlayerInfoByGUID(hunter.targetGUID))
         if not targetName or targetName == '' then
             -- The target is not available anymore, maybe the player left the raid or it was a non-raid player who moved too far
             targetMode = nil
