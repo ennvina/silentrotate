@@ -63,6 +63,26 @@ function SilentRotate:getIdFromGuid(guid)
     return type, tonumber(mobId)
 end
 
+-- Find a buff or debuff on the specified unit
+-- Return the index of the first occurence, if found, otherwise return nil
+function SilentRotate:findAura(unitID, spellName)
+    local maxNbAuras = 99
+    for i=1,maxNbAuras do
+        local name = UnitAura(unitID, i)
+
+        if not name then
+            -- name is not defined, meaning there are no other buffs/debuffs left
+            return nil
+        end
+        
+        if name == spellName then
+            return i
+        end
+    end
+
+    return nil
+end
+
 -- Checks if the spell and the mob match a boss frenzy
 function SilentRotate:isBossFrenzy(spellName, guid)
 

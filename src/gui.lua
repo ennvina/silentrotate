@@ -193,25 +193,39 @@ function SilentRotate:setHunterName(hunter)
     end
 
     local targetName
+    local targetMode
     if SilentRotate.db.profile.appendTarget and hunter.targetGUID then
-        if not SilentRotate.db.profile.appendTargetBuffOnly or not hunter.endTimeOfEffect or hunter.endTimeOfEffect == 0 or hunter.endTimeOfEffect > GetTime() then
-            targetName = select(6, GetPlayerInfoByGUID(hunter.targetGUID))
+        targetName = select(6, GetPlayerInfoByGUID(hunter.targetGUID))
+        if not hunter.buffName or hunter.buffName == "" or not hunter.endTimeOfEffect or hunter.endTimeOfEffect == 0 then
+            targetMode = 'not_a_buff'
+        elseif GetTime() > hunter.endTimeOfEffect  then
+            targetMode = 'buff_expired'
+        elseif not SilentRotate:findAura(targetName, hunter.buffName) then
+            targetMode = 'buff_lost'
+        else
+            targetMode = 'has_buff'
         end
     end
-    local hasTarget = targetName ~= nil and targetName ~= ""
+    local showTarget = targetName and targetName ~= "" and targetMode and (targetMode == 'not_a_buff' or targetMode == 'has_buff' or not SilentRotate.db.profile.appendTargetBuffOnly)
+    hunter.showingTarget = showTarget
 
     if (SilentRotate.db.profile.appendGroup and hunter.subgroup) then
-        if not hasTarget or not SilentRotate.db.profile.appendTargetNoGroup then -- Do not append the group if the target name hides the group for clarity
+        if not showTarget or not SilentRotate.db.profile.appendTargetNoGroup then -- Do not append the group if the target name hides the group for clarity
             local groupText = string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup)
             local color = SilentRotate:getUserDefinedColor('groupSuffix')
             newText = newText.." "..color:WrapTextInColorCode(groupText)
         end
     end
 
-    if hasTarget then
+    if showTarget then
         newText = newText..SilentRotate.colors['white']:WrapTextInColorCode(">")
-        local targetColor = SilentRotate.colors['white'] -- TODO detect if the spell was failed / buff faded / target died, and use a specific color
-        newText = newText..targetColor:WrapTextInColorCode(targetName)
+        local targetColorName
+        if      targetMode == 'buff_expired' then   targetColorName = 'darkGray'
+        elseif  targetMode == 'buff_lost' then      targetColorName = 'red'
+        elseif  targetMode == 'has_buff' then       targetColorName = 'green'
+        else                                        targetColorName = 'white'
+        end
+        newText = newText..SilentRotate.colors[targetColorName]:WrapTextInColorCode(targetName)
     end
 
     if (newFont ~= currentFont or newOutline ~= currentOutline) then
@@ -274,9 +288,24 @@ function SilentRotate:startHunterCooldown(hunter, endTimeOfCooldown, endTimeOfEf
     if targetGUID and SilentRotate.db.profile.appendTarget then
         SilentRotate:setHunterName(hunter)
         if buffName and endTimeOfEffect > GetTime() then
-            -- Refresh the hunter name slightly after the buff expires in order to hide/recolor the target name
-            -- TODO replace this with a regular check and cancel the check if the buff is missing or if target is dead/disconnected
-            C_Timer.After(endTimeOfEffect - GetTime() + 1, function()
+
+            -- Create a ticker to refresh the name on a regular basis, for as long as the target name is displayed
+            if not hunter.nameRefreshTicker or hunter.nameRefreshTicker:IsCancelled() then
+                local nameRefreshInterval = 0.5
+                hunter.nameRefreshTicker = C_Timer.NewTicker(nameRefreshInterval, function()
+                    SilentRotate:setHunterName(hunter)
+                    -- hunter.showingTarget is computed in the setHunterName() call; use this variable to tell when to stop refreshing
+                    if not hunter.showingTarget then
+                        hunter.nameRefreshTicker:Cancel()
+                    end
+                end)
+            end
+
+            -- Also create a timer that will be triggered shortly after the expiration time of the buff
+            if hunter.nameRefreshTimer and not hunter.nameRefreshTimer:IsCancelled() then
+                hunter.nameRefreshTimer:Cancel()
+            end
+            hunter.nameRefreshTimer = C_Timer.NewTimer(endTimeOfEffect - GetTime() + 1, function()
                 SilentRotate:setHunterName(hunter)
             end)
         end
