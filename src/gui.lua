@@ -195,8 +195,11 @@ function SilentRotate:setHunterName(hunter)
     local targetName
     local targetMode
     if SilentRotate.db.profile.appendTarget and hunter.targetGUID then
-        targetName = select(6, GetPlayerInfoByGUID(hunter.targetGUID))
-        if not hunter.buffName or hunter.buffName == "" or not hunter.endTimeOfEffect or hunter.endTimeOfEffect == 0 then
+        targetName = select(6, GetPlayerInfoByGUID(hunter.targetGUID)) -- TODO fix the code for non-player targets (e.g. creatures)
+        if not targetName or targetName == '' then
+            -- The target is not available anymore, maybe the player left the raid or it was a non-raid player who moved too far
+            targetMode = nil
+        elseif not UnitIsPlayer(targetName) or not hunter.buffName or hunter.buffName == "" or not hunter.endTimeOfEffect or hunter.endTimeOfEffect == 0 then
             targetMode = 'not_a_buff'
         elseif GetTime() > hunter.endTimeOfEffect  then
             targetMode = 'buff_expired'
