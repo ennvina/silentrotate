@@ -222,13 +222,20 @@ function SilentRotate:setHunterName(hunter)
 
     if showTarget then
         newText = newText..SilentRotate.colors['white']:WrapTextInColorCode(" > ")
-        local targetColorName
-        if      targetMode == 'buff_expired' then   targetColorName = 'darkGray'
-        elseif  targetMode == 'buff_lost' then      targetColorName = 'lightRed'
-        elseif  targetMode == 'has_buff' then       targetColorName = 'white'
-        else                                        targetColorName = 'white'
+        if (SilentRotate:isBloodlustMode()) then
+            -- Special case for Bloodlust mode: the target is the group, not the player
+            local groupText = string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup or 0)
+            local groupColorName = (targetMode == 'has_buff') and 'white' or 'darkGray'
+            newText = newText..SilentRotate.colors[groupColorName]:WrapTextInColorCode(groupText)
+        else
+            local targetColorName
+            if      targetMode == 'buff_expired' then   targetColorName = 'darkGray'
+            elseif  targetMode == 'buff_lost' then      targetColorName = 'lightRed'
+            elseif  targetMode == 'has_buff' then       targetColorName = 'white'
+            else                                        targetColorName = 'white'
+            end
+            newText = newText..SilentRotate.colors[targetColorName]:WrapTextInColorCode(targetName)
         end
-        newText = newText..SilentRotate.colors[targetColorName]:WrapTextInColorCode(targetName)
     end
 
     if (newFont ~= currentFont or newOutline ~= currentOutline) then

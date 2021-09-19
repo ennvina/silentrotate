@@ -121,7 +121,7 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
             SilentRotate:sendSyncTranq(hunter, false, timestamp)
             SilentRotate:rotate(hunter, false, nil, nil, nil, SilentRotate:getPlayerGuid(sourceGUID), spellName) -- Target is the caster itself
             if (sourceGUID == UnitGUID("player")) then
-                SilentRotate:sendAnnounceMessage(SilentRotate.db.profile.announceMisdiMessage, hunter.subgroup or 0)
+                SilentRotate:sendAnnounceMessage(SilentRotate.db.profile.announceBloodlustMessage, hunter.subgroup or 0)
             end
         end
     end
