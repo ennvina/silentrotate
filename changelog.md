@@ -3,6 +3,7 @@
 #### v0.7.2-beta (2021-xx-yy)
 
 - Added Bloodlust mode (TBC)
+- Testing increased to 60 minutes (up from 10 minutes)
 
 #### v0.7.1-beta (2021-09-19)
 
