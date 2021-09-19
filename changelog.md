@@ -1,6 +1,6 @@
 ## SilentRotate Changelog
 
-#### v0.7.1-beta (2021-xx-yy)
+#### v0.7.1-beta (2021-09-19)
 
 - Display a tick in the cooldown bar for the duration of the buff or effect
 - Option to append the target name next to the caster (enabled by default)
