@@ -254,8 +254,8 @@ function SilentRotate:toggleArcaneShotTesting(disable)
         SilentRotate:printPrefixedMessage(L['ARCANE_SHOT_TESTING_ENABLED'])
         SilentRotate.testMode = true
 
-        -- Disable testing after 10 minutes
-        C_Timer.After(600, function()
+        -- Disable testing after 60 minutes
+        C_Timer.After(3600, function()
             SilentRotate:toggleArcaneShotTesting(true)
         end)
     else

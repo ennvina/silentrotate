@@ -23,9 +23,9 @@ L["TEST_MODE_HEADER"] = "测试模式"
 L["ENABLE_ARCANE_SHOT_TESTING"] = "切换测试模式"
 L["ENABLE_ARCANE_SHOT_TESTING_DESC"] =
         "当测试模式启用时, 奥术射击将注册为宁神射击\n" ..
-        "测试模式将持续10分钟, 除非你提前关闭它\n" ..
+        "测试模式将持续60分钟, 除非你提前关闭它\n" ..
         "对于洛欧塞布，测试模式将使用绷带的新近包扎作效果为治疗debuff"
-L["ARCANE_SHOT_TESTING_ENABLED"] = "奥术射击测试模式已启用, 持续10分钟"
+L["ARCANE_SHOT_TESTING_ENABLED"] = "奥术射击测试模式已启用, 持续60分钟"
 L["ARCANE_SHOT_TESTING_DISABLED"] = "奥术射击测试模式已禁用"
 
     --- Announces
@@ -61,6 +61,7 @@ L["FEARWARD_MESSAGE_LABEL"] = "[防护恐惧结界]通告信息"
 L["AOETAUNT_SUCCESS_MESSAGE_LABEL"] = "[群嘲]施放成功通告信息"
 L["AOETAUNT_FAIL_MESSAGE_LABEL"] = "[群嘲]施放失败通告信息"
 L["MISDI_MESSAGE_LABEL"] = "Misdirection announce message"
+L["BLOODLUST_MESSAGE_LABEL"] = "Bloodlust/Heroism announce message"
 
 L["DEFAULT_TRANQSHOT_SUCCESS_ANNOUNCE_MESSAGE"] = "已对 %s 施放了[宁神射击]!"
 L["DEFAULT_TRANQSHOT_FAIL_ANNOUNCE_MESSAGE"] = "!!! 对 %s [宁神射击]失败!!!"
@@ -72,6 +73,7 @@ L["DEFAULT_FEARWARD_ANNOUNCE_MESSAGE"] = "已对 %s 施放了[防护恐惧结界
 L["DEFAULT_AOETAUNT_SUCCESS_ANNOUNCE_MESSAGE"] = "[群嘲]已施放，持续6秒!"
 L["DEFAULT_AOETAUNT_FAIL_ANNOUNCE_MESSAGE"] = "!!! [群嘲]失败 !!!"
 L["DEFAULT_MISDI_ANNOUNCE_MESSAGE"] = "Misdirection cast on %s"
+L["DEFAULT_BLOODLUST_ANNOUNCE_MESSAGE"] = "BLOODLUST group %s"
 
 L["TRANQ_NOW_LOCAL_ALERT_MESSAGE"] = "立即使用[宁神射击] !!"
 
@@ -91,6 +93,7 @@ L["FILTER_SHOW_ROGUES"] = "扰乱"
 L["FILTER_SHOW_DWARVES"] = "防恐"
 L["FILTER_SHOW_AOETAUNTERS"] = "群嘲"
 L["FILTER_SHOW_MISDIRECTORS"] = "误导"
+L["FILTER_SHOW_SHAMANS"] = "BL"
 L["NO_MODE_AVAILABLE"] = "<在设置中选择模式>"
 L["MODE_INVISIBLE"] = "这是当前选择的模式，即使按钮不可见，插件也会保持该模式。\n你可能需要单击一个可见按钮才能选择其他模式。"
 L["TRANQ_MODE_FULL_NAME"] = "宁神射击"
@@ -100,6 +103,7 @@ L["RAZ_MODE_FULL_NAME"] = "教官拉苏维奥斯"
 L["FEARWARD_MODE_FULL_NAME"] = "防护恐惧结界"
 L["AOETAUNT_MODE_FULL_NAME"] = "群体嘲讽"
 L["MISDI_MODE_FULL_NAME"] = "误导"
+L["BLOODLUST_MODE_FULL_NAME"] = "Bloodlust/Heroism"
 L["TRANQ_MODE_DETAILED_DESC"] = "此模式会监控团队副本中BOSS的狂暴状态，并通知猎人使用[宁神射击]技能。"
 L["LOATHEB_MODE_DETAILED_DESC"] = "此模式会监控洛欧塞布BOSS给治疗职业施放了一个60秒内无法使用治疗技能的[堕落心灵]debuff。"
 L["DISTRACT_MODE_DETAILED_DESC"] = "此模式会监控盗贼玩家使用了[扰乱]技能。"
@@ -107,6 +111,7 @@ L["RAZ_MODE_DETAILED_DESC"] = "此模式会监控牧师玩家对教官拉苏维�
 L["FEARWARD_MODE_DETAILED_DESC"] = "此模式会监控牧师玩家使用了[防护恐惧结界]技能。"
 L["AOETAUNT_MODE_DETAILED_DESC"] = "此模式会监控战士玩家使用了[挑战怒吼]或者德鲁伊玩家使用了[挑战咆哮]技能。"
 L["MISDI_MODE_DETAILED_DESC"] = "This mode tracks whenever a hunter has cast the Misdirection ability."
+L["BLOODLUST_MODE_DETAILED_DESC"] = "This mode tracks whenever a hunter has cast the Bloodlust/Heroism ability."
 L["MODE_BUTTON_DESC"] = "显示用于激活'%s'模式的按钮。"
 L["MODE_LABEL"] = "按钮文本"
 L["MODE_LABEL_DESC"] = "在按钮上显示用于激活'%s'模式的文本。"
@@ -178,5 +183,6 @@ L["BROADCAST_HEADER_TEXT_DISTRACT"] = "盗贼扰乱顺序"
 L["BROADCAST_HEADER_TEXT_FEARWARD"] = "牧师防恐顺序"
 L["BROADCAST_HEADER_TEXT_AOETAUNT"] = "群体嘲讽顺序"
 L["BROADCAST_HEADER_TEXT_MISDI"] = "Misdirection setup"
+L["BROADCAST_HEADER_TEXT_BLOODLUST"] = "Bloodlust/Heroism setup"
 L["BROADCAST_ROTATION_PREFIX"] = "循环"
 L["BROADCAST_BACKUP_PREFIX"] = "替补"

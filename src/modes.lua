@@ -10,6 +10,7 @@ function SilentRotate:isTranqMode(mode)
        and not SilentRotate:isFearWardMode(mode)
        and not SilentRotate:isAoeTauntMode(mode)
        and not SilentRotate:isMisdiMode(mode)
+       and not SilentRotate:isBloodlustMode(mode)
 end
 
 function SilentRotate:isRazMode(mode)
@@ -42,6 +43,11 @@ function SilentRotate:isMisdiMode(mode)
     return mode == 'misdiz'
 end
 
+function SilentRotate:isBloodlustMode(mode)
+    if (not mode) then mode = SilentRotate.db.profile.currentMode end
+    return mode == 'shamanz'
+end
+
 -- -- Setters shown here to list available modes, but no one should ever call these functions
 -- function SilentRotate:setTranqMode()
 --     SilentRotate.db.profile.currentMode = 'hunterz'
@@ -63,6 +69,9 @@ end
 -- end
 -- function SilentRotate:setMisdiMode()
 --     SilentRotate.db.profile.currentMode = 'misdiz'
+-- end
+-- function SilentRotate:setBloodlustMode()
+--     SilentRotate.db.profile.currentMode = 'shamanz'
 -- end
 
 -- Activate the specific mode
@@ -104,6 +113,8 @@ function SilentRotate:isPlayerWanted(unit, className, mode)
         return className == 'WARRIOR' or className == 'DRUID'
     elseif SilentRotate:isMisdiMode(mode) then
         return className == 'HUNTER'
+    elseif SilentRotate:isBloodlustMode(mode) then
+        return className == 'SHAMAN'
     end
     return className == 'HUNTER' -- hunter is the default mode
 end
@@ -130,6 +141,8 @@ function SilentRotate:getModeDuration(mode)
         duration = 600 -- Cooldown of Warrior's Challenging Shout and Druid's Challenging Roar
     elseif SilentRotate:isMisdiMode() then
         duration = 120 -- Cooldown of Hunter's Misdirection
+    elseif SilentRotate:isBloodlustMode() then
+        duration = 600 -- Cooldown of Shaman's Bloodlust/Heroism
     else
         duration = 0 -- Duration should have no meaning for other modes
     end
@@ -156,6 +169,8 @@ function SilentRotate:getModeEffectDuration(mode)
         duration = 6
     elseif SilentRotate:isMisdiMode() then
         duration = 30
+    elseif SilentRotate:isBloodlustMode() then
+        duration = 40
     else
         duration = 0 -- Other modes provide no specific buff/debuff
     end
@@ -177,6 +192,8 @@ function SilentRotate:getBroadcastHeaderText()
         return L['BROADCAST_HEADER_TEXT_AOETAUNT']
     elseif SilentRotate:isMisdiMode() then
         return L['BROADCAST_HEADER_TEXT_MISDI']
+    elseif SilentRotate:isBloodlustMode() then
+        return L['BROADCAST_HEADER_TEXT_BLOODLUST']
     end
     return L['BROADCAST_HEADER_TEXT']
 end
