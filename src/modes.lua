@@ -137,10 +137,10 @@ function SilentRotate:getModeDuration(mode)
     return duration
 end
 
--- Get the default duration known for a buff given by a specific mode
+-- Get the default duration known for an effect (e.g. buff) given by a specific mode
 -- If mode is nil, use the current mode instead
--- If the mode provided no buff, the returned duration is zero
-function SilentRotate:getModeBuffDuration(mode)
+-- If the mode provides no effect, the returned duration is zero
+function SilentRotate:getModeEffectDuration(mode)
     if (not mode) then mode = SilentRotate.db.profile.currentMode end
 
     local duration

@@ -194,7 +194,7 @@ function SilentRotate:setHunterName(hunter)
 
     local targetName
     if SilentRotate.db.profile.appendTarget and hunter.targetGUID then
-        if not SilentRotate.db.profile.appendTargetBuffOnly or not hunter.endTimeOfBuff or hunter.endTimeOfBuff == 0 or hunter.endTimeOfBuff > GetTime() then
+        if not SilentRotate.db.profile.appendTargetBuffOnly or not hunter.endTimeOfEffect or hunter.endTimeOfEffect == 0 or hunter.endTimeOfEffect > GetTime() then
             targetName = select(6, GetPlayerInfoByGUID(hunter.targetGUID))
         end
     end
@@ -231,38 +231,59 @@ function SilentRotate:setHunterName(hunter)
 
 end
 
-function SilentRotate:startHunterCooldown(hunter, endTimeOfCooldown, targetGUID, endTimeOfBuff)
+function SilentRotate:startHunterCooldown(hunter, endTimeOfCooldown, endTimeOfEffect, targetGUID, buffName)
     if not endTimeOfCooldown or endTimeOfCooldown == 0 then
         local duration = SilentRotate:getModeDuration()
         endTimeOfCooldown = GetTime() + duration
     end
 
+    if not endTimeOfEffect or endTimeOfEffect == 0 then
+        local effectDuration = SilentRotate:getModeEffectDuration()
+        if effectDuration then
+            endTimeOfEffect = GetTime() + effectDuration
+        else
+            endTimeOfEffect = 0
+        end
+    end
+    hunter.endTimeOfEffect = endTimeOfEffect
+
     hunter.frame.cooldownFrame.statusBar:SetMinMaxValues(GetTime(), endTimeOfCooldown)
     hunter.frame.cooldownFrame.statusBar.expirationTime = endTimeOfCooldown
+    if endTimeOfCooldown and endTimeOfEffect and GetTime() < endTimeOfCooldown and GetTime() < endTimeOfEffect and endTimeOfEffect < endTimeOfCooldown then
+        local tickWidth = 3
+        local x = hunter.frame.cooldownFrame:GetWidth()*(endTimeOfEffect-GetTime())/(endTimeOfCooldown-GetTime())
+        if x < 5 then
+            -- If the tick is too early, it is graphically undistinguishable from the beginning of the cooldown bar, so don't bother displaying the tick
+            hunter.frame.cooldownFrame.statusTick:Hide()
+        else
+            local xmin = x-tickWidth/2
+            local xmax = xmin + tickWidth
+            hunter.frame.cooldownFrame.statusTick:ClearAllPoints()
+            hunter.frame.cooldownFrame.statusTick:SetPoint('TOPLEFT', xmin, 0)
+            hunter.frame.cooldownFrame.statusTick:SetPoint('BOTTOMRIGHT', xmax-hunter.frame.cooldownFrame:GetWidth(), 0)
+            hunter.frame.cooldownFrame.statusTick:Show()
+        end
+    else
+        -- If there is no tick or the tick is beyond the cooldown bar, do not display the tick
+        hunter.frame.cooldownFrame.statusTick:Hide()
+    end
     hunter.frame.cooldownFrame:Show()
 
     hunter.targetGUID = targetGUID
-    if targetGUID then
-        if not endTimeOfBuff or endTimeOfBuff == 0 then
-            local buffDuration = SilentRotate:getModeBuffDuration()
-            if buffDuration then
-                endTimeOfBuff = GetTime() + buffDuration
-            else
-                endTimeOfBuff = 0
-            end
+    hunter.buffName = buffName
+    if targetGUID and SilentRotate.db.profile.appendTarget then
+        SilentRotate:setHunterName(hunter)
+        if buffName and endTimeOfEffect > GetTime() then
+            -- Refresh the hunter name slightly after the buff expires in order to hide/recolor the target name
+            -- TODO replace this with a regular check and cancel the check if the buff is missing or if target is dead/disconnected
+            C_Timer.After(endTimeOfEffect - GetTime() + 1, function()
+                SilentRotate:setHunterName(hunter)
+            end)
         end
-        hunter.endTimeOfBuff = endTimeOfBuff
-
-        if SilentRotate.db.profile.appendTarget then
-            SilentRotate:setHunterName(hunter)
-            if endTimeOfBuff > GetTime() then
-                -- Refresh the hunter name slightly after the buff expires in order to hide/recolor the target name
-                -- TODO replace this with a regular check and cancel the check if the buff is missing or if target is dead/disconnected
-                C_Timer.After(endTimeOfBuff - GetTime() + 1, function()
-                    SilentRotate:setHunterName(hunter)
-                end)
-            end
-        end
+    else
+        hunter.buffName = ""
+        hunter.endTimeOfEffect = 0
+        endTimeOfEffect = 0
     end
 end
 

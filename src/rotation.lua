@@ -57,9 +57,10 @@ end
 -- @param fail                  flag that tells if the spell failed (false by default, i.e. success by default)
 -- @param rotateWithoutCooldown flag for unavailable players who are e.g. dead or disconnected
 -- @param endTimeOfCooldown     time when the cooldown ends (by default the time is calculated as now+cooldown)
+-- @param endTimeOfEffect       time when the effect on the targetGUID fades (by default, time is now+duration)
 -- @param targetGUID            GUID of the only target or main target of the rotation, if such target exists
--- @param endTimeOfBuff         time when the buff of the targetGUID fades (by default, time is now+duration)
-function SilentRotate:rotate(lastHunter, fail, rotateWithoutCooldown, endTimeOfCooldown, targetGUID, endTimeOfBuff)
+-- @param buffName              name of the buff given to targetGUID (by default, buff is detected from mode)
+function SilentRotate:rotate(lastHunter, fail, rotateWithoutCooldown, endTimeOfCooldown, endTimeOfEffect, targetGUID, buffName)
 
     -- Default value to false
     fail = fail or false
@@ -72,7 +73,7 @@ function SilentRotate:rotate(lastHunter, fail, rotateWithoutCooldown, endTimeOfC
 
     -- Do not trigger cooldown when rotation from a dead or disconnected status
     if (rotateWithoutCooldown ~= true) then
-        SilentRotate:startHunterCooldown(lastHunter, endTimeOfCooldown, targetGUID, endTimeOfBuff)
+        SilentRotate:startHunterCooldown(lastHunter, endTimeOfCooldown, endTimeOfEffect, targetGUID, buffName)
     end
 
     if (hunterRotationTable == SilentRotate.rotationTables.rotation) then

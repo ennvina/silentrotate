@@ -359,6 +359,12 @@ function SilentRotate:createCooldownFrame(hunter)
         end
     )
 
+    local statusTick = hunter.frame.cooldownFrame:CreateTexture(nil, "OVERLAY")
+    statusTick:SetColorTexture(1,0.8,0,1)
+    statusTick:SetAllPoints()
+    statusTick:Hide()
+    hunter.frame.cooldownFrame.statusTick = statusTick
+
     hunter.frame.cooldownFrame:Hide()
 end
 
