@@ -23,9 +23,9 @@ L["TEST_MODE_HEADER"] = "測試模式"
 L["ENABLE_ARCANE_SHOT_TESTING"] = "切換測試模式"
 L["ENABLE_ARCANE_SHOT_TESTING_DESC"] =
         "當測試模式啟用時, 秘法射擊將註冊為寧神射擊\n" ..
-        "測試模式將持續10分鐘, 除非妳提前關閉它\n" ..
+        "測試模式將持續60分鐘, 除非妳提前關閉它\n" ..
         "For Loatheb, testing consists in using the Recently Bandaged as the healer debuff"
-L["ARCANE_SHOT_TESTING_ENABLED"] = "奧術射擊測試模式已啟用, 持續10分鐘"
+L["ARCANE_SHOT_TESTING_ENABLED"] = "奧術射擊測試模式已啟用, 持續60分鐘"
 L["ARCANE_SHOT_TESTING_DISABLED"] = "奧術射擊測試模式已禁用"
 
     --- Announces

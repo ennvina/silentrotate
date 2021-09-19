@@ -23,9 +23,9 @@ L["TEST_MODE_HEADER"] = "Test mode"
 L["ENABLE_ARCANE_SHOT_TESTING"] = "Activer/désactiver le mode test"
 L["ENABLE_ARCANE_SHOT_TESTING_DESC"] =
         "Tant que le mode de test est activé, arcane shot sera considéré comme un tir tranquilisant\n" ..
-        "Le mode de test durera 10 minutes ou jusqu'a désactivation\n" ..
+        "Le mode de test durera 60 minutes ou jusqu'a désactivation\n" ..
         "Pour Loatheb, le test consiste à utiliser le débuff Un bandage a été récemment appliqué"
-L["ARCANE_SHOT_TESTING_ENABLED"] = "Test mode activé pour 10 minutes"
+L["ARCANE_SHOT_TESTING_ENABLED"] = "Test mode activé pour 60 minutes"
 L["ARCANE_SHOT_TESTING_DISABLED"] = "Test mode désactivé"
 
     --- Announces

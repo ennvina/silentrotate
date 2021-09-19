@@ -23,9 +23,9 @@ L["TEST_MODE_HEADER"] = "Test mode"
 L["ENABLE_ARCANE_SHOT_TESTING"] = "Toggle testing mode"
 L["ENABLE_ARCANE_SHOT_TESTING_DESC"] =
         "While testing mode is enabled, arcane shot will be registered as a tranqshot\n" ..
-        "Testing mode will last 10 minutes unless you toggle it off\n" ..
+        "Testing mode will last 60 minutes unless you toggle it off\n" ..
         "For Loatheb, testing consists in using the Recently Bandaged as the healer debuff"
-L["ARCANE_SHOT_TESTING_ENABLED"] = "Arcane shot testing mode enabled for 10 minutes"
+L["ARCANE_SHOT_TESTING_ENABLED"] = "Arcane shot testing mode enabled for 60 minutes"
 L["ARCANE_SHOT_TESTING_DISABLED"] = "Arcane shot testing mode disabled"
 
     --- Announces

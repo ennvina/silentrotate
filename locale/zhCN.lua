@@ -23,9 +23,9 @@ L["TEST_MODE_HEADER"] = "测试模式"
 L["ENABLE_ARCANE_SHOT_TESTING"] = "切换测试模式"
 L["ENABLE_ARCANE_SHOT_TESTING_DESC"] =
         "当测试模式启用时, 奥术射击将注册为宁神射击\n" ..
-        "测试模式将持续10分钟, 除非你提前关闭它\n" ..
+        "测试模式将持续60分钟, 除非你提前关闭它\n" ..
         "对于洛欧塞布，测试模式将使用绷带的新近包扎作效果为治疗debuff"
-L["ARCANE_SHOT_TESTING_ENABLED"] = "奥术射击测试模式已启用, 持续10分钟"
+L["ARCANE_SHOT_TESTING_ENABLED"] = "奥术射击测试模式已启用, 持续60分钟"
 L["ARCANE_SHOT_TESTING_DISABLED"] = "奥术射击测试模式已禁用"
 
     --- Announces

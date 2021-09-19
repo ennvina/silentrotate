@@ -23,9 +23,9 @@ L["TEST_MODE_HEADER"] = "Тестовый режим"
 L["ENABLE_ARCANE_SHOT_TESTING"] = "Тестовый режим"
 L["ENABLE_ARCANE_SHOT_TESTING_DESC"] =
         "В режиме тестирования, Чародейский выстрел будет использоваться вместо Усмиряющего выстрела\n" ..
-        "Режим тестирования работает 10 минут или до отключения\n" ..
+        "Режим тестирования работает 60 минут или до отключения\n" ..
         "For Loatheb, testing consists in using the Recently Bandaged as the healer debuff"
-L["ARCANE_SHOT_TESTING_ENABLED"] = "Тестовый режим включен на 10 минут"
+L["ARCANE_SHOT_TESTING_ENABLED"] = "Тестовый режим включен на 60 минут"
 L["ARCANE_SHOT_TESTING_DISABLED"] = "Тестовый режим выключен"
 
     --- Announces
