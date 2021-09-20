@@ -220,7 +220,6 @@ function SilentRotate:printHelp()
     SilentRotate:printMessage(spacing .. SilentRotate:colorText('unlock') .. ' : Unlock the main window position')
     SilentRotate:printMessage(spacing .. SilentRotate:colorText('settings') .. ' : Open SilentRotate settings')
     SilentRotate:printMessage(spacing .. SilentRotate:colorText('report') .. ' : Print the rotation setup to the configured channel')
---    SilentRotate:printMessage(spacing .. SilentRotate:colorText('backup') .. ' : Whispers backup hunters to immediately tranq')
     SilentRotate:printMessage(spacing .. SilentRotate:colorText('check') .. ' : Print user versions of SilentRotate')
 end
 
