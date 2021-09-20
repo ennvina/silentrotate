@@ -55,8 +55,8 @@ function SilentRotate:LoadDefaults()
 			self.defaults.profile["announce"..mode.modeNameFirstUpper.."Message"] = L["DEFAULT_"..mode.modeNameUpper.."_ANNOUNCE_MESSAGE"]
 		end
 
-		-- Set config for default visible modes, based on compatibility with the player currently loading the addon
-		local isModeButtonVisible = mode.project and SilentRotate:isPlayerWanted("player", nil, modeName)
+		-- Set config for default visible modes
+		local isModeButtonVisible = mode.project and mode.default
 		self.defaults.profile[modeName.."ModeButton"] = isModeButtonVisible
 
 		-- Set config for the mode text
@@ -69,7 +69,7 @@ function SilentRotate:LoadDefaults()
 	end
 
 	-- If no button is visible by default, pick one so that the player does not see an empty list
-	if not not self.defaults.profile.currentMode then
+	if not self.defaults.profile.currentMode then
 		self.defaults.profile.tranqShotModeButton = true
 		self.defaults.profile.currentMode = SilentRotate.modes.tranqShot.modeName
 	end

@@ -111,6 +111,7 @@ SilentRotate.modes = {
     tranqShot = {
         oldModeName = 'hunterz',
         project = true,
+        default = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC,
         wanted = 'HUNTER',
         cooldown = 20,
         -- effectDuration = nil,
@@ -133,6 +134,7 @@ SilentRotate.modes = {
     loatheb = {
         oldModeName = 'healerz',
         project = true,
+        default = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC,
         wanted = function(unit, className) return className == 'PRIEST' or className == 'PALADIN' or className == 'SHAMAN' or className == 'DRUID' end,
         cooldown = 60,
         -- canFail = nil,
@@ -161,6 +163,7 @@ SilentRotate.modes = {
     fearWard = {
         oldModeName = 'priestz',
         project = true,
+        default = true,
         wanted = function(unit, className) return className == 'PRIEST' and (WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC or select(2,UnitRace(unit)) == 'Dwarf') end,
         cooldown = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 30 or 180,
         effectDuration = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 600 or 180,
@@ -191,6 +194,7 @@ SilentRotate.modes = {
     bloodlust = {
         oldModeName = 'shamanz',
         project = WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC,
+        default = WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC,
         wanted = 'SHAMAN',
         cooldown = 600,
         effectDuration = 40,
