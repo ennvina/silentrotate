@@ -48,7 +48,7 @@ function SilentRotate:LoadDefaults()
 
 	for modeName, mode in pairs(SilentRotate.modes) do
 		-- Set config for announce messages
-		if mode.spellCanFail then
+		if mode.canFail then
 			self.defaults.profile["announce"..mode.modeNameFirstUpper.."SuccessMessage"] = L["DEFAULT_"..mode.modeNameUpper.."_SUCCESS_ANNOUNCE_MESSAGE"]
 			self.defaults.profile["announce"..mode.modeNameFirstUpper.."FailMessage"] = L["DEFAULT_"..mode.modeNameUpper.."_FAIL_ANNOUNCE_MESSAGE"]
 		else
@@ -56,16 +56,14 @@ function SilentRotate:LoadDefaults()
 		end
 
 		-- Set config for default visible modes, based on compatibility with the player currently loading the addon
-		local isModeButtonVisible = true
-		if type(mode.project) == 'function' then isModeButtonVisible = mode.project() end
-		isModeButtonVisible = isModeButtonVisible and SilentRotate:isPlayerWanted("player", nil, modeName)
+		local isModeButtonVisible = mode.project and SilentRotate:isPlayerWanted("player", nil, modeName)
 		self.defaults.profile[modeName.."ModeButton"] = isModeButtonVisible
 
 		-- Set config for the mode text
 		self.defaults.profile[modeName.."ModeText"] = L["FILTER_SHOW_"..mode.modeNameUpper]
 
 		-- The first mode button visible dictates the default mode
-		if isModeButton and not self.defaults.profile.currentMode then
+		if isModeButtonVisible and not self.defaults.profile.currentMode then
 			self.defaults.profile.currentMode = modeName
 		end
 	end

@@ -129,44 +129,44 @@ function SilentRotate:createModeFrame()
 end
 
 -- Create single mode button
-function SilentRotate:createSingleModeFrame(name, text, minX, maxX, enabled)
+function SilentRotate:createSingleModeFrame(modeName, text, minX, maxX, enabled)
     local fontSize = SilentRotate.constants.modeFrameFontSize
     local margin = SilentRotate.constants.modeFrameMargin
-    local mode = CreateFrame("Frame", nil, SilentRotate.mainFrame.modeFrame)
-    mode:SetPoint('TOPLEFT', minX+margin, -(SilentRotate.constants.modeBarHeight-2*margin-fontSize)/2)
-    mode:SetWidth(maxX-minX-2*margin)
-    mode:SetHeight(SilentRotate.constants.modeBarHeight-2*margin)
+    local modeFrame = CreateFrame("Frame", nil, SilentRotate.mainFrame.modeFrame)
+    modeFrame:SetPoint('TOPLEFT', minX+margin, -(SilentRotate.constants.modeBarHeight-2*margin-fontSize)/2)
+    modeFrame:SetWidth(maxX-minX-2*margin)
+    modeFrame:SetHeight(SilentRotate.constants.modeBarHeight-2*margin)
 
     -- Set Texture
-    mode.texture = mode:CreateTexture(nil, "BACKGROUND")
+    modeFrame.texture = modeFrame:CreateTexture(nil, "BACKGROUND")
     if enabled then
-        mode.texture:SetColorTexture(SilentRotate.colors.blue:GetRGB())
+        modeFrame.texture:SetColorTexture(SilentRotate.colors.blue:GetRGB())
     else
-        mode.texture:SetColorTexture(SilentRotate.colors.darkBlue:GetRGB())
+        modeFrame.texture:SetColorTexture(SilentRotate.colors.darkBlue:GetRGB())
     end
-    mode.texture:SetAllPoints()
+    modeFrame.texture:SetAllPoints()
 
     -- Set Text
-    mode.text = mode:CreateFontString(nil, "ARTWORK")
-    mode.text:SetFont("Fonts\\ARIALN.ttf", fontSize)
-    mode.text:SetShadowColor(0,0,0,0.5)
-    mode.text:SetShadowOffset(1,-1)
-    mode.text:SetPoint('TOPLEFT',1,-1)
-    mode.text:SetText(text)
-    mode.text:SetTextColor(1,1,1,1)
+    modeFrame.text = modeFrame:CreateFontString(nil, "ARTWORK")
+    modeFrame.text:SetFont("Fonts\\ARIALN.ttf", fontSize)
+    modeFrame.text:SetShadowColor(0,0,0,0.5)
+    modeFrame.text:SetShadowOffset(1,-1)
+    modeFrame.text:SetPoint('TOPLEFT',1,-1)
+    modeFrame.text:SetText(text)
+    modeFrame.text:SetTextColor(1,1,1,1)
 
     -- Register the OnMouseDown event ; nb. the OnClick event is exclusive to Buttons (which we aren't)
-    mode:SetScript(
+    modeFrame:SetScript(
         "OnMouseDown",
         function()
-            SilentRotate:activateMode(name)
+            SilentRotate:activateMode(modeName)
             SilentRotate:updateRaidStatus()
             SilentRotate:resetRotation()
             SilentRotate:sendSyncOrderRequest()
         end
     )
 
-    SilentRotate.mainFrame.modeFrames[name] = mode
+    SilentRotate.mainFrame.modeFrames[modeName] = modeFrame
 end
 
 -- Setup mode frame appearance, based on user-defined settings
