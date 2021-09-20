@@ -70,7 +70,12 @@ function SilentRotate:LoadDefaults()
 
 	-- If no button is visible by default, pick one so that the player does not see an empty list
 	if not self.defaults.profile.currentMode then
-		self.defaults.profile.tranqShotModeButton = true
-		self.defaults.profile.currentMode = SilentRotate.modes.tranqShot.modeName
+		if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+			self.defaults.profile.loathebModeButton = true
+			self.defaults.profile.currentMode = SilentRotate.modes.loatheb.modeName
+		else
+			self.defaults.profile.misdiModeButton = true
+			self.defaults.profile.currentMode = SilentRotate.modes.misdi.modeName
+		end
 	end
 end
