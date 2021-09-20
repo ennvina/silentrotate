@@ -308,7 +308,7 @@ SilentRotate.modes = {
         project = true,
         default = false,
         wanted = 'DRUID',
-        cooldown = 1200,
+        cooldown = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 1800 or 1200,
         -- effectDuration = nil,
         canFail = false,
         spell = GetSpellInfo(20484), -- Rebirth Rank 1
