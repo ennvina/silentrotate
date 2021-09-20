@@ -158,7 +158,7 @@ SilentRotate.modes = {
                 SilentRotate:resetRotation()
             end
         end,
-        targetGUID = function(sourceGUID, destGUID) return SilentRotate:getPlayerGuid(destGUID) end,
+        targetGUID = function(sourceGUID, destGUID) return destGUID end,
         -- targetSpell = nil,
         -- customTargetName = nil,
         announceArg = function(hunter, destName) return destName end,
@@ -170,9 +170,10 @@ SilentRotate.modes = {
         default = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC,
         wanted = {'PRIEST', 'PALADIN', 'SHAMAN', 'DRUID'},
         cooldown = 60,
+        -- effectDuration = nil,
         -- canFail = nil,
         -- spell = nil,
-        auraTest = function(spellId)
+        auraTest = function(spellId, spellName)
             return SilentRotate.testMode and spellId == 11196 -- 11196 is the spell ID of "Recently Bandaged"
                 or spellId == 29184 -- priest debuff
                 or spellId == 29195 -- druid debuff
@@ -215,7 +216,7 @@ SilentRotate.modes = {
         spell = GetSpellInfo(6346),
         -- auraTest = nil,
         -- customCombatlogFunc = nil,
-        targetGUID = function(sourceGUID, destGUID) return SilentRotate:getPlayerGuid(destGUID) end,
+        targetGUID = function(sourceGUID, destGUID) return destGUID end,
         targetSpell = function(spellId, spellName) return spellName end,
         -- customTargetName = nil,
         announceArg = function(hunter, destName) return destName end,
@@ -252,7 +253,7 @@ SilentRotate.modes = {
         spell = GetSpellInfo(34477),
         -- auraTest = nil,
         -- customCombatlogFunc = nil,
-        targetGUID = function(sourceGUID, destGUID) return SilentRotate:getPlayerGuid(destGUID) end,
+        targetGUID = function(sourceGUID, destGUID) return destGUID end,
         targetSpell = function(spellId, spellName) return spellName end,
         -- customTargetName = nil,
         announceArg = function(hunter, destName) return destName end,
@@ -272,7 +273,7 @@ SilentRotate.modes = {
         },
         -- auraTest = nil,
         -- customCombatlogFunc = nil,
-        targetGUID = function(sourceGUID, destGUID) return SilentRotate:getPlayerGuid(sourceGUID) end, -- Target is the caster itself
+        targetGUID = function(sourceGUID, destGUID) return sourceGUID end, -- Target is the caster itself
         targetSpell = function(spellId, spellName) return spellName end,
         customTargetName = function(hunter, targetName) return string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup or 0) end,
         announceArg = function(hunter, destName) return hunter.subgroup or 0 end,
