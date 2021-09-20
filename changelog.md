@@ -6,6 +6,7 @@ The code was reworked to improve performance and make it easier to maintain
 Because of that, some options may have reset to their default value
 
 - Added Bloodlust mode (TBC)
+- Added Grounding Totem mode
 - Testing time increased to 60 minutes (up from 10 minutes)
 - Razuvious mode no longer exists, it was hidden since forever anyway
 

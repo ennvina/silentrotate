@@ -230,7 +230,7 @@ function SilentRotate:setHunterName(hunter)
         end
         local mode = self:getMode()
         if type(mode.customTargetName) == 'function' then
-            targetName = mode.customTargetName(hunter, targetName)
+            targetName = mode.customTargetName(mode, hunter, targetName)
         end
         newText = newText..SilentRotate.colors[targetColorName]:WrapTextInColorCode(targetName)
     end
@@ -302,7 +302,7 @@ function SilentRotate:startHunterCooldown(hunter, endTimeOfCooldown, endTimeOfEf
                 hunter.nameRefreshTicker = C_Timer.NewTicker(nameRefreshInterval, function()
                     SilentRotate:setHunterName(hunter)
                     -- hunter.showingTarget is computed in the setHunterName() call; use this variable to tell when to stop refreshing
-                    if not hunter.showingTarget then
+                    if not hunter.showingTarget and not SilentRotate:getMode().buffCanReturn then
                         hunter.nameRefreshTicker:Cancel()
                         hunter.nameRefreshTicker = nil
                     end

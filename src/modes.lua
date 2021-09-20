@@ -146,22 +146,23 @@ SilentRotate.modes = {
         cooldown = 20,
         -- effectDuration = nil,
         canFail = true,
-        spell = function(spellId, spellName)
+        spell = function(self, spellId, spellName)
             return spellName == GetSpellInfo(19801) -- 'Tranquilizing Shot'
                 or spellName == GetSpellInfo(14287) and SilentRotate.testMode -- 'Arcane Shot'
         end,
         -- auraTest = nil,
-        customCombatlogFunc = function(event, sourceGUID, sourceName, sourceFlags, destGUID, destName, spellId, spellName)
+        customCombatlogFunc = function(self, event, sourceGUID, sourceName, sourceFlags, destGUID, destName, spellId, spellName)
             if event == "SPELL_AURA_APPLIED" and SilentRotate:isBossFrenzy(spellName, sourceGUID) and SilentRotate:isPlayerNextTranq() then
                 SilentRotate:throwTranqAlert()
             elseif event == "UNIT_DIED" and SilentRotate:isTranqableBoss(destGUID) then
                 SilentRotate:resetRotation()
             end
         end,
-        targetGUID = function(sourceGUID, destGUID) return destGUID end,
-        -- targetSpell = nil,
+        targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
+        -- buffName = nil,
+        -- buffCanReturn = nil,
         -- customTargetName = nil,
-        announceArg = function(hunter, destName) return destName end,
+        announceArg = function(self, hunter, destName) return destName end,
     },
 
     loatheb = {
@@ -173,7 +174,7 @@ SilentRotate.modes = {
         -- effectDuration = nil,
         -- canFail = nil,
         -- spell = nil,
-        auraTest = function(spellId, spellName)
+        auraTest = function(self, spellId, spellName)
             return SilentRotate.testMode and spellId == 11196 -- 11196 is the spell ID of "Recently Bandaged"
                 or spellId == 29184 -- priest debuff
                 or spellId == 29195 -- druid debuff
@@ -183,9 +184,10 @@ SilentRotate.modes = {
         -- customCombatlogFunc = nil,
         -- effectDuration = nil,
         -- targetGUID = nil,
-        -- targetSpell = nil,
+        -- buffName = nil,
+        -- buffCanReturn = nil,
         -- customTargetName = nil,
-        announceArg = function(hunter, destName) return destName end,
+        announceArg = function(self, hunter, destName) return destName end,
     },
 
     distract = {
@@ -200,26 +202,28 @@ SilentRotate.modes = {
         -- auraTest = nil,
         -- customCombatlogFunc = nil,
         -- targetGUID = nil,
-        -- targetSpell = nil,
+        -- buffName = nil,
+        -- buffCanReturn = nil,
         -- customTargetName = nil,
-        announceArg = function(hunter, destName) return destName end,
+        announceArg = function(self, hunter, destName) return destName end,
     },
 
     fearWard = {
         oldModeName = 'fearz',
         project = true,
         default = true,
-        wanted = function(className, raceName) return className == 'PRIEST' and (WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC or raceName == 'Dwarf') end,
+        wanted = function(self, className, raceName) return className == 'PRIEST' and (WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC or raceName == 'Dwarf') end,
         cooldown = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 30 or 180,
         effectDuration = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 600 or 180,
         canFail = false,
         spell = GetSpellInfo(6346),
         -- auraTest = nil,
         -- customCombatlogFunc = nil,
-        targetGUID = function(sourceGUID, destGUID) return destGUID end,
-        targetSpell = function(spellId, spellName) return spellName end,
+        targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
+        buffName = function(self, spellId, spellName) return spellName end,
+        buffCanReturn = false,
         -- customTargetName = nil,
-        announceArg = function(hunter, destName) return destName end,
+        announceArg = function(self, hunter, destName) return destName end,
     },
 
     aoeTaunt = {
@@ -237,9 +241,10 @@ SilentRotate.modes = {
         -- auraTest = nil,
         -- customCombatlogFunc = nil,
         -- targetGUID = nil,
-        -- targetSpell = nil,
+        -- buffName = nil,
+        -- buffCanReturn = nil,
         -- customTargetName = nil,
-        announceArg = function(hunter, destName) return destName end,
+        announceArg = function(self, hunter, destName) return destName end,
     },
 
     misdi = {
@@ -253,10 +258,11 @@ SilentRotate.modes = {
         spell = GetSpellInfo(34477),
         -- auraTest = nil,
         -- customCombatlogFunc = nil,
-        targetGUID = function(sourceGUID, destGUID) return destGUID end,
-        targetSpell = function(spellId, spellName) return spellName end,
+        targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
+        buffName = function(self, spellId, spellName) return spellName end,
+        buffCanReturn = false,
         -- customTargetName = nil,
-        announceArg = function(hunter, destName) return destName end,
+        announceArg = function(self, hunter, destName) return destName end,
     },
 
     bloodlust = {
@@ -273,10 +279,29 @@ SilentRotate.modes = {
         },
         -- auraTest = nil,
         -- customCombatlogFunc = nil,
-        targetGUID = function(sourceGUID, destGUID) return sourceGUID end, -- Target is the caster itself
-        targetSpell = function(spellId, spellName) return spellName end,
-        customTargetName = function(hunter, targetName) return string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup or 0) end,
-        announceArg = function(hunter, destName) return hunter.subgroup or 0 end,
+        targetGUID = function(self, sourceGUID, destGUID) return sourceGUID end, -- Target is the caster itself
+        buffName = function(self, spellId, spellName) return spellName end,
+        buffCanReturn = false,
+        customTargetName = function(self, hunter, targetName) return string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup or 0) end,
+        announceArg = function(self, hunter, destName) return hunter.subgroup or 0 end,
+    },
+
+    grounding = {
+        project = true,
+        default = false,
+        wanted = 'SHAMAN',
+        cooldown = 15,
+        effectDuration = 45,
+        canFail = false,
+        spell = GetSpellInfo(8177),
+        -- auraTest = nil,
+        -- customCombatlogFunc = nil,
+        targetGUID = function(self, sourceGUID, destGUID) return sourceGUID end, -- Target is the caster itself
+        buffName = function(self, spellId, spellName) return self.metadata.groundingTotemEffectName end, -- Buff is the totem effect
+        buffCanReturn = true,
+        customTargetName = function(self, hunter, targetName) return string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup or 0) end,
+        announceArg = function(self, hunter, destName) return hunter.subgroup or 0 end,
+        metadata = { groundingTotemEffectName = GetSpellInfo(8178) }, -- The buff is the name from spellId+1, not from spellId
     },
 }
 
