@@ -10,7 +10,7 @@ function SilentRotate:getMode(modeName)
     end
 
     if modeName and modeName:sub(-1) == 'z' then -- All old mode names end with 'z'
-        modeName = SilentRotate.backwardCompatibilityModeMap[modeName]
+        modeName = SilentRotate.backwardCompatibilityModeMap[modeName] or modeName
     end
 
     -- return the mode object, or TranqShot as the default mode if no mode is set
