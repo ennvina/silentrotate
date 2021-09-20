@@ -72,6 +72,8 @@ SilentRotate.constants = {
         ['flagtaken'] = 'Flag Taken (DBM)',
     },
 
+    ['tranqShot'] = GetSpellInfo(19801),
+    ['arcaneShot'] = GetSpellInfo(14287),
     ['bosses'] = {
         [11982] = 19451, -- magmadar
         [11981] = 23342, -- flamegor
@@ -104,3 +106,49 @@ SilentRotate.constants = {
     },
 
 }
+
+SilentRotate.modes = {
+    tranqShot = {
+        modeName = 'tranqShot',
+        oldModeName = 'hunterz',
+        project = nil,
+        wanted = 'HUNTER',
+        cooldown = 20,
+        effectDuration = nil,
+        targetName = nil,
+        spellTest = function(spellName) return spellName == SilentRotate.constants.tranqShot or (SilentRotate.testMode and spellName == SilentRotate.constants.arcaneShot) end,
+        spellCanFail = true,
+        auraTest = nil,
+    },
+
+    loatheb = {
+        modeName = 'loatheb',
+        oldModeName = 'healerz',
+        project = nil, -- function() return WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC end
+        wanted = function(unit, className) return className == 'PRIEST' or className == 'PALADIN' or className == 'SHAMAN' or className == 'DRUID' end,
+        cooldown = 60,
+        effectDuration = nil,
+        targetName = nil,
+        spellTest = nil,
+        spellCanFail = nil,
+        auraTest = function(spellId) return SilentRotate:isLoathebDebuff(spellId) or (SilentRotate.testMode and spellId == 11196) end,
+    },
+
+	        -- announceDistractSuccessMessage 	= L["DEFAULT_DISTRACT_SUCCESS_ANNOUNCE_MESSAGE"],
+	        -- announceDistractFailMessage 	= L["DEFAULT_DISTRACT_FAIL_ANNOUNCE_MESSAGE"],
+	        -- announceFearWardMessage 		= L["DEFAULT_FEARWARD_ANNOUNCE_MESSAGE"],
+	        -- announceAoeTauntSuccessMessage 	= L["DEFAULT_AOETAUNT_SUCCESS_ANNOUNCE_MESSAGE"],
+	        -- announceAoeTauntFailMessage 	= L["DEFAULT_AOETAUNT_FAIL_ANNOUNCE_MESSAGE"],
+			-- announceMisdiMessage 			= L["DEFAULT_MISDI_ANNOUNCE_MESSAGE"],
+			-- announceBloodlustMessage 		= L["DEFAULT_BLOODLUST_ANNOUNCE_MESSAGE"],
+}
+
+-- Create a backward compatibility map between old mode names and new ones
+-- And fill some attributes automatically
+SilentRotate.backwardCompatibilityModeMap = {}
+for modeName, mode in pairs(SilentRotate.modes) do
+    assert(modeName == mode.modeName)
+    mode.modeNameUpper = modeName:upper()
+    mode.modeNameFirstUpper = modeName:gsub("^%l", string.upper)
+    SilentRotate.backwardCompatibilityModeMap[mode.oldModeName] = modeName
+end

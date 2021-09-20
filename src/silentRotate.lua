@@ -119,8 +119,6 @@ SlashCmdList["SILENTROTATE"] = function(msg)
         SilentRotate:lock(true)
     elseif (cmd == 'unlock') then
         SilentRotate:lock(false)
-    -- elseif (cmd == 'backup') then
-    --     SilentRotate:whisperBackup()
     elseif (cmd == 'rotate') then -- @todo decide if this should be removed or not
         SilentRotate:testRotation()
     elseif (cmd == 'test') then -- @todo: remove this

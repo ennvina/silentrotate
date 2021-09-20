@@ -257,8 +257,8 @@ end
 
 function SilentRotate:startHunterCooldown(hunter, endTimeOfCooldown, endTimeOfEffect, targetGUID, buffName)
     if not endTimeOfCooldown or endTimeOfCooldown == 0 then
-        local duration = SilentRotate:getModeDuration()
-        endTimeOfCooldown = GetTime() + duration
+        local cooldown = SilentRotate:getModeCooldown()
+        endTimeOfCooldown = GetTime() + cooldown
     end
 
     if not endTimeOfEffect or endTimeOfEffect == 0 then

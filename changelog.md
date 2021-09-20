@@ -1,9 +1,10 @@
 ## SilentRotate Changelog
 
-#### v0.7.2-beta (2021-xx-yy)
+#### v0.8.0-beta (2021-xx-yy)
 
 - Added Bloodlust mode (TBC)
 - Testing increased to 60 minutes (up from 10 minutes)
+- Raz mode no longer exists, it was hidden since forever anyway
 
 #### v0.7.1-beta (2021-09-19)
 

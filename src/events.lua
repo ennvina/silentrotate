@@ -1,8 +1,5 @@
 local SilentRotate = select(2, ...)
 
-local tranqShot = GetSpellInfo(19801)
-local arcaneShot = GetSpellInfo(14287)
-
 local eventFrame = CreateFrame("Frame")
 eventFrame:RegisterEvent("PLAYER_LOGIN")
 eventFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
@@ -40,8 +37,8 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
     local spellId, spellName, spellSchool, amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing, isOffHand = select(12, CombatLogGetCurrentEventInfo())
 
     -- @todo try to refactor a bit
-    if SilentRotate:isTranqMode() then
-        if (spellName == tranqShot or (SilentRotate.testMode and spellName == arcaneShot)) then
+    if SilentRotate:isTranqShotMode() then
+        if (spellName == SilentRotate.constants.tranqShot or (SilentRotate.testMode and spellName == SilentRotate.constants.arcaneShot)) then
             local hunter = SilentRotate:getHunter(sourceGUID)
             if (event == "SPELL_CAST_SUCCESS") then
                 SilentRotate:sendSyncTranq(hunter, false, timestamp)
@@ -61,8 +58,6 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
         elseif event == "UNIT_DIED" and SilentRotate:isTranqableBoss(destGUID) then
             SilentRotate:resetRotation()
         end
-    elseif SilentRotate:isRazMode() then
-        -- TODO
     elseif SilentRotate:isDistractMode() then
         if SilentRotate:isDistractSpell(spellName) then
             local hunter = SilentRotate:getHunter(sourceGUID)
@@ -149,7 +144,7 @@ end
 -- One of the auras of the unitID has changed (gained, faded)
 function SilentRotate:UNIT_AURA(unitID, isEcho)
 
-    -- UNIT_AURA is used exclusively to Loatheb
+    -- UNIT_AURA is used exclusively to aura-based modes
     if not SilentRotate:isLoathebMode() then return end
 
     -- Whether the unit really got the debuff or not, it's pointless if the unit is not tracked (e.g. not a healer)
