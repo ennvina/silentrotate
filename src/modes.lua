@@ -17,41 +17,6 @@ function SilentRotate:getMode(modeName)
     return SilentRotate.modes[modeName or SilentRotate.modes.tranqShot.modeName]
 end
 
-function SilentRotate:isTranqShotMode(modeName)
-    local mode = self:getMode(modeName)
-    return mode and mode.modeName == SilentRotate.modes.tranqShot.modeName
-end
-
-function SilentRotate:isLoathebMode(modeName)
-    local mode = self:getMode(modeName)
-    return mode and mode.modeName == SilentRotate.modes.loatheb.modeName
-end
-
-function SilentRotate:isDistractMode(modeName)
-    local mode = self:getMode(modeName)
-    return mode and mode.modeName == SilentRotate.modes.distract.modeName
-end
-
-function SilentRotate:isFearWardMode(modeName)
-    local mode = self:getMode(modeName)
-    return mode and mode.modeName == SilentRotate.modes.fearWard.modeName
-end
-
-function SilentRotate:isAoeTauntMode(modeName)
-    local mode = self:getMode(modeName)
-    return mode and mode.modeName == SilentRotate.modes.aoeTaunt.modeName
-end
-
-function SilentRotate:isMisdiMode(modeName)
-    local mode = self:getMode(modeName)
-    return mode and mode.modeName == SilentRotate.modes.misdi.modeName
-end
-
-function SilentRotate:isBloodlustMode(modeName)
-    local mode = self:getMode(modeName)
-    return mode and mode.modeName == SilentRotate.modes.bloodlust.modeName
-end
-
 -- Activate the specific mode
 function SilentRotate:activateMode(modeName)
     local currentMode = self:getMode()
@@ -85,12 +50,46 @@ function SilentRotate:isPlayerWanted(unit, className, modeName)
     if mode and mode.wanted then
         if type(mode.wanted) == 'string' then
             return className == mode.wanted
-        elseif type(mode.wanted == 'function') then
-            return mode.wanted(unit, className)
+        elseif type(mode.wanted) == 'table' then
+            for _, c in pairs(mode.wanted) do
+                if className == c then
+                    return true
+                end
+            end
+            return false
+        elseif type(mode.wanted) == 'function' then
+            local raceName = select(2,UnitRace(unit))
+            return mode.wanted(className, raceName)
         end
     end
 
     return nil
+end
+
+-- Return true if the spellId/spellName matches one of the spells of spellWanted
+-- spellWanted can be either a spell id, a spell name, a list of ids and names, or a function(spellId, spellName)
+function SilentRotate:isSpellInteresting(spellId, spellName, spellWanted)
+
+    if type(spellWanted) == 'number' then -- Single spell ID
+        return spellWanted == spellId
+
+    elseif type(spellWanted) == 'string' then -- Single spell name
+        return spellWanted == spellName
+
+    elseif type(spellWanted) == 'table' then -- List of spell IDs and/or names
+        for _, s in pairs(spellWanted) do
+            if type(s) == 'number' and s == spellId
+            or type(s) == 'string' and s == spellName then
+                return true
+            end
+        end
+        return false
+
+    elseif type(spellWanted) == 'function' then -- Functor
+        return spellWanted(spellId, spellName)
+    end
+
+    return false
 end
 
 -- Get the default duration known for a specific mode
@@ -147,7 +146,10 @@ SilentRotate.modes = {
         cooldown = 20,
         -- effectDuration = nil,
         canFail = true,
-        spellTest = function(spellName) return spellName == SilentRotate.constants.tranqShot or (SilentRotate.testMode and spellName == SilentRotate.constants.arcaneShot) end,
+        spell = function(spellId, spellName)
+            return spellName == GetSpellInfo(19801) -- 'Tranquilizing Shot'
+                or spellName == GetSpellInfo(14287) and SilentRotate.testMode -- 'Arcane Shot'
+        end,
         -- auraTest = nil,
         customCombatlogFunc = function(event, sourceGUID, sourceName, sourceFlags, destGUID, destName, spellId, spellName)
             if event == "SPELL_AURA_APPLIED" and SilentRotate:isBossFrenzy(spellName, sourceGUID) and SilentRotate:isPlayerNextTranq() then
@@ -166,11 +168,17 @@ SilentRotate.modes = {
         oldModeName = 'healerz',
         project = true,
         default = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC,
-        wanted = function(unit, className) return className == 'PRIEST' or className == 'PALADIN' or className == 'SHAMAN' or className == 'DRUID' end,
+        wanted = {'PRIEST', 'PALADIN', 'SHAMAN', 'DRUID'},
         cooldown = 60,
         -- canFail = nil,
-        -- spellTest = nil,
-        auraTest = function(spellId) return SilentRotate:isLoathebDebuff(spellId) or (SilentRotate.testMode and spellId == 11196) end, -- 11196 is the spell ID of "Recently Bandaged"
+        -- spell = nil,
+        auraTest = function(spellId)
+            return SilentRotate.testMode and spellId == 11196 -- 11196 is the spell ID of "Recently Bandaged"
+                or spellId == 29184 -- priest debuff
+                or spellId == 29195 -- druid debuff
+                or spellId == 29197 -- paladin debuff
+                or spellId == 29199 -- shaman debuff
+        end,
         -- customCombatlogFunc = nil,
         -- effectDuration = nil,
         -- targetGUID = nil,
@@ -187,7 +195,7 @@ SilentRotate.modes = {
         cooldown = 30,
         effectDuration = 10,
         canFail = true,
-        spellTest = function(spellName) return SilentRotate:isDistractSpell(spellName) end,
+        spell = GetSpellInfo(1725),
         -- auraTest = nil,
         -- customCombatlogFunc = nil,
         -- targetGUID = nil,
@@ -200,11 +208,11 @@ SilentRotate.modes = {
         oldModeName = 'priestz',
         project = true,
         default = true,
-        wanted = function(unit, className) return className == 'PRIEST' and (WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC or select(2,UnitRace(unit)) == 'Dwarf') end,
+        wanted = function(className, raceName) return className == 'PRIEST' and (WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC or raceName == 'Dwarf') end,
         cooldown = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 30 or 180,
         effectDuration = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 600 or 180,
         canFail = false,
-        spellTest = function(spellName) return SilentRotate:isFearWardSpell(spellName) end,
+        spell = GetSpellInfo(6346),
         -- auraTest = nil,
         -- customCombatlogFunc = nil,
         targetGUID = function(sourceGUID, destGUID) return SilentRotate:getPlayerGuid(destGUID) end,
@@ -217,11 +225,14 @@ SilentRotate.modes = {
         oldModeName = 'tankz',
         project = true,
         default = false,
-        wanted = function(unit, className) return className == 'WARRIOR' or className == 'DRUID' end,
+        wanted = {'WARRIOR', 'DRUID'},
         cooldown = 600,
         effectDuration = 6,
         canFail = true,
-        spellTest = function(spellName) return SilentRotate:isAoeTauntSpell(spellName) end,
+        spell = {
+            GetSpellInfo(1161), -- warrior's Challenging Shout
+            GetSpellInfo(5209), -- druid's Challenging Roar
+        },
         -- auraTest = nil,
         -- customCombatlogFunc = nil,
         -- targetGUID = nil,
@@ -238,7 +249,7 @@ SilentRotate.modes = {
         cooldown = 120,
         effectDuration = 30,
         canFail = false,
-        spellTest = function(spellName) return SilentRotate:isMisdiSpell(spellName) end,
+        spell = GetSpellInfo(34477),
         -- auraTest = nil,
         -- customCombatlogFunc = nil,
         targetGUID = function(sourceGUID, destGUID) return SilentRotate:getPlayerGuid(destGUID) end,
@@ -255,7 +266,10 @@ SilentRotate.modes = {
         cooldown = 600,
         effectDuration = 40,
         canFail = false,
-        spellTest = function(spellName) return SilentRotate:isBloodlustSpell(spellName) end,
+        spell = {
+            GetSpellInfo(2825), -- Bloodlust
+            GetSpellInfo(32182), -- Heroism
+        },
         -- auraTest = nil,
         -- customCombatlogFunc = nil,
         targetGUID = function(sourceGUID, destGUID) return SilentRotate:getPlayerGuid(sourceGUID) end, -- Target is the caster itself

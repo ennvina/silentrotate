@@ -29,9 +29,9 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
 
     -- @todo : Improve this with register / unregister event to save ressources
     -- Avoid parsing combat log when not able to use it
-    if not SilentRotate.raidInitialized then return end
+    if not self.raidInitialized then return end
     -- Avoid parsing combat log when outside instance if test mode isn't enabled
-    if not SilentRotate.testMode and not IsInInstance() then return end
+    if not self.testMode and not IsInInstance() then return end
 
     local timestamp, event, _, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags = CombatLogGetCurrentEventInfo()
     local spellId, spellName, spellSchool, amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing, isOffHand = select(12, CombatLogGetCurrentEventInfo())
@@ -39,22 +39,22 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
     local mode = self:getMode()
 
     -- COMBAT_LOG_EVENT_UNFILTERED is used exclusively by spell-based modes
-    if type(mode.spellTest) == 'function' and mode.spellTest(spellName) then
-        local hunter = SilentRotate:getHunter(sourceGUID)
-        if event == "SPELL_CAST_SUCCESS" then
+    if mode.spell and self:isSpellInteresting(spellId, spellName, mode.spell) then
+        local hunter = self:getHunter(sourceGUID)
+        if event == "SPELL_CAST_SUCCESS" or (mode.canFail and event == "SPELL_MISSED") then
             local failed = event == "SPELL_MISSED"
             local targetGUID = type(mode.targetGUID) == 'function' and mode.targetGUID(sourceGUID, destGUID) or nil
             local targetSpell = type(mode.targetSpell) == 'function' and mode.targetSpell(spellId, spellName) or nil
             local announceArg = type(mode.announceArg) == 'function' and mode.announceArg(hunter, destName) or nil
-            SilentRotate:sendSyncTranq(hunter, failed, timestamp)
-            SilentRotate:rotate(hunter, failed, nil, nil, nil, targetGUID, targetSpell)
+            self:sendSyncTranq(hunter, failed, timestamp)
+            self:rotate(hunter, failed, nil, nil, nil, targetGUID, targetSpell)
             if (sourceGUID == UnitGUID("player")) then
                 if failed then
-                    SilentRotate:sendAnnounceMessage(SilentRotate.db.profile["announce"..mode.modeNameFirstUpper.."FailMessage"], announceArg)
+                    self:sendAnnounceMessage(self.db.profile["announce"..mode.modeNameFirstUpper.."FailMessage"], announceArg)
                 elseif mode.canFail then
-                    SilentRotate:sendAnnounceMessage(SilentRotate.db.profile["announce"..mode.modeNameFirstUpper.."SuccessMessage"], announceArg)
+                    self:sendAnnounceMessage(self.db.profile["announce"..mode.modeNameFirstUpper.."SuccessMessage"], announceArg)
                 else
-                    SilentRotate:sendAnnounceMessage(SilentRotate.db.profile["announce"..mode.modeNameFirstUpper.."Message"], announceArg)
+                    self:sendAnnounceMessage(self.db.profile["announce"..mode.modeNameFirstUpper.."Message"], announceArg)
                 end
             end
         end
@@ -68,19 +68,19 @@ end
 
 -- Raid group has changed
 function SilentRotate:GROUP_ROSTER_UPDATE()
-    SilentRotate:updateRaidStatus()
+    self:updateRaidStatus()
 end
 
 -- Player left combat
 function SilentRotate:PLAYER_REGEN_ENABLED()
-    SilentRotate:updateRaidStatus()
+    self:updateRaidStatus()
 end
 
 -- Player changed its main target
 function SilentRotate:PLAYER_TARGET_CHANGED()
     if (SilentRotate.db.profile.showWindowWhenTargetingBoss) then
-        if (SilentRotate:isTranqableBoss(UnitGUID("target")) and not UnitIsDead('target')) then
-            SilentRotate.mainFrame:Show()
+        if (self:isTranqableBoss(UnitGUID("target")) and not UnitIsDead('target')) then
+            self.mainFrame:Show()
         end
     end
 end
@@ -93,7 +93,7 @@ function SilentRotate:UNIT_AURA(unitID, isEcho)
     if type(mode.auraTest) ~= 'function' then return end
 
     -- Whether the unit really got the debuff or not, it's pointless if the unit is not tracked (e.g. not a healer)
-    local hunter = SilentRotate:getHunter(UnitGUID(unitID))
+    local hunter = self:getHunter(UnitGUID(unitID))
     if not hunter then return end
     local previousExpirationTime = hunter.frame.cooldownFrame.statusBar.expirationTime
 
@@ -101,11 +101,11 @@ function SilentRotate:UNIT_AURA(unitID, isEcho)
         -- Try again in 1 second to secure lags between UNIT_AURA and the actual aura applied
         -- But set the isEcho flag so that the repetition will not be repeated over and over
         C_Timer.After(1, function()
-            SilentRotate:UNIT_AURA(unitID, true)
+            self:UNIT_AURA(unitID, true)
         end)
     end
 
-    -- Loop through the unit's debuffs to check if s/he is affected by Loatheb's Corrupted Mind
+    -- Loop through the unit's debuffs to check if s/he is affected by a specific debuff, e.g. Loatheb's Corrupted Mind
     local maxNbDebuffs = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 16 or 40
     for i=1,maxNbDebuffs do
         local name, _,_,_,_, endTime ,_,_,_, spellId = UnitDebuff(unitID, i)
@@ -127,13 +127,13 @@ function SilentRotate:UNIT_AURA(unitID, isEcho)
                 return
             end
             -- Send the rotate order, this is the most important part of the addon
-            SilentRotate:rotate(hunter, false, nil, endTime)
+            self:rotate(hunter, false, nil, endTime)
             if (UnitIsUnit(unitID, "player")) then
                 -- Announce to the channel selected in the addon options, but announce only ourselves
                 if mode.canFail then
-                    SilentRotate:sendAnnounceMessage(SilentRotate.db.profile["announce"..mode.modeNameFirstUpper.."SuccessMessage"], type(mode.announceArg) == 'function' and announceArg(hunter, UnitName(unitID)) or nil)
+                    self:sendAnnounceMessage(SilentRotate.db.profile["announce"..mode.modeNameFirstUpper.."SuccessMessage"], type(mode.announceArg) == 'function' and announceArg(hunter, UnitName(unitID)) or nil)
                 else
-                    SilentRotate:sendAnnounceMessage(SilentRotate.db.profile["announce"..mode.modeNameFirstUpper.."Message"], type(mode.announceArg) == 'function' and announceArg(hunter, UnitName(unitID)) or nil)
+                    self:sendAnnounceMessage(SilentRotate.db.profile["announce"..mode.modeNameFirstUpper.."Message"], type(mode.announceArg) == 'function' and announceArg(hunter, UnitName(unitID)) or nil)
                 end
             end
             return
@@ -158,7 +158,7 @@ function SilentRotate:registerUnitEvents(hunter)
     hunter.frame:SetScript(
         "OnEvent",
         function(self, event, ...)
-            SilentRotate:updateHunterStatus(hunter)
+            self:updateHunterStatus(hunter)
         end
     )
 
