@@ -92,7 +92,7 @@ end
 -- Checks if the spell and the mob match a boss frenzy
 function SilentRotate:isBossFrenzy(spellName, guid)
 
-    local bosses = SilentRotate.constants.bosses
+    local bosses = SilentRotate.constants.tranqableBosses
     local type, mobId = SilentRotate:getIdFromGuid(guid)
 
     if (type == "Creature") then
@@ -109,7 +109,7 @@ end
 -- Checks if the mob is a tranq-able boss
 function SilentRotate:isTranqableBoss(guid)
 
-    local bosses = SilentRotate.constants.bosses
+    local bosses = SilentRotate.constants.tranqableBosses
     local type, mobId = SilentRotate:getIdFromGuid(guid)
 
     if (type == "Creature") then
@@ -126,67 +126,10 @@ end
 -- Checks if the spell is a boss frenzy
 function SilentRotate:isFrenzy(spellName)
 
-    local bosses = SilentRotate.constants.bosses
+    local bosses = SilentRotate.constants.tranqableBosses
 
     for bossId, frenzy in pairs(bosses) do
         if (spellName == GetSpellInfo(frenzy)) then
-            return true
-        end
-    end
-
-    return false
-end
-
--- Checks if the spell is the Loatheb debuff
-function SilentRotate:isLoathebDebuff(spellId)
-
-    local ids = SilentRotate.constants.loatheb
-
-    for _, id in ipairs(ids) do
-        if (spellId == id) then
-            return true
-        end
-    end
-
-    return false
-end
-
--- Checks if the spell is the Rogue Distract
-function SilentRotate:isDistractSpell(spellName)
-    return spellName == SilentRotate.constants.distract
-end
-
--- Checks if the spell is the Priest Fear Ward
-function SilentRotate:isFearWardSpell(spellName)
-    return spellName == SilentRotate.constants.fearWard
-end
-
--- Checks if the spell is the Hunter Misdirection
-function SilentRotate:isMisdiSpell(spellName)
-    return spellName == SilentRotate.constants.misdi
-end
-
--- Checks if the spell is the Warrior Challenging Shout or Druid Challenging Road
-function SilentRotate:isAoeTauntSpell(spellName)
-
-    local names = SilentRotate.constants.aoeTaunt
-
-    for _, name in ipairs(names) do
-        if (spellName == name) then
-            return true
-        end
-    end
-
-    return false
-end
-
--- Checks if the spell is the Shaman Bloodlust or Heroism
-function SilentRotate:isBloodlustSpell(spellName)
-
-    local names = SilentRotate.constants.bloodlust
-
-    for _, name in ipairs(names) do
-        if (spellName == name) then
             return true
         end
     end

@@ -118,104 +118,67 @@ function SilentRotate:createModeFrame()
     SilentRotate.mainFrame.modeFrame.texture:SetColorTexture(SilentRotate.colors.darkBlue:GetRGB())
     SilentRotate.mainFrame.modeFrame.texture:SetAllPoints()
 
-    SilentRotate.mainFrame.modeFrames = { ["hunterz"] = nil, ["priestz"] = nil, ["healerz"] = nil, ["roguez"] = nil, ["fearz"] = nil }
-    local commonModeWidth = SilentRotate.constants.mainFrameWidth/4
-    SilentRotate:createSingleModeFrame("hunterz", L["FILTER_SHOW_HUNTERS"]     , 0*commonModeWidth, 1*commonModeWidth, SilentRotate:isTranqMode())
-    SilentRotate:createSingleModeFrame("healerz", L["FILTER_SHOW_HEALERS"]     , 1*commonModeWidth, 2*commonModeWidth, SilentRotate:isLoathebMode())
-    SilentRotate:createSingleModeFrame("roguez",  L["FILTER_SHOW_ROGUES"]      , 2*commonModeWidth, 3*commonModeWidth, SilentRotate:isDistractMode())
-    SilentRotate:createSingleModeFrame("priestz", L["FILTER_SHOW_PRIESTS"]     , 3*commonModeWidth, 4*commonModeWidth, SilentRotate:isRazMode())
-    SilentRotate:createSingleModeFrame("fearz",   L["FILTER_SHOW_DWARVES"]     , 4*commonModeWidth, 5*commonModeWidth, SilentRotate:isFearWardMode())
-    SilentRotate:createSingleModeFrame("tauntz",  L["FILTER_SHOW_AOETAUNTERS"] , 5*commonModeWidth, 6*commonModeWidth, SilentRotate:isAoeTauntMode())
-    SilentRotate:createSingleModeFrame("misdiz",  L["FILTER_SHOW_MISDIRECTORS"], 6*commonModeWidth, 7*commonModeWidth, SilentRotate:isMisdiMode())
-    SilentRotate:createSingleModeFrame("shamanz", L["FILTER_SHOW_SHAMANS"]     , 7*commonModeWidth, 8*commonModeWidth, SilentRotate:isBloodlustMode())
+    SilentRotate.mainFrame.modeFrames = {}
+    local commonModeWidth = SilentRotate.constants.mainFrameWidth/3
+    modeIndex = 0
+    for modeName, mode in pairs(SilentRotate.modes) do
+        SilentRotate:createSingleModeFrame(modeName, L["FILTER_SHOW_"..mode.modeNameUpper], modeIndex*commonModeWidth, (modeIndex+1)*commonModeWidth, SilentRotate.db.profile.currentMode == modeName)
+        modeIndex = modeIndex+1
+    end
     SilentRotate:applyModeFrameSettings()
 end
 
 -- Create single mode button
-function SilentRotate:createSingleModeFrame(name, text, minX, maxX, enabled)
+function SilentRotate:createSingleModeFrame(modeName, text, minX, maxX, enabled)
     local fontSize = SilentRotate.constants.modeFrameFontSize
     local margin = SilentRotate.constants.modeFrameMargin
-    local mode = CreateFrame("Frame", nil, SilentRotate.mainFrame.modeFrame)
-    mode:SetPoint('TOPLEFT', minX+margin, -(SilentRotate.constants.modeBarHeight-2*margin-fontSize)/2)
-    mode:SetWidth(maxX-minX-2*margin)
-    mode:SetHeight(SilentRotate.constants.modeBarHeight-2*margin)
+    local modeFrame = CreateFrame("Frame", nil, SilentRotate.mainFrame.modeFrame)
+    modeFrame:SetPoint('TOPLEFT', minX+margin, -(SilentRotate.constants.modeBarHeight-2*margin-fontSize)/2)
+    modeFrame:SetWidth(maxX-minX-2*margin)
+    modeFrame:SetHeight(SilentRotate.constants.modeBarHeight-2*margin)
 
     -- Set Texture
-    mode.texture = mode:CreateTexture(nil, "BACKGROUND")
+    modeFrame.texture = modeFrame:CreateTexture(nil, "BACKGROUND")
     if enabled then
-        mode.texture:SetColorTexture(SilentRotate.colors.blue:GetRGB())
+        modeFrame.texture:SetColorTexture(SilentRotate.colors.blue:GetRGB())
     else
-        mode.texture:SetColorTexture(SilentRotate.colors.darkBlue:GetRGB())
+        modeFrame.texture:SetColorTexture(SilentRotate.colors.darkBlue:GetRGB())
     end
-    mode.texture:SetAllPoints()
+    modeFrame.texture:SetAllPoints()
 
     -- Set Text
-    mode.text = mode:CreateFontString(nil, "ARTWORK")
-    mode.text:SetFont("Fonts\\ARIALN.ttf", fontSize)
-    mode.text:SetShadowColor(0,0,0,0.5)
-    mode.text:SetShadowOffset(1,-1)
-    mode.text:SetPoint('TOPLEFT',1,-1)
-    mode.text:SetText(text)
-    mode.text:SetTextColor(1,1,1,1)
+    modeFrame.text = modeFrame:CreateFontString(nil, "ARTWORK")
+    modeFrame.text:SetFont("Fonts\\ARIALN.ttf", fontSize)
+    modeFrame.text:SetShadowColor(0,0,0,0.5)
+    modeFrame.text:SetShadowOffset(1,-1)
+    modeFrame.text:SetPoint('TOPLEFT',1,-1)
+    modeFrame.text:SetText(text)
+    modeFrame.text:SetTextColor(1,1,1,1)
 
     -- Register the OnMouseDown event ; nb. the OnClick event is exclusive to Buttons (which we aren't)
-    mode:SetScript(
+    modeFrame:SetScript(
         "OnMouseDown",
         function()
-            SilentRotate:activateMode(name)
+            SilentRotate:activateMode(modeName)
             SilentRotate:updateRaidStatus()
             SilentRotate:resetRotation()
             SilentRotate:sendSyncOrderRequest()
         end
     )
 
-    SilentRotate.mainFrame.modeFrames[name] = mode
+    SilentRotate.mainFrame.modeFrames[modeName] = modeFrame
 end
 
 -- Setup mode frame appearance, based on user-defined settings
 function SilentRotate:applyModeFrameSettings()
-    local modeFrameMapping = {
-        {
-            modeName = "hunterz",
-            visibilityFlag = "tranqModeButton",
-            textVariable = "tranqModeText",
-        },
-        {
-            modeName = "healerz",
-            visibilityFlag = "loathebModeButton",
-            textVariable = "loathebModeText",
-        },
-        {
-            modeName = "roguez",
-            visibilityFlag = "distractModeButton",
-            textVariable = "distractModeText",
-        },
-        {
-            modeName = "priestz",
-            visibilityFlag = "razModeButton",
-            textVariable = "razModeText",
-        },
-        {
-            modeName = "fearz",
-            visibilityFlag = "fearWardModeButton",
-            textVariable = "fearWardModeText",
-        },
-        {
-            modeName = "tauntz",
-            visibilityFlag = "aoeTauntModeButton",
-            textVariable = "aoeTauntModeText",
-        },
-        {
-            modeName = "misdiz",
-            visibilityFlag = "misdiModeButton",
-            textVariable = "misdiModeText",
-        },
-        {
-            modeName = "shamanz",
-            visibilityFlag = "bloodlustModeButton",
-            textVariable = "bloodlustModeText",
-        },
-    }
+    local modeFrameMapping = {}
+    for modeName, mode in pairs(SilentRotate.modes) do
+        table.insert(modeFrameMapping, {
+            modeName = modeName,
+            visibilityFlag = modeName.."ModeButton",
+            textVariable = modeName.."ModeText",
+        })
+    end
 
     -- First, count how many buttons should be visible
     local nbButtonsVisible = 0

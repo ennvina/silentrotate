@@ -1,9 +1,13 @@
 ## SilentRotate Changelog
 
-#### v0.7.2-beta (2021-xx-yy)
+#### v0.8.0-beta (2021-xx-yy)
+
+The code was reworked to improve performance and make it easier to maintain
+Because of that, some options may have reset to their default value
 
 - Added Bloodlust mode (TBC)
-- Testing increased to 60 minutes (up from 10 minutes)
+- Testing time increased to 60 minutes (up from 10 minutes)
+- Razuvious mode no longer exists, it was hidden since forever anyway
 
 #### v0.7.1-beta (2021-09-19)
 

@@ -72,35 +72,11 @@ SilentRotate.constants = {
         ['flagtaken'] = 'Flag Taken (DBM)',
     },
 
-    ['bosses'] = {
-        [11982] = 19451, -- magmadar
-        [11981] = 23342, -- flamegor
-        [14020] = 23342, -- chromaggus
-        [15509] = 19451, -- huhuran
-        [15932] = 19451, -- gluth
+    ['tranqableBosses'] = {
+        [11982] = 19451, -- Magmadar (MC)
+        [11981] = 23342, -- Flamegor (BWL)
+        [14020] = 23342, -- Chromaggus (BWL)
+        [15509] = 19451, -- Huhuran (AQ40)
+        [15932] = 19451, -- Gluth (Naxx)
     },
-
-    ['loatheb'] = {
-        29184, -- priest debuff
-        29195, -- druid debuff
-        29197, -- paladin debuff
-        29199, -- shaman debuff
-    },
-
-    ['distract'] = GetSpellInfo(1725),
-
-    ['fearWard'] = GetSpellInfo(6346),
-
-    ['aoeTaunt'] = {
-        GetSpellInfo(1161), -- warrior's challenging shout
-        GetSpellInfo(5209), -- druid's challenging roar
-    },
-
-    ['misdi'] = GetSpellInfo(34477),
-
-    ['bloodlust'] = {
-        GetSpellInfo(2825), -- Bloodlust
-        GetSpellInfo(32182), -- Heroism
-    },
-
 }
