@@ -59,7 +59,7 @@ end
 -- @param endTimeOfCooldown     time when the cooldown ends (by default the time is calculated as now+cooldown)
 -- @param endTimeOfEffect       time when the effect on the targetGUID fades (by default, time is now+duration)
 -- @param targetGUID            GUID of the only target or main target of the rotation, if such target exists
--- @param buffName              name of the buff given to targetGUID (by default, buff is detected from mode)
+-- @param buffName              name of the buff given to targetGUID
 function SilentRotate:rotate(lastHunter, fail, rotateWithoutCooldown, endTimeOfCooldown, endTimeOfEffect, targetGUID, buffName)
 
     -- Default value to false
