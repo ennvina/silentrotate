@@ -303,6 +303,23 @@ SilentRotate.modes = {
         announceArg = function(self, hunter, destName) return hunter.subgroup or 0 end,
         metadata = { groundingTotemEffectName = GetSpellInfo(8178) }, -- The buff is the name from spellId+1, not from spellId
     },
+
+    brez = {
+        project = true,
+        default = false,
+        wanted = 'DRUID',
+        cooldown = 1200,
+        -- effectDuration = nil,
+        canFail = false,
+        spell = GetSpellInfo(20484), -- Rebirth Rank 1
+        -- auraTest = nil,
+        -- customCombatlogFunc = nil,
+        targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
+        -- buffName = nil,
+        -- buffCanReturn = nil,
+        -- customTargetName = nil,
+        announceArg = function(self, hunter, destName) return destName end,
+    },
 }
 
 -- Create a backward compatibility map between old mode names and new ones
