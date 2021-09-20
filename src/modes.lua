@@ -206,7 +206,7 @@ SilentRotate.modes = {
     },
 
     fearWard = {
-        oldModeName = 'priestz',
+        oldModeName = 'fearz',
         project = true,
         default = true,
         wanted = function(className, raceName) return className == 'PRIEST' and (WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC or raceName == 'Dwarf') end,
@@ -223,7 +223,7 @@ SilentRotate.modes = {
     },
 
     aoeTaunt = {
-        oldModeName = 'tankz',
+        oldModeName = 'tauntz',
         project = true,
         default = false,
         wanted = {'WARRIOR', 'DRUID'},
