@@ -774,7 +774,10 @@ function SilentRotate:CreateConfig()
 	options.args.profile = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db)
 
     AceConfigDialog:AddToBlizOptions(Addon, nil, nil, "general")
+    AceConfigDialog:AddToBlizOptions(Addon, L['SETTING_MODES'], Addon, "modes")
     AceConfigDialog:AddToBlizOptions(Addon, L['SETTING_ANNOUNCES'], Addon, "announces")
+    AceConfigDialog:AddToBlizOptions(Addon, L["SETTING_NAMES"], Addon, "names")
+    AceConfigDialog:AddToBlizOptions(Addon, L["SETTING_SOUNDS"], Addon, "sounds")
     AceConfigDialog:AddToBlizOptions(Addon, L["SETTING_PROFILES"], Addon, "profile")
 
     AceConfigDialog:SetDefaultSize(Addon, 895, 570)
