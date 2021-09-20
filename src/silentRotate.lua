@@ -172,7 +172,7 @@ end
 -- Sends rotation setup to raid channel
 function SilentRotate:printRotationSetup()
 
-    if (IsInRaid()) then
+    if (IsInRaid() or SilentRotate.testMode) then
         SilentRotate:sendRotationSetupBroacastMessage('--- ' .. SilentRotate.constants.printPrefix .. SilentRotate:getBroadcastHeaderText() .. ' ---', channel)
 
         if (SilentRotate.db.profile.useMultilineRotationReport) then

@@ -130,7 +130,7 @@ function SilentRotate:getBroadcastHeaderText()
     local mode = self:getMode()
 
     if mode and type(mode.modeName) == 'string' then
-        return L['BROADCAST_HEADER_TEXT_'..mode.modeNameUpper]
+        return string.format(L['BROADCAST_HEADER_TEXT'], L[mode.modeNameUpper.."_MODE_FULL_NAME"])
     end
 
     return ''
