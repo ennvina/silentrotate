@@ -287,5 +287,7 @@ for modeName, mode in pairs(SilentRotate.modes) do
     mode.modeName = modeName
     mode.modeNameUpper = modeName:upper()
     mode.modeNameFirstUpper = modeName:gsub("^%l", string.upper)
-    SilentRotate.backwardCompatibilityModeMap[mode.oldModeName] = modeName
+    if type(mode.oldModeName) == 'string' then
+        SilentRotate.backwardCompatibilityModeMap[mode.oldModeName] = modeName
+    end
 end
