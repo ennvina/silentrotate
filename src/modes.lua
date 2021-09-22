@@ -59,7 +59,7 @@ function SilentRotate:isPlayerWanted(unit, className, modeName)
             return false
         elseif type(mode.wanted) == 'function' then
             local raceName = select(2,UnitRace(unit))
-            return mode.wanted(className, raceName)
+            return mode.wanted(mode, className, raceName)
         end
     end
 
