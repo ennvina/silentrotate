@@ -10,7 +10,7 @@ function SilentRotate:getMode(modeName)
     end
 
     if modeName and modeName:sub(-1) == 'z' then -- All old mode names end with 'z'
-        modeName = SilentRotate.backwardCompatibilityModeMap[modeName]
+        modeName = SilentRotate.backwardCompatibilityModeMap[modeName] or modeName
     end
 
     -- return the mode object, or TranqShot as the default mode if no mode is set
@@ -59,7 +59,7 @@ function SilentRotate:isPlayerWanted(unit, className, modeName)
             return false
         elseif type(mode.wanted) == 'function' then
             local raceName = select(2,UnitRace(unit))
-            return mode.wanted(className, raceName)
+            return mode.wanted(mode, className, raceName)
         end
     end
 
@@ -302,6 +302,23 @@ SilentRotate.modes = {
         customTargetName = function(self, hunter, targetName) return string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup or 0) end,
         announceArg = function(self, hunter, destName) return hunter.subgroup or 0 end,
         metadata = { groundingTotemEffectName = GetSpellInfo(8178) }, -- The buff is the name from spellId+1, not from spellId
+    },
+
+    brez = {
+        project = true,
+        default = false,
+        wanted = 'DRUID',
+        cooldown = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 1800 or 1200,
+        -- effectDuration = nil,
+        canFail = false,
+        spell = GetSpellInfo(20484), -- Rebirth Rank 1
+        -- auraTest = nil,
+        -- customCombatlogFunc = nil,
+        targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
+        -- buffName = nil,
+        -- buffCanReturn = nil,
+        -- customTargetName = nil,
+        announceArg = function(self, hunter, destName) return destName end,
     },
 }
 
