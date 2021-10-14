@@ -2,7 +2,7 @@
 ## Title: SilentRotate |cff88aaff0.7.1-beta|r
 ## Notes: Track spell rotation in raid
 ## Author: Vinny
-## Version: 0.7.1-beta
+## Version: 0.8.0-beta
 ## SavedVariables: SilentRotateDb
 ## OptionalDeps: Ace3
 
