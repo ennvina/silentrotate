@@ -33,8 +33,76 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
     -- Avoid parsing combat log when outside instance if test mode isn't enabled
     if not self.testMode and not IsInInstance() then return end
 
+    -- All events have these
     local timestamp, event, _, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags = CombatLogGetCurrentEventInfo()
-    local spellId, spellName, spellSchool, amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing, isOffHand = select(12, CombatLogGetCurrentEventInfo())
+
+    -- Spells and environment have additional info
+    local spellId, spellName, spellSchool
+    local environmentalType
+
+    -- Damage events have these
+    local amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing, isOffHand
+    -- Other events may have some of the above (damage) or some of the below
+    local missType, amountMissed, overhealing, absorbed, overEnergize, powerType, alternatePowerType, auraType, failedType
+    local extraGUID, extraName, extraFlags, extraRaidFlags, extraSpellID, extraSpellName, extraSchool, extraAmount
+
+    -- Special events
+    local itemID, itemName, recapID, unconsciousOnDeath
+
+    -- Analyze prefix
+    local prefixOffset = 12
+    local suffixOffset = 12
+    if event:sub(0,5) == "SPELL" or event == "DAMAGE_SPLIT" or event == "DAMAGE_SHIELD" or event == "DAMAGE_SHIELD_MISSED" then
+        spellId, spellName, spellSchool = select(prefixOffset, CombatLogGetCurrentEventInfo())
+        suffixOffset = prefixOffset+3
+    elseif event:sub(0,13) == "ENVIRONMENTAL" then
+        environmentalType = select(prefixOffset, CombatLogGetCurrentEventInfo())
+        suffixOffset = prefixOffset+1
+    end
+
+    -- Analyze suffix
+    if     event:sub(-7) == "_DAMAGE"
+        or event == "DAMAGE_SPLIT"
+        or event == "DAMAGE_SHIELD" then
+        amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing, isOffHand = select(suffixOffset, CombatLogGetCurrentEventInfo())
+    elseif event:sub(-7) == "_MISSED" then
+        missType, isOffHand, amountMissed, critical = select(suffixOffset, CombatLogGetCurrentEventInfo())
+    elseif event:sub(-5) == "_HEAL" then
+        amount, overhealing, absorbed, critical = select(suffixOffset, CombatLogGetCurrentEventInfo())
+    elseif event:sub(-14) == "_HEAL_ABSORBED" then
+        extraGUID, extraName, extraFlags, extraRaidFlags, extraSpellID, extraSpellName, extraSchool, amount = select(suffixOffset, CombatLogGetCurrentEventInfo())
+    elseif event:sub(-9) == "_ENERGIZE" then
+        amount, overEnergize, powerType, alternatePowerType = select(suffixOffset, CombatLogGetCurrentEventInfo())
+    elseif event:sub(-6) == "_DRAIN"
+        or event:sub(-6) == "_LEECH" then
+        amount, powerType, extraAmount = select(suffixOffset, CombatLogGetCurrentEventInfo())
+    elseif event:sub(-10) == "_INTERRUPT"
+        or event:sub(-14) == "_DISPEL_FAILED" then
+        extraSpellId, extraSpellName, extraSchool = select(suffixOffset, CombatLogGetCurrentEventInfo())
+    elseif event:sub(-7) == "_DISPEL"
+        or event:sub(-7) == "_STOLEN"
+        or event:sub(-18) == "_AURA_BROKEN_SPELL" then
+        extraSpellId, extraSpellName, extraSchool, auraType = select(suffixOffset, CombatLogGetCurrentEventInfo())
+    elseif event:sub(-14) == "_EXTRA_ATTACKS" then
+        amount = select(suffixOffset, CombatLogGetCurrentEventInfo())
+    elseif event:sub(-13) == "_AURA_APPLIED"
+        or event:sub(-13) == "_AURA_REMOVED"
+        or event:sub(-18) == "_AURA_APPLIED_DOSE"
+        or event:sub(-18) == "_AURA_REMOVED_DOSE"
+        or event:sub(-13) == "_AURA_REFRESH" then
+        auraType, amount = select(suffixOffset, CombatLogGetCurrentEventInfo())
+    elseif event:sub(-12) == "_AURA_BROKEN" then
+        auraType = select(suffixOffset, CombatLogGetCurrentEventInfo())
+    elseif event:sub(-12) == "_CAST_FAILED" then
+        failedType = select(suffixOffset, CombatLogGetCurrentEventInfo())
+    end
+
+    -- Special events
+    if event == "ENCHANT_APPLIED" or event == "ENCHANT_REMOVED" then
+        spellName, itemID, itemName = select(prefixOffset, CombatLogGetCurrentEventInfo())
+    elseif event == "UNIT_DIED" or event == "UNIT_DESTROYED" or event == "UNIT_DISSIPATES" then
+        recapID, unconsciousOnDeath = select(prefixOffset, CombatLogGetCurrentEventInfo())
+    end
 
     local mode = self:getMode()
 
@@ -62,7 +130,7 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
 
     -- Custom combat log functions are possible, though extremely rare
     if type(mode.customCombatlogFunc) == 'function' then
-        mode.customCombatlogFunc(event, sourceGUID, sourceName, sourceFlags, destGUID, destName, spellId, spellName)
+        mode.customCombatlogFunc(mode, event, sourceGUID, sourceName, sourceFlags, destGUID, destName, spellId, spellName)
     end
 end
 
