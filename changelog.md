@@ -1,5 +1,9 @@
 ## SilentRotate Changelog
 
+#### v0.8.1-beta (2021-xx-yy)
+
+- Added Innervate mode
+
 #### v0.8.0-beta (2021-10-15)
 
 The code was reworked to improve performance and make it easier to maintain
