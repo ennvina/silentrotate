@@ -322,7 +322,7 @@ function SilentRotate:createCooldownFrame(hunter)
         function(self, elapsed)
             self.statusBar:SetValue(GetTime())
 
-            if (self.statusBar.expirationTime < GetTime()) then
+            if (not self.statusBar.expirationTime or self.statusBar.expirationTime < GetTime()) then
                 self:Hide()
             end
         end
