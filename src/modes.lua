@@ -212,7 +212,7 @@ SilentRotate.modes = {
         oldModeName = 'fearz',
         project = true,
         default = true,
-        wanted = function(self, className, raceName) return className == 'PRIEST' and (WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC or raceName == 'Dwarf') end,
+        wanted = 'Priest',
         cooldown = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 30 or 180,
         effectDuration = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 600 or 180,
         canFail = false,
