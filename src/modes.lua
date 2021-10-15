@@ -320,6 +320,23 @@ SilentRotate.modes = {
         -- customTargetName = nil,
         announceArg = function(self, hunter, destName) return destName end,
     },
+
+    innerv = {
+        project = true,
+        default = false,
+        wanted = 'DRUID',
+        cooldown = 360,
+        effectDuration = 20,
+        canFail = false,
+        spell = GetSpellInfo(29166),
+        -- auraTest = nil,
+        -- customCombatlogFunc = nil,
+        targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
+        buffName = function(self, spellId, spellName) return spellName end,
+        buffCanReturn = false,
+        -- customTargetName = nil,
+        announceArg = function(self, hunter, destName) return destName end,
+    },
 }
 
 -- Create a backward compatibility map between old mode names and new ones
