@@ -273,11 +273,16 @@ end
 function SilentRotate:createHunterFrame(hunter, parentFrame)
     hunter.frame = CreateFrame("Frame", nil, parentFrame)
     hunter.frame:SetHeight(SilentRotate.constants.hunterFrameHeight)
+    hunter.frame.GUID = hunter.GUID
 
     -- Set Texture
     hunter.frame.texture = hunter.frame:CreateTexture(nil, "ARTWORK")
     hunter.frame.texture:SetTexture("Interface\\AddOns\\SilentRotate\\textures\\steel.tga")
     hunter.frame.texture:SetAllPoints()
+
+    -- Tooltip
+    hunter.frame:SetScript("OnEnter", SilentRotate.onHunterEnter)
+    hunter.frame:SetScript("OnLeave", SilentRotate.onHunterLeave)
 
     -- Set Text
     hunter.frame.text = hunter.frame:CreateFontString(nil, "ARTWORK")
@@ -391,4 +396,28 @@ end
 -- Blind icon tooltip hide
 function SilentRotate:onBlindIconLeave(self, motion)
     GameTooltip:Hide()
+end
+
+-- Hunter frame tooltip show
+function SilentRotate:onHunterEnter()
+    local mode = SilentRotate:getMode()
+    if mode and mode.tooltip then
+        local tooltip
+        if type(mode.tooltip) == 'string' then
+            tooltip = mode.tooltip
+        elseif type(mode.tooltip) == 'function' then
+            local hunter = SilentRotate:getHunter(self.GUID)
+            tooltip = mode.tooltip(mode, hunter)
+        end
+        if tooltip then
+            GameTooltip:SetOwner(self, "ANCHOR_TOP")
+            GameTooltip:SetText(tooltip)
+            GameTooltip:Show()
+        end
+    end
+end
+
+-- Hunter frame tooltip hide
+function SilentRotate:onHunterLeave(self, motion)
+    GameTooltip:Hide() -- @TODO hide only if it was shown
 end
