@@ -296,12 +296,56 @@ SilentRotate.modes = {
         spell = GetSpellInfo(8177),
         -- auraTest = nil,
         -- customCombatlogFunc = nil,
+        customCombatlogFunc = function(self, event, sourceGUID, sourceName, sourceFlags, destGUID, destName, spellId, spellName)
+            if (event == "SPELL_SUMMON") and sourceGUID and sourceName and spellName == self.spell then
+                self.metadata.summons[destGUID] = {
+                    ownerGUID = sourceGUID,
+                    ownerName = sourceName,
+                    summoned = true,
+                    killedBy = nil,
+                    killedWith = nil,
+                }
+                self.metadata.summoners[sourceGUID] = destGUID
+                print(string.format("%s did summon %s", sourceName, destGUID))
+                if (event == "UNIT_DESTROYED") then
+                    print(string.format("Totem expired %s", destGUID))
+                    self.metadata.summons[destGUID].summoned = false
+                elseif event ~= "SPELL_MISSED" and sourceName and spellName then
+                    self.metadata.summons[destGUID].killedBy = sourceName
+                    if event == "SPELL_CAST_SUCCESS" then
+                        self.metadata.summons[destGUID].killedWith = spellName
+    print(string.format("%s maybe killed %s, with spell %s", sourceName, destGUID, spellName))
+else
+    print(string.format("%s maybe killed %s (no spell)", sourceName, destGUID))
+                    end
+                end
+        end,
         targetGUID = function(self, sourceGUID, destGUID) return sourceGUID end, -- Target is the caster itself
         buffName = function(self, spellId, spellName) return self.metadata.groundingTotemEffectName end, -- Buff is the totem effect
         buffCanReturn = true,
-        customTargetName = function(self, hunter, targetName) return string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup or 0) end,
+        customTargetName = function(self, hunter, targetName)
+            local totemGUID = self.metadata.summoners[hunter.GUID]
+            local totem = self.metadata.summons[totemGUID]
+            if not totemGUID or totem.summoned then
+                -- Totem still active: display the group where it belongs
+                return string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup or 0)
+            elseif totem.killedBy and totem.killedWith then
+                -- Totem destroyed by spell: display the culprit and the motive (i.e. destroyer and spell)
+                return string.format("%s (%s)", totem.killedBy, totem.killedWith)
+            elseif totem.killedBy and not totem.killedWith then
+                -- Totem destroyed not by a spell: display the culprit only
+                return totem.killedBy
+            else
+                -- Expired, display nothing
+                return ''
+            end
+        end,
         announceArg = function(self, hunter, destName) return hunter.subgroup or 0 end,
-        metadata = { groundingTotemEffectName = GetSpellInfo(8178) }, -- The buff is the name from spellId+1, not from spellId
+        metadata = {
+            groundingTotemEffectName = GetSpellInfo(8178), -- The buff is the name from spellId+1, not from spellId
+            summons = {},
+            summoners = {}
+        },
     },
 
     brez = {
