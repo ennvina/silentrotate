@@ -1,6 +1,6 @@
 ## SilentRotate Changelog
 
-#### v0.8.1-beta (2021-xx-yy)
+#### v0.8.1-beta (2021-10-22)
 
 - Added Innervate mode
 - Grounding totem now tracks which spell destroyed the totem
