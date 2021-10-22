@@ -3,6 +3,7 @@
 #### v0.8.1-beta (2021-xx-yy)
 
 - Added Innervate mode
+- Grounding totem now tracks which spell destroyed the totem
 - Window width can be changed in Settings > General
 
 #### v0.8.0-beta (2021-10-15)
