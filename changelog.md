@@ -1,5 +1,10 @@
 ## SilentRotate Changelog
 
+#### v0.8.2-beta (2021-xx-yy)
+
+- New button in the title bar to display history
+- If the window was hidden by the user, it is not reopen on startup
+
 #### v0.8.1-beta (2021-10-22)
 
 - Added Innervate mode

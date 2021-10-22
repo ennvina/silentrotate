@@ -4,6 +4,7 @@ function SilentRotate:LoadDefaults()
 	self.defaults = {
 	    profile = {
 			-- Window
+			visible = true,
 			mainFrameWidth = 150,
 
 			-- Messaging
@@ -37,6 +38,14 @@ function SilentRotate:LoadDefaults()
 			enableNextToTranqSound = true,
 			enableTranqNowSound = true,
 			tranqNowSound = 'alarm1',
+
+			-- History
+			history = {
+				visible = false,
+				width = 400,
+				height = 200,
+				modes = {},
+			},
 
 			-- Miscellaneous
 			lock = false,

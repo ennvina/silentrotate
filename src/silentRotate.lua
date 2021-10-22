@@ -42,20 +42,36 @@ end
 
 -- Apply settings
 function SilentRotate:applySettings()
+    local config = SilentRotate.db.profile
 
     SilentRotate.mainFrame:ClearAllPoints()
-
-    local config = SilentRotate.db.profile
     if config.point then
         SilentRotate.mainFrame:SetPoint(config.point, UIParent, 'BOTTOMLEFT', config.x, config.y)
     else
         SilentRotate.mainFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
     end
+    if type(config.visible) == 'boolean' and not config.visible then
+        SilentRotate.mainFrame:Hide()
+    end
+
+    SilentRotate.historyFrame:ClearAllPoints()
+    if config.history then
+        if config.history.point then
+            SilentRotate.historyFrame:SetPoint(config.history.point, UIParent, 'BOTTOMLEFT', config.history.x, config.history.y)
+        else
+            SilentRotate.historyFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
+        end
+        if type(config.history.visible) == 'boolean' and not config.history.visible then
+            SilentRotate.historyFrame:Hide()
+        end
+    end
 
     SilentRotate:updateDisplay()
 
-    SilentRotate.mainFrame:EnableMouse(not SilentRotate.db.profile.lock)
-    SilentRotate.mainFrame:SetMovable(not SilentRotate.db.profile.lock)
+    SilentRotate.mainFrame:EnableMouse(not config.lock)
+    SilentRotate.mainFrame:SetMovable(not config.lock)
+    SilentRotate.historyFrame:EnableMouse(not config.lock)
+    SilentRotate.historyFrame:SetMovable(not config.lock)
 end
 
 -- Print wrapper, just in case
@@ -152,8 +168,20 @@ function SilentRotate:toggleDisplay()
     if SilentRotate.mainFrame:IsShown() then
         SilentRotate.mainFrame:Hide()
         SilentRotate:printMessage(L['TRANQ_WINDOW_HIDDEN'])
+        SilentRotate.db.profile.visible = false
     else
         SilentRotate.mainFrame:Show()
+        SilentRotate.db.profile.visible = true
+    end
+end
+
+function SilentRotate:toggleHistory()
+    if SilentRotate.historyFrame:IsShown() then
+        SilentRotate.historyFrame:Hide()
+        SilentRotate.db.profile.history.visible = false
+    else
+        SilentRotate.historyFrame:Show()
+        SilentRotate.db.profile.history.visible = true
     end
 end
 

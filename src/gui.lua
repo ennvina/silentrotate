@@ -4,12 +4,17 @@ local L = LibStub("AceLocale-3.0"):GetLocale("SilentRotate")
 -- Initialize GUI frames. Shouldn't be called more than once
 function SilentRotate:initGui()
 
-    SilentRotate:createMainFrame()
-    SilentRotate:createTitleFrame()
-    SilentRotate:createButtons()
-    SilentRotate:createModeFrame()
-    SilentRotate:createRotationFrame()
-    SilentRotate:createBackupFrame()
+    local mainFrame = SilentRotate:createMainFrame()
+    local titleFrame = SilentRotate:createTitleFrame(mainFrame)
+    SilentRotate:createMainFrameButtons(titleFrame)
+    SilentRotate:createModeFrame(mainFrame)
+    local rotationFrame = SilentRotate:createRotationFrame(mainFrame)
+    SilentRotate:createBackupFrame(mainFrame, rotationFrame)
+
+    local historyFrame = SilentRotate:createHistoryFrame()
+    local historyTitleFrame = SilentRotate:createTitleFrame(historyFrame)
+    SilentRotate:createHistoryFrameButtons(historyTitleFrame)
+    SilentRotate:createBackgroundFrame(historyFrame, SilentRotate.constants.titleBarHeight, SilentRotate.db.profile.history.height)
 
     SilentRotate:drawHunterFrames()
     SilentRotate:createDropHintFrame()
