@@ -4,7 +4,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("SilentRotate")
 -- Create main window
 function SilentRotate:createMainFrame()
     SilentRotate.mainFrame = CreateFrame("Frame", 'mainFrame', UIParent)
-    SilentRotate.mainFrame:SetWidth(SilentRotate.constants.mainFrameWidth)
+    SilentRotate.mainFrame:SetWidth(SilentRotate.db.profile.mainFrameWidth)
     SilentRotate.mainFrame:SetHeight(SilentRotate.constants.rotationFramesBaseHeight * 2 + SilentRotate.constants.titleBarHeight + SilentRotate.constants.modeBarHeight)
     SilentRotate.mainFrame:Show()
 
@@ -119,7 +119,7 @@ function SilentRotate:createModeFrame()
     SilentRotate.mainFrame.modeFrame.texture:SetAllPoints()
 
     SilentRotate.mainFrame.modeFrames = {}
-    local commonModeWidth = SilentRotate.constants.mainFrameWidth/3
+    local commonModeWidth = SilentRotate.db.profile.mainFrameWidth/3
     modeIndex = 0
     for modeName, mode in pairs(SilentRotate.modes) do
         SilentRotate:createSingleModeFrame(modeName, L["FILTER_SHOW_"..mode.modeNameUpper], modeIndex*commonModeWidth, (modeIndex+1)*commonModeWidth, SilentRotate.db.profile.currentMode == modeName)
@@ -211,7 +211,7 @@ function SilentRotate:applyModeFrameSettings()
         SilentRotate.mainFrame.modeFrame.text:Hide()
     end
 
-    local commonModeWidth = SilentRotate.constants.mainFrameWidth/nbButtonsVisible
+    local commonModeWidth = SilentRotate.db.profile.mainFrameWidth/nbButtonsVisible
     local minX = 0
     local maxX = commonModeWidth
     local fontSize = SilentRotate.constants.modeFrameFontSize

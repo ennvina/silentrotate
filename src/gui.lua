@@ -27,6 +27,10 @@ function SilentRotate:updateDisplay()
             SilentRotate.mainFrame:Hide()
         end
     end
+
+    SilentRotate.mainFrame:SetWidth(SilentRotate.db.profile.mainFrameWidth)
+    SilentRotate.mainFrame.dropHintFrame:SetWidth(SilentRotate.db.profile.mainFrameWidth - 10)
+    SilentRotate:applyModeFrameSettings()
 end
 
 -- render / re-render hunter frames to reflect table changes.

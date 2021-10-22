@@ -18,6 +18,7 @@ L["SHOW_WHEN_TARGETING_BOSS"] = "当你的目标是一个可宁神的Boss时，�
 L["SHOW_WHEN_TARGETING_BOSS_DESC"] = "当你的目标是一个可宁神的Boss时，显示窗口"
 L["WINDOW_LOCKED"] = "SilentRotate: 窗口已隐藏"
 L["WINDOW_UNLOCKED"] = "SilentRotate: 窗口已锁定"
+L["WINDOW_WIDTH"] = "Window width"
 
 L["TEST_MODE_HEADER"] = "测试模式"
 L["ENABLE_ARCANE_SHOT_TESTING"] = "切换测试模式"
