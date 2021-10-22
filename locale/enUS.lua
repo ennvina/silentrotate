@@ -18,6 +18,7 @@ L["SHOW_WHEN_TARGETING_BOSS"] = "Show window when you target a tranq-able boss"
 L["SHOW_WHEN_TARGETING_BOSS_DESC"] = "Show window when you target a tranq-able boss"
 L["WINDOW_LOCKED"] = "SilentRotate: Window locked"
 L["WINDOW_UNLOCKED"] = "SilentRotate: Window unlocked"
+L["WINDOW_WIDTH"] = "Window width"
 
 L["TEST_MODE_HEADER"] = "Test mode"
 L["ENABLE_ARCANE_SHOT_TESTING"] = "Toggle testing mode"

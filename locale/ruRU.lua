@@ -18,6 +18,7 @@ L["SHOW_WHEN_TARGETING_BOSS"] = "Показывать окно только ес
 L["SHOW_WHEN_TARGETING_BOSS_DESC"] = "Показывать окно только если ваша цель может быть усмирена"
 L["WINDOW_LOCKED"] = "SilentRotate: Окно закреплено"
 L["WINDOW_UNLOCKED"] = "SilentRotate: Окно откреплено"
+L["WINDOW_WIDTH"] = "Window width"
 
 L["TEST_MODE_HEADER"] = "Тестовый режим"
 L["ENABLE_ARCANE_SHOT_TESTING"] = "Тестовый режим"

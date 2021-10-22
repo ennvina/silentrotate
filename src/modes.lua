@@ -163,6 +163,8 @@ SilentRotate.modes = {
         -- buffCanReturn = nil,
         -- customTargetName = nil,
         announceArg = function(self, hunter, destName) return destName end,
+        -- tooltip = nil,
+        -- metadata = nil
     },
 
     loatheb = {
@@ -188,6 +190,8 @@ SilentRotate.modes = {
         -- buffCanReturn = nil,
         -- customTargetName = nil,
         announceArg = function(self, hunter, destName) return destName end,
+        -- tooltip = nil,
+        -- metadata = nil
     },
 
     distract = {
@@ -206,6 +210,8 @@ SilentRotate.modes = {
         -- buffCanReturn = nil,
         -- customTargetName = nil,
         announceArg = function(self, hunter, destName) return destName end,
+        -- tooltip = nil,
+        -- metadata = nil
     },
 
     fearWard = {
@@ -224,6 +230,8 @@ SilentRotate.modes = {
         buffCanReturn = false,
         -- customTargetName = nil,
         announceArg = function(self, hunter, destName) return destName end,
+        -- tooltip = nil,
+        -- metadata = nil
     },
 
     aoeTaunt = {
@@ -245,6 +253,8 @@ SilentRotate.modes = {
         -- buffCanReturn = nil,
         -- customTargetName = nil,
         announceArg = function(self, hunter, destName) return destName end,
+        -- tooltip = nil,
+        -- metadata = nil
     },
 
     misdi = {
@@ -263,6 +273,8 @@ SilentRotate.modes = {
         buffCanReturn = false,
         -- customTargetName = nil,
         announceArg = function(self, hunter, destName) return destName end,
+        -- tooltip = nil,
+        -- metadata = nil
     },
 
     bloodlust = {
@@ -284,6 +296,8 @@ SilentRotate.modes = {
         buffCanReturn = false,
         customTargetName = function(self, hunter, targetName) return string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup or 0) end,
         announceArg = function(self, hunter, destName) return hunter.subgroup or 0 end,
+        -- tooltip = nil,
+        -- metadata = nil
     },
 
     grounding = {
@@ -296,12 +310,80 @@ SilentRotate.modes = {
         spell = GetSpellInfo(8177),
         -- auraTest = nil,
         -- customCombatlogFunc = nil,
+        customCombatlogFunc = function(self, event, sourceGUID, sourceName, sourceFlags, destGUID, destName, spellId, spellName)
+            if (event == "SPELL_SUMMON") and sourceGUID and sourceName and spellName == self.spell then
+                self.metadata.summons[destGUID] = {
+                    ownerGUID = sourceGUID,
+                    ownerName = sourceName,
+                    summoned = true,
+                    killedAt = nil,
+                    killedBy = nil,
+                    killedWith = nil,
+                }
+                self.metadata.summoners[sourceGUID] = destGUID
+            elseif destGUID and self.metadata.summons[destGUID] then
+                if (event == "UNIT_DESTROYED") then
+                    self.metadata.summons[destGUID].summoned = false
+                elseif sourceName and spellName then
+                    -- Check if the caster is attacking to the totem
+                    -- Because of limitations of the CombatLog, we cannot know for sure if the spell kills the totem
+                    -- But if we simplify with these conditions it should be okay:
+                    -- 1. all enemy units are supposed to be "friends" between each other
+                    -- 2. friendly fire does not happen on the totem
+                    -- 3. a mind-controlled caster or totem owner will not de-MC during the travel time of a spell
+                    local ownerName = self.metadata.summons[destGUID].ownerName
+                    local ownerHostile = not UnitIsPlayer(ownerName) or UnitIsPossessed(ownerName)
+                    local casterHostile = not UnitIsPlayer(sourceName) or UnitIsPossessed(sourceName)
+                    if ownerHostile ~= casterHostile then
+                        -- In Classic Era, only damage can kill the totem
+                        self.metadata.summons[destGUID].summoned = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and event:sub(-7) ~= "_DAMAGE"
+                        self.metadata.summons[destGUID].killedAt = GetServerTime()
+                        self.metadata.summons[destGUID].killedBy = sourceName
+                        if event:sub(0,5) == "SPELL" then
+                            self.metadata.summons[destGUID].killedWith = spellName
+                        end
+                    end
+                end
+            end
+        end,
         targetGUID = function(self, sourceGUID, destGUID) return sourceGUID end, -- Target is the caster itself
         buffName = function(self, spellId, spellName) return self.metadata.groundingTotemEffectName end, -- Buff is the totem effect
         buffCanReturn = true,
-        customTargetName = function(self, hunter, targetName) return string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup or 0) end,
+        customTargetName = function(self, hunter, targetName)
+            local totemGUID = self.metadata.summoners[hunter.GUID]
+            local totem = self.metadata.summons[totemGUID]
+            if not totemGUID or totem.summoned then
+                -- Totem still active: display the group where it belongs
+                return string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup or 0)
+            elseif totem.killedWith then
+                -- Totem destroyed by spell: display the spell name only
+                return totem.killedWith
+            elseif totem.killedBy then
+                -- Totem destroyed not by a spell: display the culprit only
+                return totem.killedBy
+            else
+                -- Expired, display nothing
+                return nil
+            end
+        end,
         announceArg = function(self, hunter, destName) return hunter.subgroup or 0 end,
-        metadata = { groundingTotemEffectName = GetSpellInfo(8178) }, -- The buff is the name from spellId+1, not from spellId
+        tooltip = function(self, hunter)
+            local totemGUID = self.metadata.summoners[hunter.GUID]
+            local totem = self.metadata.summons[totemGUID]
+            if totem and not totem.summoned and totem.killedAt and totem.killedBy then
+                if totem.killedWith then
+                    return string.format("[%s] %s (%s)", date("%H:%M:%S", totem.killedAt), totem.killedWith, totem.killedBy)
+                else
+                    return string.format("[%s] %s", date("%H:%M:%S", totem.killedAt), totem.killedBy)
+                end
+            end
+            return nil
+        end,
+        metadata = {
+            groundingTotemEffectName = GetSpellInfo(8178), -- The buff is the name from spellId+1, not from spellId
+            summons = {},
+            summoners = {}
+        },
     },
 
     brez = {
@@ -319,6 +401,8 @@ SilentRotate.modes = {
         -- buffCanReturn = nil,
         -- customTargetName = nil,
         announceArg = function(self, hunter, destName) return destName end,
+        -- tooltip = nil,
+        -- metadata = nil
     },
 
     innerv = {

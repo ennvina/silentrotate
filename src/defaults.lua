@@ -3,11 +3,14 @@ local L = LibStub("AceLocale-3.0"):GetLocale("SilentRotate")
 function SilentRotate:LoadDefaults()
 	self.defaults = {
 	    profile = {
+			-- Window
+			mainFrameWidth = 150,
+
 			-- Messaging
-	        enableAnnounces = true,
-	        channelType = "YELL",
-	        rotationReportChannelType = "RAID",
-	        useMultilineRotationReport = false,
+			enableAnnounces = true,
+			channelType = "YELL",
+			rotationReportChannelType = "RAID",
+			useMultilineRotationReport = false,
 
 			-- Modes
 			currentMode = nil, -- Will be set based on *modeButton flags at the end of this file
@@ -19,7 +22,7 @@ function SilentRotate:LoadDefaults()
 			indexPrefixColor = {SilentRotate.colors.lightCyan:GetRGB()},
 			appendGroup = false,
 			appendTarget = true,
-			appendTargetBuffOnly = true,
+			appendTargetBuffOnly = false,
 			appendTargetNoGroup = true,
 			groupSuffix = L["DEFAULT_GROUP_SUFFIX_MESSAGE"],
 			groupSuffixColor = {SilentRotate.colors.lightCyan:GetRGB()},

@@ -135,34 +135,42 @@ function SilentRotate:CreateConfig()
                         order = 9,
                         width = "full",
                     },
+                    mainFrameWidth = {
+                        name = L["WINDOW_WIDTH"],
+                        type = "range",
+                        order = 10,
+                        width = "full",
+                        min = 100,
+                        max = 300,
+                    },
                     testHeader = {
                         name = L["TEST_MODE_HEADER"],
                         type = "header",
-                        order = 10,
+                        order = 20,
                     },
                     ToggleArcaneShotTestingDesc = {
                         name = L['ENABLE_ARCANE_SHOT_TESTING_DESC'],
                         type = "description",
                         width = "full",
-                        order = 11,
+                        order = 21,
                     },
                     spacer12 = {
                         name = ' ',
                         type = "description",
                         width = "full",
-                        order = 12,
+                        order = 22,
                     },
                     ToggleArcaneShotTesting = {
                         name = L["ENABLE_ARCANE_SHOT_TESTING"],
                         type = "execute",
-                        order = 13,
+                        order = 23,
                         func = function() SilentRotate.toggleArcaneShotTesting() end
                     },
                     showBlindIcon = {
                         name = L["DISPLAY_BLIND_ICON"],
                         desc = L["DISPLAY_BLIND_ICON_DESC"],
                         type = "toggle",
-                        order = 14,
+                        order = 24,
                         width = "full",
                         set = function(info, value) set(info,value) SilentRotate:refreshBlindIcons() end
                     },
@@ -170,7 +178,7 @@ function SilentRotate:CreateConfig()
                         name = L["DISPLAY_BLIND_ICON_TOOLTIP"],
                         desc = L["DISPLAY_BLIND_ICON_TOOLTIP_DESC"],
                         type = "toggle",
-                        order = 15,
+                        order = 25,
                         width = "full",
                     },
                 }

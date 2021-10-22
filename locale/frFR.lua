@@ -18,6 +18,7 @@ L["SHOW_WHEN_TARGETING_BOSS"] = "Afficher la fenêtre principale lorsque vous ci
 L["SHOW_WHEN_TARGETING_BOSS_DESC"] = "Afficher la fenêtre principale lorsque vous ciblez un boss tranquilisable"
 L["WINDOW_LOCKED"] = "SilentRotate: Fenêtre verrouillée"
 L["WINDOW_UNLOCKED"] = "SilentRotate: Fenêtre déverrouillée"
+L["WINDOW_WIDTH"] = "Largeur de la fenêtre"
 
 L["TEST_MODE_HEADER"] = "Test mode"
 L["ENABLE_ARCANE_SHOT_TESTING"] = "Activer/désactiver le mode test"

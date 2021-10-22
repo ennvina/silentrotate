@@ -4,7 +4,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("SilentRotate")
 -- Create main window
 function SilentRotate:createMainFrame()
     SilentRotate.mainFrame = CreateFrame("Frame", 'mainFrame', UIParent)
-    SilentRotate.mainFrame:SetWidth(SilentRotate.constants.mainFrameWidth)
+    SilentRotate.mainFrame:SetWidth(SilentRotate.db.profile.mainFrameWidth)
     SilentRotate.mainFrame:SetHeight(SilentRotate.constants.rotationFramesBaseHeight * 2 + SilentRotate.constants.titleBarHeight + SilentRotate.constants.modeBarHeight)
     SilentRotate.mainFrame:Show()
 
@@ -119,7 +119,7 @@ function SilentRotate:createModeFrame()
     SilentRotate.mainFrame.modeFrame.texture:SetAllPoints()
 
     SilentRotate.mainFrame.modeFrames = {}
-    local commonModeWidth = SilentRotate.constants.mainFrameWidth/3
+    local commonModeWidth = SilentRotate.db.profile.mainFrameWidth/3
     modeIndex = 0
     for modeName, mode in pairs(SilentRotate.modes) do
         SilentRotate:createSingleModeFrame(modeName, L["FILTER_SHOW_"..mode.modeNameUpper], modeIndex*commonModeWidth, (modeIndex+1)*commonModeWidth, SilentRotate.db.profile.currentMode == modeName)
@@ -211,7 +211,7 @@ function SilentRotate:applyModeFrameSettings()
         SilentRotate.mainFrame.modeFrame.text:Hide()
     end
 
-    local commonModeWidth = SilentRotate.constants.mainFrameWidth/nbButtonsVisible
+    local commonModeWidth = SilentRotate.db.profile.mainFrameWidth/nbButtonsVisible
     local minX = 0
     local maxX = commonModeWidth
     local fontSize = SilentRotate.constants.modeFrameFontSize
@@ -273,11 +273,16 @@ end
 function SilentRotate:createHunterFrame(hunter, parentFrame)
     hunter.frame = CreateFrame("Frame", nil, parentFrame)
     hunter.frame:SetHeight(SilentRotate.constants.hunterFrameHeight)
+    hunter.frame.GUID = hunter.GUID
 
     -- Set Texture
     hunter.frame.texture = hunter.frame:CreateTexture(nil, "ARTWORK")
     hunter.frame.texture:SetTexture("Interface\\AddOns\\SilentRotate\\textures\\steel.tga")
     hunter.frame.texture:SetAllPoints()
+
+    -- Tooltip
+    hunter.frame:SetScript("OnEnter", SilentRotate.onHunterEnter)
+    hunter.frame:SetScript("OnLeave", SilentRotate.onHunterLeave)
 
     -- Set Text
     hunter.frame.text = hunter.frame:CreateFontString(nil, "ARTWORK")
@@ -391,4 +396,28 @@ end
 -- Blind icon tooltip hide
 function SilentRotate:onBlindIconLeave(self, motion)
     GameTooltip:Hide()
+end
+
+-- Hunter frame tooltip show
+function SilentRotate:onHunterEnter()
+    local mode = SilentRotate:getMode()
+    if mode and mode.tooltip then
+        local tooltip
+        if type(mode.tooltip) == 'string' then
+            tooltip = mode.tooltip
+        elseif type(mode.tooltip) == 'function' then
+            local hunter = SilentRotate:getHunter(self.GUID)
+            tooltip = mode.tooltip(mode, hunter)
+        end
+        if tooltip then
+            GameTooltip:SetOwner(self, "ANCHOR_TOP")
+            GameTooltip:SetText(tooltip)
+            GameTooltip:Show()
+        end
+    end
+end
+
+-- Hunter frame tooltip hide
+function SilentRotate:onHunterLeave(self, motion)
+    GameTooltip:Hide() -- @TODO hide only if it was shown
 end
