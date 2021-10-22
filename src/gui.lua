@@ -221,7 +221,6 @@ function SilentRotate:setHunterName(hunter)
     end
 
     if showTarget then
-        newText = newText..SilentRotate.colors['white']:WrapTextInColorCode(" > ")
         local targetColorName
         if      targetMode == 'buff_expired' then   targetColorName = 'darkGray'
         elseif  targetMode == 'buff_lost' then      targetColorName = 'lightRed'
@@ -232,7 +231,10 @@ function SilentRotate:setHunterName(hunter)
         if type(mode.customTargetName) == 'function' then
             targetName = mode.customTargetName(mode, hunter, targetName)
         end
-        newText = newText..SilentRotate.colors[targetColorName]:WrapTextInColorCode(targetName)
+        if targetName then
+            newText = newText..SilentRotate.colors['white']:WrapTextInColorCode(" > ")
+            newText = newText..SilentRotate.colors[targetColorName]:WrapTextInColorCode(targetName)
+        end
     end
 
     if (newFont ~= currentFont or newOutline ~= currentOutline) then

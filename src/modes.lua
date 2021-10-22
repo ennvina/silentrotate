@@ -337,7 +337,7 @@ else
                 return totem.killedBy
             else
                 -- Expired, display nothing
-                return ''
+                return nil
             end
         end,
         announceArg = function(self, hunter, destName) return hunter.subgroup or 0 end,
