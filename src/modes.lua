@@ -342,10 +342,10 @@ SilentRotate.modes = {
             if not totemGUID or totem.summoned then
                 -- Totem still active: display the group where it belongs
                 return string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup or 0)
-            elseif totem.killedBy and totem.killedWith then
-                -- Totem destroyed by spell: display the culprit and the motive (i.e. destroyer and spell)
-                return string.format("%s (%s)", totem.killedBy, totem.killedWith)
-            elseif totem.killedBy and not totem.killedWith then
+            elseif totem.killedWith then
+                -- Totem destroyed by spell: display the spell name only
+                return totem.killedWith
+            elseif totem.killedBy then
                 -- Totem destroyed not by a spell: display the culprit only
                 return totem.killedBy
             else
