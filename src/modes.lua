@@ -302,23 +302,36 @@ SilentRotate.modes = {
                     ownerGUID = sourceGUID,
                     ownerName = sourceName,
                     summoned = true,
+                    killedAt = nil,
                     killedBy = nil,
                     killedWith = nil,
                 }
                 self.metadata.summoners[sourceGUID] = destGUID
-                print(string.format("%s did summon %s", sourceName, destGUID))
+            elseif destGUID and self.metadata.summons[destGUID] then
                 if (event == "UNIT_DESTROYED") then
-                    print(string.format("Totem expired %s", destGUID))
                     self.metadata.summons[destGUID].summoned = false
-                elseif event ~= "SPELL_MISSED" and sourceName and spellName then
-                    self.metadata.summons[destGUID].killedBy = sourceName
-                    if event == "SPELL_CAST_SUCCESS" then
-                        self.metadata.summons[destGUID].killedWith = spellName
-    print(string.format("%s maybe killed %s, with spell %s", sourceName, destGUID, spellName))
-else
-    print(string.format("%s maybe killed %s (no spell)", sourceName, destGUID))
+                elseif sourceName and spellName then
+                    -- Check if the caster is attacking to the totem
+                    -- Because of limitations of the CombatLog, we cannot know for sure if the spell kills the totem
+                    -- But if we simplify with these conditions it should be okay:
+                    -- 1. a mob will not try to heal/buff the totem
+                    -- 2. all enemy units are supposed to be "friends" between each other
+                    -- 3. friendly fire does not happen on the totem
+                    -- 4. a mind-controlled caster or totem owner will de-MC during the travel time of a spell cast
+                    local ownerName = self.metadata.summons[destGUID].ownerName
+                    local ownerHostile = not UnitIsPlayer(ownerName) or UnitIsPossessed(ownerName)
+                    local casterHostile = not UnitIsPlayer(sourceName) or UnitIsPossessed(sourceName)
+                    if ownerHostile ~= casterHostile then
+                        -- In Classic Era, only damage can kill the totem
+                        self.metadata.summons[destGUID].summoned = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and event:sub(-7) ~= "_DAMAGE"
+                        self.metadata.summons[destGUID].killedAt = GetTime()
+                        self.metadata.summons[destGUID].killedBy = sourceName
+                        if event:sub(0,5) == "SPELL" then
+                            self.metadata.summons[destGUID].killedWith = spellName
+                        end
                     end
                 end
+            end
         end,
         targetGUID = function(self, sourceGUID, destGUID) return sourceGUID end, -- Target is the caster itself
         buffName = function(self, spellId, spellName) return self.metadata.groundingTotemEffectName end, -- Buff is the totem effect
