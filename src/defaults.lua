@@ -22,7 +22,7 @@ function SilentRotate:LoadDefaults()
 			indexPrefixColor = {SilentRotate.colors.lightCyan:GetRGB()},
 			appendGroup = false,
 			appendTarget = true,
-			appendTargetBuffOnly = true,
+			appendTargetBuffOnly = false,
 			appendTargetNoGroup = true,
 			groupSuffix = L["DEFAULT_GROUP_SUFFIX_MESSAGE"],
 			groupSuffixColor = {SilentRotate.colors.lightCyan:GetRGB()},
