@@ -34,7 +34,7 @@ function SilentRotate:createHistoryFrame()
     local historyFrame = CreateFrame("Frame", 'mainFrame', UIParent)
 
     historyFrame:SetWidth(SilentRotate.db.profile.history.width)
-    historyFrame:SetHeight(SilentRotate.db.profile.history.height+SilentRotate.constants.titleBarHeight)
+    historyFrame:SetHeight(SilentRotate.db.profile.history.height)
     historyFrame:Show()
 
     historyFrame:RegisterForDrag("LeftButton")
@@ -44,13 +44,14 @@ function SilentRotate:createHistoryFrame()
     historyFrame:SetScript(
         "OnDragStop",
         function()
-            local config = SilentRotate.db.profile
             historyFrame:StopMovingOrSizing()
 
-            if (not config.history) then config.history = {} end
-            config.history.point = 'TOPLEFT'
-            config.history.y = historyFrame:GetTop()
-            config.history.x = historyFrame:GetLeft()
+            local config = SilentRotate.db.profile
+            if config.history then
+                config.history.point = 'TOPLEFT'
+                config.history.y = historyFrame:GetTop()
+                config.history.x = historyFrame:GetLeft()
+            end
         end
     )
 
@@ -60,7 +61,7 @@ end
 
 -- Create Title frame
 function SilentRotate:createTitleFrame(baseFrame)
-    titleFrame = CreateFrame("Frame", 'rotationFrame', baseFrame)
+    local titleFrame = CreateFrame("Frame", 'rotationFrame', baseFrame)
     titleFrame:SetPoint('TOPLEFT')
     titleFrame:SetPoint('TOPRIGHT')
     titleFrame:SetHeight(SilentRotate.constants.titleBarHeight)
@@ -79,6 +80,32 @@ function SilentRotate:createTitleFrame(baseFrame)
 
     baseFrame.titleFrame = titleFrame
     return titleFrame
+end
+
+-- Create resize frame
+function SilentRotate:createResizer(baseFrame)
+    baseFrame:SetResizable(true)
+
+    local resizer = CreateFrame("Button", nil, baseFrame, "PanelResizeButtonTemplate")
+
+    resizer:SetPoint("BOTTOMRIGHT")
+
+    local minWidth = 100
+    local minHeight = 50
+    local maxWidth = 500
+    local maxHeight = 500
+    resizer:Init(baseFrame, minWidth, minHeight, maxWidth, maxHeight)
+
+    resizer:SetOnResizeStoppedCallback(function(frame)
+        local config = SilentRotate.db.profile
+        if config.history then
+            config.history.width = frame:GetWidth()
+            config.history.height = frame:GetHeight()
+        end
+    end)
+
+    baseFrame.resizer = resizer
+    return resizer
 end
 
 -- Create title bar buttons for main frame
@@ -167,7 +194,7 @@ end
 
 -- Create Mode frame
 function SilentRotate:createModeFrame(baseFrame)
-    modeFrame = CreateFrame("Frame", 'modeFrame', baseFrame)
+    local modeFrame = CreateFrame("Frame", 'modeFrame', baseFrame)
     modeFrame:SetPoint('LEFT')
     modeFrame:SetPoint('RIGHT')
     modeFrame:SetPoint('TOP', 0, -SilentRotate.constants.titleBarHeight)
@@ -302,14 +329,17 @@ function SilentRotate:applyModeFrameSettings()
 end
 
 -- Create background frame
-function SilentRotate:createBackgroundFrame(baseFrame, offsetY, height, frameName)
+function SilentRotate:createBackgroundFrame(baseFrame, offsetY, height, noAnchorBottom, frameName)
     if not frameName then frameName = 'backgroundFrame' end
 
     backgroundFrame = CreateFrame("Frame", frameName, baseFrame)
     backgroundFrame:SetPoint('LEFT')
     backgroundFrame:SetPoint('RIGHT')
     backgroundFrame:SetPoint('TOP', 0, -offsetY)
-    backgroundFrame:SetHeight(height)
+    if not noAnchorBottom then
+        backgroundFrame:SetPoint('BOTTOM')
+    end
+    backgroundFrame:SetHeight(height-offsetY)
 
     backgroundFrame.texture = backgroundFrame:CreateTexture(nil, "BACKGROUND")
     backgroundFrame.texture:SetColorTexture(0,0,0,0.5)
@@ -323,13 +353,14 @@ end
 function SilentRotate:createRotationFrame(baseFrame)
     local offsetY = SilentRotate.constants.titleBarHeight+SilentRotate.constants.modeBarHeight
     local height = SilentRotate.constants.rotationFramesBaseHeight
-    return SilentRotate:createBackgroundFrame(baseFrame, offsetY, height, 'rotationFrame')
+    local noAnchorBottom = true
+    return SilentRotate:createBackgroundFrame(baseFrame, offsetY, height, noAnchorBottom, 'rotationFrame')
 end
 
 -- Create backup frame
 function SilentRotate:createBackupFrame(baseFrame, rotationFrame)
     -- Backup frame
-    backupFrame = CreateFrame("Frame", 'backupFrame', baseFrame)
+    local backupFrame = CreateFrame("Frame", 'backupFrame', baseFrame)
     backupFrame:SetPoint('TOPLEFT', rotationFrame, 'BOTTOMLEFT', 0, 0)
     backupFrame:SetPoint('TOPRIGHT', rotationFrame, 'BOTTOMRIGHT', 0, 0)
     backupFrame:SetHeight(SilentRotate.constants.rotationFramesBaseHeight)

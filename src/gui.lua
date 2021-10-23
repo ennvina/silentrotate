@@ -15,6 +15,7 @@ function SilentRotate:initGui()
     local historyTitleFrame = SilentRotate:createTitleFrame(historyFrame)
     SilentRotate:createHistoryFrameButtons(historyTitleFrame)
     SilentRotate:createBackgroundFrame(historyFrame, SilentRotate.constants.titleBarHeight, SilentRotate.db.profile.history.height)
+    SilentRotate:createResizer(historyFrame)
 
     SilentRotate:drawHunterFrames()
     SilentRotate:createDropHintFrame()
