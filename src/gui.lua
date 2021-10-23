@@ -172,10 +172,12 @@ function SilentRotate:setHunterName(hunter)
     if (SilentRotate.db.profile.useClassColor) then
         local _, _classFilename, _ = UnitClass(hunter.name)
         if (_classFilename) then
-            if (_classFilename == "PRIEST") then
+            if _classFilename == "PRIEST" then
                 shadowOpacity = 1.0
-            elseif (_classFilename == "ROGUE" or _classFilename == "PALADIN") then
+            elseif _classFilename == "ROGUE" or _classFilename == "PALADIN" then
                 shadowOpacity = 0.8
+            elseif _classFilename == "SHAMAN" then
+                shadowOpacity = 0.4
             else
                 shadowOpacity = 0.6
             end
