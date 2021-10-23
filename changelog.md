@@ -4,6 +4,7 @@
 
 - New button in the title bar to display history
 - If the window was hidden by the user, it is not reopen on startup
+- Window width is changed by a resizer in the window instead of settings
 
 #### v0.8.1-beta (2021-10-22)
 

@@ -82,8 +82,8 @@ function SilentRotate:createTitleFrame(baseFrame)
     return titleFrame
 end
 
--- Create resize frame
-function SilentRotate:createResizer(baseFrame)
+-- Create resizer for width and height
+function SilentRotate:createCornerResizer(baseFrame)
     baseFrame:SetResizable(true)
 
     local resizer = CreateFrame("Button", nil, baseFrame, "PanelResizeButtonTemplate")
@@ -102,6 +102,80 @@ function SilentRotate:createResizer(baseFrame)
             config.history.width = frame:GetWidth()
             config.history.height = frame:GetHeight()
         end
+    end)
+
+    baseFrame.resizer = resizer
+    return resizer
+end
+
+-- Create resizers for width only
+function SilentRotate:createHorizontalResizer(baseFrame, backgroundFrame)
+    baseFrame:SetResizable(true)
+
+    local resizer = CreateFrame("Frame", nil, baseFrame, BackdropTemplateMixin and "BackdropTemplate" or nil)
+
+    resizer:SetPoint("RIGHT")
+
+    resizer:SetWidth(8)
+
+    resizer:SetPoint("TOP", baseFrame.rotationFrame or baseFrame, "TOPRIGHT")
+    if baseFrame.backupFrame and baseFrame.backupFrame:IsVisible() then
+        resizer:SetPoint("BOTTOM", baseFrame.backupFrame, "BOTTOMRIGHT")
+    else
+        resizer:SetPoint("BOTTOM", baseFrame.rotationFrame or baseFrame, "BOTTOMRIGHT")
+    end
+    if baseFrame.backupFrame then
+        baseFrame.backupFrame:SetScript("OnShow", function(frame)
+            resizer:SetPoint("BOTTOM", baseFrame.backupFrame, "BOTTOMRIGHT")
+        end)
+        baseFrame.backupFrame:SetScript("OnHide", function(frame)
+            resizer:SetPoint("BOTTOM", baseFrame.rotationFrame or baseFrame, "BOTTOMRIGHT")
+        end)
+    end
+
+    resizer:SetBackdrop({
+        bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+        edgeFile = nil,
+        tile = true, tileSize = 16, edgeSize = 1,
+        insets = { left = 3, right = 3, top = 7, bottom = 7 }
+    })
+    resizer:SetBackdropColor(1, 1, 1, 0)
+
+    resizer:SetScript("OnEnter", function(frame)
+        frame:SetBackdropColor(1, 1, 1, 0.8)
+    end)
+
+    resizer:SetScript("OnLeave", function(frame)
+        frame:SetBackdropColor(1, 1, 1, 0)
+    end)
+
+    resizer:SetScript("OnMouseDown", function(frame)
+        baseFrame:StartSizing("RIGHT")
+    end)
+
+    resizer:SetScript("OnMouseUp", function(frame)
+        baseFrame:StopMovingOrSizing()
+
+        local config = SilentRotate.db.profile
+        config.mainFrameWidth = baseFrame:GetWidth()
+    end)
+
+    local minWidth = 100
+    local maxWidth = 500
+
+    baseFrame:SetScript("OnSizeChanged", function(frame, width, height)
+        if width < minWidth then
+            width = minWidth
+            baseFrame:SetWidth(width)
+        elseif width > maxWidth then
+            width = maxWidth
+            baseFrame:SetWidth(width)
+        end
+
+        if baseFrame.dropHintFrame then
+            baseFrame.dropHintFrame:SetWidth(width - 10)
+        end
+        SilentRotate:applyModeFrameSettings(width)
     end)
 
     baseFrame.resizer = resizer
@@ -261,7 +335,7 @@ function SilentRotate:createSingleModeFrame(baseFrame, modeName, text, minX, max
 end
 
 -- Setup mode frame appearance, based on user-defined settings
-function SilentRotate:applyModeFrameSettings()
+function SilentRotate:applyModeFrameSettings(width)
     local modeFrameMapping = {}
     for modeName, mode in pairs(SilentRotate.modes) do
         table.insert(modeFrameMapping, {
@@ -304,7 +378,7 @@ function SilentRotate:applyModeFrameSettings()
         modeFrameText:Hide()
     end
 
-    local commonModeWidth = SilentRotate.db.profile.mainFrameWidth/nbButtonsVisible
+    local commonModeWidth = (width or SilentRotate.db.profile.mainFrameWidth)/nbButtonsVisible
     local minX = 0
     local maxX = commonModeWidth
     local fontSize = SilentRotate.constants.modeFrameFontSize

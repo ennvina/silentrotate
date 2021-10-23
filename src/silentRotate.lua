@@ -70,6 +70,7 @@ function SilentRotate:applySettings()
 
     SilentRotate.mainFrame:EnableMouse(not config.lock)
     SilentRotate.mainFrame:SetMovable(not config.lock)
+    SilentRotate.mainFrame.resizer:SetShown(not config.lock)
     SilentRotate.historyFrame:EnableMouse(not config.lock)
     SilentRotate.historyFrame:SetMovable(not config.lock)
     SilentRotate.historyFrame.resizer:SetShown(not config.lock)

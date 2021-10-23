@@ -135,14 +135,6 @@ function SilentRotate:CreateConfig()
                         order = 9,
                         width = "full",
                     },
-                    mainFrameWidth = {
-                        name = L["WINDOW_WIDTH"],
-                        type = "range",
-                        order = 10,
-                        width = "full",
-                        min = 100,
-                        max = 300,
-                    },
                     testHeader = {
                         name = L["TEST_MODE_HEADER"],
                         type = "header",

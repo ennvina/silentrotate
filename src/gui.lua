@@ -10,12 +10,13 @@ function SilentRotate:initGui()
     SilentRotate:createModeFrame(mainFrame)
     local rotationFrame = SilentRotate:createRotationFrame(mainFrame)
     SilentRotate:createBackupFrame(mainFrame, rotationFrame)
+    SilentRotate:createHorizontalResizer(mainFrame)
 
     local historyFrame = SilentRotate:createHistoryFrame()
     local historyTitleFrame = SilentRotate:createTitleFrame(historyFrame)
     SilentRotate:createHistoryFrameButtons(historyTitleFrame)
     SilentRotate:createBackgroundFrame(historyFrame, SilentRotate.constants.titleBarHeight, SilentRotate.db.profile.history.height)
-    SilentRotate:createResizer(historyFrame)
+    SilentRotate:createCornerResizer(historyFrame)
 
     SilentRotate:drawHunterFrames()
     SilentRotate:createDropHintFrame()
@@ -25,7 +26,6 @@ end
 
 -- Show/Hide main window based on user settings
 function SilentRotate:updateDisplay()
-
     if (SilentRotate:isInPveRaid()) then
         SilentRotate.mainFrame:Show()
     else
@@ -33,10 +33,6 @@ function SilentRotate:updateDisplay()
             SilentRotate.mainFrame:Hide()
         end
     end
-
-    SilentRotate.mainFrame:SetWidth(SilentRotate.db.profile.mainFrameWidth)
-    SilentRotate.mainFrame.dropHintFrame:SetWidth(SilentRotate.db.profile.mainFrameWidth - 10)
-    SilentRotate:applyModeFrameSettings()
 end
 
 -- render / re-render hunter frames to reflect table changes.
