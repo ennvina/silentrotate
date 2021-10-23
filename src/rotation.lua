@@ -23,7 +23,8 @@ function SilentRotate:registerHunter(hunterName)
         table.insert(SilentRotate.rotationTables.rotation, hunter)
     end
 
-    SilentRotate:drawHunterFrames()
+    -- @TODO apply only to the relevant mainFrame
+    SilentRotate:drawHunterFramesOfAllMainFrames()
 
     return hunter
 end
@@ -49,7 +50,8 @@ function SilentRotate:removeHunter(deletedHunter)
         end
     end
 
-    SilentRotate:drawHunterFrames()
+    -- @TODO apply only to the relevant mainFrame
+    SilentRotate:drawHunterFramesOfAllMainFrames()
 end
 
 -- Update the rotation list once a tranq has been done.
@@ -271,7 +273,8 @@ function SilentRotate:purgeHunterList()
             SilentRotate:unregisterUnitEvents(hunter)
             SilentRotate:removeHunter(hunter)
         end
-        SilentRotate:drawHunterFrames()
+        -- @TODO apply only to the relevant mainFrame
+        SilentRotate:drawHunterFramesOfAllMainFrames()
     end
 
 end
@@ -409,7 +412,8 @@ function SilentRotate:moveHunter(hunter, group, position)
         table.insert(destinationTable, finalIndex, hunter)
     end
 
-    SilentRotate:drawHunterFrames()
+    -- @TODO apply only to the relevant mainFrame
+    SilentRotate:drawHunterFramesOfAllMainFrames()
 end
 
 -- Find the table that contains given hunter (rotation or backup)

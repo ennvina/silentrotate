@@ -159,26 +159,52 @@ end
 --SlashCmdList["SR"] = SlashCmdList["SILENTROTATE"]
 
 function SilentRotate:showDisplay()
-    if not SilentRotate.mainFrame:IsShown() then
-        SilentRotate.mainFrame:Show()
+    for _, mainFrame in pairs(SilentRotate.mainFrames) do
+        if not mainFrame:IsShown() then
+            mainFrame:Show()
+            SilentRotate.db.profile.windows[mainFrame.windowIndex].visible = true
+        end
     end
 end
 
 function SilentRotate:hideDisplay()
-    if SilentRotate.mainFrame:IsShown() then
-        SilentRotate.mainFrame:Hide()
-        SilentRotate:printMessage(L['TRANQ_WINDOW_HIDDEN'])
+    for _, mainFrame in pairs(SilentRotate.mainFrames) do
+        local somethingWasHidden = false
+        if mainFrame:IsShown() then
+            mainFrame:Hide()
+            SilentRotate.db.profile.windows[mainFrame.windowIndex].visible = false
+            somethingWasHidden = true
+        end
+        if somethingWasHidden then
+            SilentRotate:printMessage(L['TRANQ_WINDOW_HIDDEN'])
+        end
     end
 end
 
+-- If all main frames are hidden, show them all
+-- Otherwise hide the frames that are visible
 function SilentRotate:toggleDisplay()
-    if SilentRotate.mainFrame:IsShown() then
-        SilentRotate.mainFrame:Hide()
+    local everythingHidden = true
+    for _, mainFrame in pairs(SilentRotate.mainFrames) do
+        if mainFrame:IsShown() then
+            everythingHidden = false
+            break
+        end
+    end
+
+    if everythingHidden then
+        for _, mainFrame in pairs(SilentRotate.mainFrames) do
+            mainFrame:Show()
+            SilentRotate.db.profile.windows[mainFrame.windowIndex].visible = true
+        end
+    else 
+        for _, mainFrame in pairs(SilentRotate.mainFrames) do
+            if mainFrame:IsShown() then
+                mainFrame:Hide()
+                SilentRotate.db.profile.windows[mainFrame.windowIndex].visible = false
+            end
+        end
         SilentRotate:printMessage(L['TRANQ_WINDOW_HIDDEN'])
-        SilentRotate.db.profile.visible = false
-    else
-        SilentRotate.mainFrame:Show()
-        SilentRotate.db.profile.visible = true
     end
 end
 

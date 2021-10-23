@@ -29,7 +29,6 @@ function SilentRotate:createMainFrame()
 
     if not SilentRotate.mainFrames then
         SilentRotate.mainFrames = { mainFrame }
-        SilentRotate.mainFrame = mainFrame
     else
         table.insert(SilentRotate.mainFrames, mainFrame)
         SilentRotate.db.profile.windows[windowIndex] = SilentRotate.db.profile.windows[1]
@@ -196,7 +195,7 @@ function SilentRotate:createHorizontalResizer(baseFrame, windowConfig, side, bac
             if baseFrame.dropHintFrame then
                 baseFrame.dropHintFrame:SetWidth(width - 10)
                 -- Hack: we know mode frame settings must be re-applied when there is a drophint
-                SilentRotate:applyModeFrameSettings(width)
+                SilentRotate:applyModeFrameSettings(baseFrame, width)
             end
         end)
 
@@ -314,7 +313,7 @@ function SilentRotate:createModeFrame(baseFrame)
         SilentRotate:createSingleModeFrame(baseFrame, modeName, L["FILTER_SHOW_"..mode.modeNameUpper], modeIndex*commonModeWidth, (modeIndex+1)*commonModeWidth, SilentRotate.db.profile.currentMode == modeName)
         modeIndex = modeIndex+1
     end
-    SilentRotate:applyModeFrameSettings()
+    SilentRotate:applyModeFrameSettings(baseFrame)
 
     return modeFrame
 end
@@ -350,7 +349,7 @@ function SilentRotate:createSingleModeFrame(baseFrame, modeName, text, minX, max
     modeFrame:SetScript(
         "OnMouseDown",
         function()
-            SilentRotate:activateMode(modeName)
+            SilentRotate:activateMode(modeName, baseFrame)
             SilentRotate:updateRaidStatus()
             SilentRotate:resetRotation()
             SilentRotate:sendSyncOrderRequest()
@@ -363,7 +362,7 @@ function SilentRotate:createSingleModeFrame(baseFrame, modeName, text, minX, max
 end
 
 -- Setup mode frame appearance, based on user-defined settings
-function SilentRotate:applyModeFrameSettings(width)
+function SilentRotate:applyModeFrameSettings(mainFrame, width)
     local modeFrameMapping = {}
     for modeName, mode in pairs(SilentRotate.modes) do
         table.insert(modeFrameMapping, {
@@ -380,24 +379,24 @@ function SilentRotate:applyModeFrameSettings(width)
         if (isVisible) then nbButtonsVisible = nbButtonsVisible+1 end
     end
 
-    local modeFrameText = SilentRotate.mainFrame.modeFrame and SilentRotate.mainFrame.modeFrame.text
+    local modeFrameText = mainFrame.modeFrame and mainFrame.modeFrame.text
     if (nbButtonsVisible == 0) then
         -- Special case: no buttons visible
         if (not modeFrameText) then
-            modeFrameText = SilentRotate.mainFrame.modeFrame:CreateFontString(nil, "ARTWORK")
+            modeFrameText = mainFrame.modeFrame:CreateFontString(nil, "ARTWORK")
             modeFrameText:SetPoint("LEFT",2,0)
             modeFrameText:SetTextColor(1,1,1,1)
             modeFrameText:SetFont("Fonts\\ARIALN.ttf", 11)
             modeFrameText:SetShadowColor(0,0,0,0.5)
             modeFrameText:SetShadowOffset(1,-1)
-            SilentRotate.mainFrame.modeFrame.text = modeFrameText
+            mainFrame.modeFrame.text = modeFrameText
         else
             modeFrameText:Show()
         end
         modeFrameText:SetText(L["NO_MODE_AVAILABLE"])
         for _, mapping in ipairs(modeFrameMapping) do
             local modeName = mapping.modeName
-            SilentRotate.mainFrame.modeFrames[modeName]:Hide()
+            mainFrame.modeFrames[modeName]:Hide()
         end
         return
     end
@@ -415,7 +414,7 @@ function SilentRotate:applyModeFrameSettings(width)
     for _, mapping in ipairs(modeFrameMapping) do
         local modeName = mapping.modeName
         local isVisible = SilentRotate.db.profile[mapping.visibilityFlag]
-        local mode = SilentRotate.mainFrame.modeFrames[modeName]
+        local mode = mainFrame.modeFrames[modeName]
         if (isVisible) then
             mode:Show()
             local text = SilentRotate.db.profile[mapping.textVariable]
@@ -484,7 +483,7 @@ function SilentRotate:createBackupFrame(baseFrame, rotationFrame)
 end
 
 -- Create single hunter frame
-function SilentRotate:createHunterFrame(hunter, parentFrame)
+function SilentRotate:createHunterFrame(hunter, parentFrame, mainFrame)
     hunter.frame = CreateFrame("Frame", nil, parentFrame)
     hunter.frame:SetHeight(SilentRotate.constants.hunterFrameHeight)
     hunter.frame.GUID = hunter.GUID
@@ -505,7 +504,7 @@ function SilentRotate:createHunterFrame(hunter, parentFrame)
 
     SilentRotate:createCooldownFrame(hunter)
     SilentRotate:createBlindIconFrame(hunter)
-    SilentRotate:configureHunterFrameDrag(hunter)
+    SilentRotate:configureHunterFrameDrag(hunter, mainFrame)
 
     if (SilentRotate.enableDrag) then
         SilentRotate:enableHunterFrameDragging(hunter, true)

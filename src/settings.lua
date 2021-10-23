@@ -60,7 +60,9 @@ function SilentRotate:CreateConfig()
 
     local function setForMode(...)
         set(...)
-        SilentRotate:applyModeFrameSettings()
+        for _, mainFrame in pairs(SilentRotate.mainFrames) do
+            SilentRotate:applyModeFrameSettings(mainFrame)
+        end
     end
 
 	local options = {

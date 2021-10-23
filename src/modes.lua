@@ -18,17 +18,17 @@ function SilentRotate:getMode(modeName)
 end
 
 -- Activate the specific mode
-function SilentRotate:activateMode(modeName)
+function SilentRotate:activateMode(modeName, mainFrame)
     local currentMode = self:getMode()
     local paramMode = self:getMode(modeName)
     if currentMode.modeName == paramMode.modeName then return end
 
-    oldFrame = SilentRotate.mainFrame.modeFrames[currentMode.modeName]
+    oldFrame = mainFrame.modeFrames[currentMode.modeName]
     if oldFrame then
         oldFrame.texture:SetColorTexture(SilentRotate.colors.darkBlue:GetRGB())
     end
 
-    newFrame = SilentRotate.mainFrame.modeFrames[modeName]
+    newFrame = mainFrame.modeFrames[modeName]
     if newFrame then
         SilentRotate.db.profile.currentMode = modeName
         newFrame.texture:SetColorTexture(SilentRotate.colors.blue:GetRGB())
