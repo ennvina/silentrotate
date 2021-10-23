@@ -5,7 +5,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("SilentRotate")
 function SilentRotate:createMainFrame()
     local mainFrame = CreateFrame("Frame", 'mainFrame', UIParent)
 
-    mainFrame:SetWidth(SilentRotate.db.profile.mainFrameWidth)
+    mainFrame:SetWidth(SilentRotate.db.profile.windows[1].width)
     mainFrame:SetHeight(SilentRotate.constants.rotationFramesBaseHeight * 2 + SilentRotate.constants.titleBarHeight + SilentRotate.constants.modeBarHeight)
     mainFrame:Show()
 
@@ -13,19 +13,28 @@ function SilentRotate:createMainFrame()
     mainFrame:SetClampedToScreen(true)
     mainFrame:SetScript("OnDragStart", function() mainFrame:StartMoving() end)
 
+    mainFrame.windowIndex = SilentRotate.mainFrames and #(SilentRotate.mainFrames)+1 or 1
+
     mainFrame:SetScript(
         "OnDragStop",
         function()
-            local config = SilentRotate.db.profile
             mainFrame:StopMovingOrSizing()
 
+            local config = SilentRotate.db.profile.windows[mainFrame.windowIndex]
             config.point = 'TOPLEFT'
             config.y = mainFrame:GetTop()
             config.x = mainFrame:GetLeft()
         end
     )
 
-    SilentRotate.mainFrame = mainFrame
+    if not SilentRotate.mainFrames then
+        SilentRotate.mainFrames = { mainFrame }
+        SilentRotate.mainFrame = mainFrame
+    else
+        table.insert(SilentRotate.mainFrames, mainFrame)
+        SilentRotate.db.profile.windows[windowIndex] = SilentRotate.db.profile.windows[1]
+    end
+
     return mainFrame
 end
 
@@ -47,11 +56,9 @@ function SilentRotate:createHistoryFrame()
             historyFrame:StopMovingOrSizing()
 
             local config = SilentRotate.db.profile
-            if config.history then
-                config.history.point = 'TOPLEFT'
-                config.history.y = historyFrame:GetTop()
-                config.history.x = historyFrame:GetLeft()
-            end
+            config.history.point = 'TOPLEFT'
+            config.history.y = historyFrame:GetTop()
+            config.history.x = historyFrame:GetLeft()
         end
     )
 
@@ -83,7 +90,7 @@ function SilentRotate:createTitleFrame(baseFrame)
 end
 
 -- Create resizer for width and height
-function SilentRotate:createCornerResizer(baseFrame)
+function SilentRotate:createCornerResizer(baseFrame, windowConfig)
     baseFrame:SetResizable(true)
 
     local resizer = CreateFrame("Button", nil, baseFrame, "PanelResizeButtonTemplate")
@@ -97,88 +104,109 @@ function SilentRotate:createCornerResizer(baseFrame)
     resizer:Init(baseFrame, minWidth, minHeight, maxWidth, maxHeight)
 
     resizer:SetOnResizeStoppedCallback(function(frame)
-        local config = SilentRotate.db.profile
-        if config.history then
-            config.history.width = frame:GetWidth()
-            config.history.height = frame:GetHeight()
-        end
+        windowConfig.width = frame:GetWidth()
+        windowConfig.height = frame:GetHeight()
     end)
 
-    baseFrame.resizer = resizer
+    if not baseFrame.resizers then
+        baseFrame.resizers = { ["BOTTOMRIGHT"] = resizer }
+    else
+        baseFrame.resizers["BOTTOMRIGHT"] = resizer
+    end
     return resizer
 end
 
 -- Create resizers for width only
-function SilentRotate:createHorizontalResizer(baseFrame, backgroundFrame)
+function SilentRotate:createHorizontalResizer(baseFrame, windowConfig, side, backgroundFrame, dynamicBottomBackgroundFrame)
     baseFrame:SetResizable(true)
 
     local resizer = CreateFrame("Frame", nil, baseFrame, BackdropTemplateMixin and "BackdropTemplate" or nil)
+    resizer:SetFrameStrata("HIGH")
 
-    resizer:SetPoint("RIGHT")
+    resizer:SetPoint(side)
 
     resizer:SetWidth(8)
 
-    resizer:SetPoint("TOP", baseFrame.rotationFrame or baseFrame, "TOPRIGHT")
-    if baseFrame.backupFrame and baseFrame.backupFrame:IsVisible() then
-        resizer:SetPoint("BOTTOM", baseFrame.backupFrame, "BOTTOMRIGHT")
-    else
-        resizer:SetPoint("BOTTOM", baseFrame.rotationFrame or baseFrame, "BOTTOMRIGHT")
-    end
-    if baseFrame.backupFrame then
-        baseFrame.backupFrame:SetScript("OnShow", function(frame)
-            resizer:SetPoint("BOTTOM", baseFrame.backupFrame, "BOTTOMRIGHT")
-        end)
-        baseFrame.backupFrame:SetScript("OnHide", function(frame)
-            resizer:SetPoint("BOTTOM", baseFrame.rotationFrame or baseFrame, "BOTTOMRIGHT")
-        end)
+    resizer:SetPoint("TOP", backgroundFrame or baseFrame, "TOP")
+    resizer:SetPoint("BOTTOM", backgroundFrame or baseFrame, "BOTTOM")
+
+    -- Special case if there is the bottom point is attached to a frame which can be shown/hidden
+    if dynamicBottomBackgroundFrame then
+        if dynamicBottomBackgroundFrame:IsVisible() then
+            resizer:SetPoint("BOTTOM", dynamicBottomBackgroundFrame, "BOTTOM")
+        end
+        if not baseFrame.resizers then
+            -- Attach to visibility if not done yet
+            -- It assumes horizontal resizers are only stacked between each other
+            -- (see footnote at the end of this method)
+            -- It also assumes all resizers of the same base attach to the same sub-frames
+            dynamicBottomBackgroundFrame:SetScript("OnShow", function(frame)
+                for _side, _frame in pairs(baseFrame.resizers) do
+                    _frame:SetPoint("BOTTOM", dynamicBottomBackgroundFrame, "BOTTOM")
+                end
+            end)
+            dynamicBottomBackgroundFrame:SetScript("OnHide", function(frame)
+                for _side, _frame in pairs(baseFrame.resizers) do
+                    _frame:SetPoint("BOTTOM", backgroundFrame, "BOTTOM")
+                end
+            end)
+        end
     end
 
     resizer:SetBackdrop({
         bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
         edgeFile = nil,
         tile = true, tileSize = 16, edgeSize = 1,
-        insets = { left = 3, right = 3, top = 7, bottom = 7 }
+        insets = { left = 3, right = 3, top = 5, bottom = 5 }
     })
     resizer:SetBackdropColor(1, 1, 1, 0)
-
     resizer:SetScript("OnEnter", function(frame)
         frame:SetBackdropColor(1, 1, 1, 0.8)
     end)
-
     resizer:SetScript("OnLeave", function(frame)
         frame:SetBackdropColor(1, 1, 1, 0)
     end)
 
     resizer:SetScript("OnMouseDown", function(frame)
-        baseFrame:StartSizing("RIGHT")
+        baseFrame:StartSizing(side)
     end)
 
     resizer:SetScript("OnMouseUp", function(frame)
         baseFrame:StopMovingOrSizing()
 
-        local config = SilentRotate.db.profile
-        config.mainFrameWidth = baseFrame:GetWidth()
+        windowConfig.x = baseFrame:GetLeft()
+        windowConfig.width = baseFrame:GetWidth()
     end)
 
-    local minWidth = 100
-    local maxWidth = 500
+    if not baseFrame.resizers then
+        local minWidth = 100
+        local maxWidth = 500
 
-    baseFrame:SetScript("OnSizeChanged", function(frame, width, height)
-        if width < minWidth then
-            width = minWidth
-            baseFrame:SetWidth(width)
-        elseif width > maxWidth then
-            width = maxWidth
-            baseFrame:SetWidth(width)
-        end
+        baseFrame:SetScript("OnSizeChanged", function(frame, width, height)
+            -- Clamp width
+            if width < minWidth then
+                width = minWidth
+                baseFrame:SetWidth(width)
+            elseif width > maxWidth then
+                width = maxWidth
+                baseFrame:SetWidth(width)
+            end
 
-        if baseFrame.dropHintFrame then
-            baseFrame.dropHintFrame:SetWidth(width - 10)
-        end
-        SilentRotate:applyModeFrameSettings(width)
-    end)
+            -- Resize other UI elements which may depend on it
+            if baseFrame.dropHintFrame then
+                baseFrame.dropHintFrame:SetWidth(width - 10)
+                -- Hack: we know mode frame settings must be re-applied when there is a drophint
+                SilentRotate:applyModeFrameSettings(width)
+            end
+        end)
 
-    baseFrame.resizer = resizer
+        baseFrame.resizers = { [side] = resizer }
+    else
+        -- No need to re-attach to baseFrame's OnSizeChanged if a resizer is already here
+        -- Nonetheless, it assumes that horizontal resizers can be stacked between each other
+        -- But horizontal resizers are not stacked with corner resizers
+        baseFrame.resizers[side] = resizer
+    end
     return resizer
 end
 
@@ -280,7 +308,7 @@ function SilentRotate:createModeFrame(baseFrame)
 
     baseFrame.modeFrame = modeFrame
     baseFrame.modeFrames = {}
-    local commonModeWidth = SilentRotate.db.profile.mainFrameWidth/3
+    local commonModeWidth = SilentRotate.db.profile.windows[1].width/3
     modeIndex = 0
     for modeName, mode in pairs(SilentRotate.modes) do
         SilentRotate:createSingleModeFrame(baseFrame, modeName, L["FILTER_SHOW_"..mode.modeNameUpper], modeIndex*commonModeWidth, (modeIndex+1)*commonModeWidth, SilentRotate.db.profile.currentMode == modeName)
@@ -378,7 +406,7 @@ function SilentRotate:applyModeFrameSettings(width)
         modeFrameText:Hide()
     end
 
-    local commonModeWidth = (width or SilentRotate.db.profile.mainFrameWidth)/nbButtonsVisible
+    local commonModeWidth = (width or SilentRotate.db.profile.windows[1].width)/nbButtonsVisible
     local minX = 0
     local maxX = commonModeWidth
     local fontSize = SilentRotate.constants.modeFrameFontSize

@@ -40,40 +40,43 @@ function SilentRotate:ProfilesChanged()
     self:applySettings()
 end
 
+-- Apply position, size, and visibility
+function applyWindowSettings(frame, windowConfig)
+    frame:ClearAllPoints()
+    if windowConfig.point then
+        frame:SetPoint(windowConfig.point, UIParent, 'BOTTOMLEFT', windowConfig.x, windowConfig.y)
+    else
+        frame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
+    end
+    if windowConfig.width then
+        frame:SetWidth(windowConfig.width)
+    end
+    if windowConfig.height then
+        frame:SetHeight(windowConfig.height)
+    end
+    if type(windowConfig.visible) == 'boolean' and not windowConfig.visible then
+        frame:Hide()
+    end
+
+    local unlocked = not SilentRotate.db.profile.lock
+    frame:EnableMouse(unlocked)
+    frame:SetMovable(unlocked)
+    for _, resizer in pairs(frame.resizers) do
+        resizer:SetShown(unlocked)
+    end
+end
+
 -- Apply settings
 function SilentRotate:applySettings()
     local config = SilentRotate.db.profile
 
-    SilentRotate.mainFrame:ClearAllPoints()
-    if config.point then
-        SilentRotate.mainFrame:SetPoint(config.point, UIParent, 'BOTTOMLEFT', config.x, config.y)
-    else
-        SilentRotate.mainFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
-    end
-    if type(config.visible) == 'boolean' and not config.visible then
-        SilentRotate.mainFrame:Hide()
+    for _, mainFrame in pairs(SilentRotate.mainFrames) do
+        applyWindowSettings(mainFrame, config.windows[mainFrame.windowIndex])
     end
 
-    SilentRotate.historyFrame:ClearAllPoints()
-    if config.history then
-        if config.history.point then
-            SilentRotate.historyFrame:SetPoint(config.history.point, UIParent, 'BOTTOMLEFT', config.history.x, config.history.y)
-        else
-            SilentRotate.historyFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
-        end
-        if type(config.history.visible) == 'boolean' and not config.history.visible then
-            SilentRotate.historyFrame:Hide()
-        end
-    end
+    applyWindowSettings(SilentRotate.historyFrame, config.history)
 
     SilentRotate:updateDisplay()
-
-    SilentRotate.mainFrame:EnableMouse(not config.lock)
-    SilentRotate.mainFrame:SetMovable(not config.lock)
-    SilentRotate.mainFrame.resizer:SetShown(not config.lock)
-    SilentRotate.historyFrame:EnableMouse(not config.lock)
-    SilentRotate.historyFrame:SetMovable(not config.lock)
-    SilentRotate.historyFrame.resizer:SetShown(not config.lock)
 end
 
 -- Print wrapper, just in case

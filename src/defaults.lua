@@ -3,9 +3,13 @@ local L = LibStub("AceLocale-3.0"):GetLocale("SilentRotate")
 function SilentRotate:LoadDefaults()
 	self.defaults = {
 	    profile = {
-			-- Window
-			visible = true,
-			mainFrameWidth = 150,
+			-- Main windows, at least one always exists
+			windows = {
+				{
+					visible = true,
+					width = 150,
+				}
+			},
 
 			-- Messaging
 			enableAnnounces = true,

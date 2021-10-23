@@ -72,7 +72,7 @@ function SilentRotate:createDropHintFrame()
 
     hintFrame:SetPoint('TOP', SilentRotate.mainFrame.rotationFrame, 'TOP', 0, 0)
     hintFrame:SetHeight(SilentRotate.constants.hunterFrameHeight)
-    hintFrame:SetWidth(SilentRotate.db.profile.mainFrameWidth - 10)
+    hintFrame:SetWidth(SilentRotate.db.profile.windows[1].width - 10)
 
     hintFrame.texture = hintFrame:CreateTexture(nil, "BACKGROUND")
     hintFrame.texture:SetColorTexture(SilentRotate.colors.white:GetRGB())
