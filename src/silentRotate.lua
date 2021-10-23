@@ -144,6 +144,8 @@ SlashCmdList["SILENTROTATE"] = function(msg)
         SilentRotate:printRotationSetup()
     elseif (cmd == 'settings') then
         SilentRotate:openSettings()
+    elseif (cmd == 'history') then
+        SilentRotate:toggleHistory()
     elseif (cmd == 'check' or cmd== 'version') then
         SilentRotate:checkVersions()
     else
@@ -250,6 +252,7 @@ function SilentRotate:printHelp()
     SilentRotate:printMessage(spacing .. SilentRotate:colorText('settings') .. ' : Open SilentRotate settings')
     SilentRotate:printMessage(spacing .. SilentRotate:colorText('report') .. ' : Print the rotation setup to the configured channel')
     SilentRotate:printMessage(spacing .. SilentRotate:colorText('check') .. ' : Print user versions of SilentRotate')
+    SilentRotate:printMessage(spacing .. SilentRotate:colorText('history') .. ' : Show/hide history window')
 end
 
 -- Adds color to given text
