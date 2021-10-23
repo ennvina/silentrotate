@@ -294,7 +294,7 @@ SilentRotate.modes = {
         targetGUID = function(self, sourceGUID, destGUID) return sourceGUID end, -- Target is the caster itself
         buffName = function(self, spellId, spellName) return spellName end,
         buffCanReturn = false,
-        customTargetName = function(self, hunter, targetName) return string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup or 0) end,
+        customTargetName = function(self, hunter, targetName) return hunter.subgroup and string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup) end,
         announceArg = function(self, hunter, destName) return hunter.subgroup or 0 end,
         -- tooltip = nil,
         -- metadata = nil
@@ -309,7 +309,6 @@ SilentRotate.modes = {
         canFail = false,
         spell = GetSpellInfo(8177),
         -- auraTest = nil,
-        -- customCombatlogFunc = nil,
         customCombatlogFunc = function(self, event, sourceGUID, sourceName, sourceFlags, destGUID, destName, spellId, spellName)
             if (event == "SPELL_SUMMON") and sourceGUID and sourceName and spellName == self.spell then
                 self.metadata.summons[destGUID] = {
@@ -354,7 +353,7 @@ SilentRotate.modes = {
             local totem = self.metadata.summons[totemGUID]
             if not totemGUID or totem.summoned then
                 -- Totem still active: display the group where it belongs
-                return string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup or 0)
+                return hunter.subgroup and string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup)
             elseif totem.killedWith then
                 -- Totem destroyed by spell: display the spell name only
                 return totem.killedWith
