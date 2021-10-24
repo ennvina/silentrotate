@@ -333,6 +333,7 @@ SilentRotate.modes = {
                     local ownerName = self.metadata.summons[destGUID].ownerName
                     local ownerHostile = not UnitIsPlayer(ownerName) or UnitIsPossessed(ownerName)
                     local casterHostile = not UnitIsPlayer(sourceName) or UnitIsPossessed(sourceName)
+                    local wasSummoned = self.metadata.summons[destGUID].summoned
                     if ownerHostile ~= casterHostile then
                         -- In Classic Era, only damage can kill the totem
                         self.metadata.summons[destGUID].summoned = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and event:sub(-7) ~= "_DAMAGE"
@@ -340,6 +341,17 @@ SilentRotate.modes = {
                         self.metadata.summons[destGUID].killedBy = sourceName
                         if event:sub(0,5) == "SPELL" then
                             self.metadata.summons[destGUID].killedWith = spellName
+                        end
+                    end
+
+                    local totem = self.metadata.summons[destGUID]
+                    local isNowSummoned = totem.summoned
+                    if wasSummoned ~= isNowSummoned then
+                        local ownerGUID = totem.ownerGUID
+                        local hunter = SilentRotate:getHunter(ownerGUID)
+                        if hunter then
+                            local msg = totem.killedWith and string.format("%s (%s)", totem.killedWith, totem.killedBy) or totem.killedBy
+                            SilentRotate:addHistoryMessage(msg, self, totem.killedAt)
                         end
                     end
                 end
