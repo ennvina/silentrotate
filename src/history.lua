@@ -26,12 +26,22 @@ function SilentRotate:loadHistory()
 end
 
 -- Clear messages on screen and in config
-function SilentRotate.clearHistory()
+function SilentRotate:clearHistory()
     SilentRotate.historyFrame.backgroundFrame.textFrame:Clear()
     SilentRotate.db.profile.history.messages = {}
 end
 
+-- Set time until fadeout starts, in seconds
+function SilentRotate:setHistoryTimeVisible(duration)
+    if type(duration) ~= 'number' then
+        duration = tonumber(duration)
+    end
+    if type(duration) == 'number' and duration >= 0 then
+        SilentRotate.historyFrame.backgroundFrame.textFrame:SetTimeVisible(duration)
+    end
+end
+
 -- Show again messages that were hidden due to fading after a certain time
-function SilentRotate.refreshHistory()
+function SilentRotate:respawnHistory()
     SilentRotate.historyFrame.backgroundFrame.textFrame:ResetAllFadeTimes()
 end

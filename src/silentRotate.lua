@@ -76,6 +76,7 @@ function SilentRotate:applySettings()
     end
 
     applyWindowSettings(SilentRotate.historyFrame, config.history)
+    SilentRotate:setHistoryTimeVisible(config.historyTimeVisible)
 
     SilentRotate:updateDisplay()
 end

@@ -137,6 +137,15 @@ function SilentRotate:CreateConfig()
                         order = 9,
                         width = "full",
                     },
+                    historyTimeVisible = {
+                        name = L["HISTORY_FADEOUT"],
+                        desc = L["HISTORY_FADEOUT_DESC"],
+                        type = "range",
+                        min = 5,
+                        max = 3600,
+                        order = 10,
+                        width = "full",
+                    },
                     testHeader = {
                         name = L["TEST_MODE_HEADER"],
                         type = "header",

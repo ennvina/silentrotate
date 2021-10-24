@@ -18,6 +18,10 @@ L["SHOW_WHEN_TARGETING_BOSS"] = "Show window when you target a tranq-able boss"
 L["SHOW_WHEN_TARGETING_BOSS_DESC"] = "Show window when you target a tranq-able boss"
 L["WINDOW_LOCKED"] = "SilentRotate: Window locked"
 L["WINDOW_UNLOCKED"] = "SilentRotate: Window unlocked"
+L["HISTORY_FADEOUT"] = "Time to fade History"
+L["HISTORY_FADEOUT_DESC"] = "Time, in seconds, to keep messages visible in the History window.\n" ..
+        "Old messages can be displayed back, using the Respawn button.\n" ..
+        "Hitting the Clear button erases all messages, current and past, forever."
 
 L["TEST_MODE_HEADER"] = "Test mode"
 L["ENABLE_ARCANE_SHOT_TESTING"] = "Toggle testing mode"

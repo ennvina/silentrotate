@@ -41,7 +41,7 @@ SilentRotate.constants = {
         fontFace = "Fonts\\ARIALN.ttf",
         fontSize = 12,
         margin = 4,
-        timeVisible = 600, -- 10 minutes
+        defaultTimeVisible = 600, -- Fallback value in case the configuration is not a number
     },
 
     ['commsPrefix'] = 'silentrotate',
