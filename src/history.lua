@@ -15,7 +15,7 @@ end
 -- Load history messages from config
 function SilentRotate:loadHistory()
     for _, item in pairs(SilentRotate.db.profile.history.messages) do
-        local mode = SilentRotate:getMode(item.modeName)
+        local mode = SilentRotate:getMode(item.mode)
         if mode then
             local modeName = L["FILTER_SHOW_"..mode.modeNameUpper]
             local hrTime = item.timestamp
