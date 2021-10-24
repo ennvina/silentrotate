@@ -219,7 +219,7 @@ function SilentRotate:createMainFrameButtons(baseFrame)
         },
         {
             texture = 'Interface/GossipFrame/BinderGossipIcon',
-            callback = SilentRotate.openSettings
+            callback = SilentRotate.toggleSettings
         },
         {
             texture = 'Interface/Buttons/UI-RefreshButton',

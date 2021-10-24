@@ -149,7 +149,7 @@ SlashCmdList["SILENTROTATE"] = function(msg)
     elseif (cmd == 'report') then
         SilentRotate:printRotationSetup()
     elseif (cmd == 'settings') then
-        SilentRotate:openSettings()
+        SilentRotate:toggleSettings()
     elseif (cmd == 'history') then
         SilentRotate:toggleHistory()
     elseif (cmd == 'check' or cmd== 'version') then
@@ -226,10 +226,15 @@ function SilentRotate:test()
     SilentRotate:toggleArcaneShotTesting()
 end
 
--- Open ace settings
-function SilentRotate:openSettings()
+-- Toggle Ace settings
+function SilentRotate:toggleSettings()
     local AceConfigDialog = LibStub("AceConfigDialog-3.0")
-    AceConfigDialog:Open("SilentRotate")
+    local aceConfigAppName = "SilentRotate"
+    if AceConfigDialog.OpenFrames[aceConfigAppName] then
+        AceConfigDialog:Close(aceConfigAppName)
+    else
+        AceConfigDialog:Open(aceConfigAppName)
+    end
 end
 
 -- Sends rotation setup to raid channel
@@ -279,12 +284,12 @@ function SilentRotate:printHelp()
     local spacing = '   '
     SilentRotate:printMessage(SilentRotate:colorText('/silentrotate') .. ' commands options :')
     SilentRotate:printMessage(spacing .. SilentRotate:colorText('toggle') .. ' : Show/Hide the main window')
+    SilentRotate:printMessage(spacing .. SilentRotate:colorText('settings') .. ' : Show/hide SilentRotate settings')
+    SilentRotate:printMessage(spacing .. SilentRotate:colorText('history') .. ' : Show/hide history window')
     SilentRotate:printMessage(spacing .. SilentRotate:colorText('lock') .. ' : Lock the main window position')
     SilentRotate:printMessage(spacing .. SilentRotate:colorText('unlock') .. ' : Unlock the main window position')
-    SilentRotate:printMessage(spacing .. SilentRotate:colorText('settings') .. ' : Open SilentRotate settings')
     SilentRotate:printMessage(spacing .. SilentRotate:colorText('report') .. ' : Print the rotation setup to the configured channel')
     SilentRotate:printMessage(spacing .. SilentRotate:colorText('check') .. ' : Print user versions of SilentRotate')
-    SilentRotate:printMessage(spacing .. SilentRotate:colorText('history') .. ' : Show/hide history window')
 end
 
 -- Adds color to given text
