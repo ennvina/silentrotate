@@ -152,8 +152,12 @@ SilentRotate.modes = {
         end,
         -- auraTest = nil,
         customCombatlogFunc = function(self, event, sourceGUID, sourceName, sourceFlags, destGUID, destName, spellId, spellName)
-            if event == "SPELL_AURA_APPLIED" and SilentRotate:isBossFrenzy(spellName, sourceGUID) and SilentRotate:isPlayerNextTranq() then
-                SilentRotate:throwTranqAlert()
+            if event == "SPELL_AURA_APPLIED" and SilentRotate:isBossFrenzy(spellName, sourceGUID) then
+                local historyMessage = string.format(L["HISTORY_TRANQSHOT_FRENZY"], sourceName, spellName)
+                SilentRotate:addHistoryMessage(historyMessage, self)
+                if SilentRotate:isPlayerNextTranq() then
+                    SilentRotate:throwTranqAlert()
+                end
             elseif event == "UNIT_DIED" and SilentRotate:isTranqableBoss(destGUID) then
                 SilentRotate:resetRotation()
             end
@@ -322,7 +326,11 @@ SilentRotate.modes = {
                 self.metadata.summoners[sourceGUID] = destGUID
             elseif destGUID and self.metadata.summons[destGUID] then
                 if (event == "UNIT_DESTROYED") then
-                    self.metadata.summons[destGUID].summoned = false
+                    if self.metadata.summons[destGUID].summoned then
+                        self.metadata.summons[destGUID].summoned = false
+                        local historyMessage = string.format(L["HISTORY_GROUNDING_EXPIRE"], self.metadata.summons[destGUID].ownerName)
+                        SilentRotate:addHistoryMessage(historyMessage, self)
+                    end
                 elseif sourceName and spellName then
                     -- Check if the caster is attacking to the totem
                     -- Because of limitations of the CombatLog, we cannot know for sure if the spell kills the totem
@@ -350,8 +358,13 @@ SilentRotate.modes = {
                         local ownerGUID = totem.ownerGUID
                         local hunter = SilentRotate:getHunter(ownerGUID)
                         if hunter then
-                            local msg = totem.killedWith and string.format("%s (%s)", totem.killedWith, totem.killedBy) or totem.killedBy
-                            SilentRotate:addHistoryMessage(msg, self, totem.killedAt)
+                            local historyMessage
+                            if totem.killedWith then
+                                historyMessage = string.format(L["HISTORY_GROUNDING_ABSORB"], totem.ownerName, totem.killedWith, totem.killedBy)
+                            else
+                                historyMessage = string.format(L["HISTORY_GROUNDING_ABSORB_NOSPELL"], totem.ownerName, totem.killedBy)
+                            end
+                            SilentRotate:addHistoryMessage(historyMessage, self, totem.killedAt)
                         end
                     end
                 end

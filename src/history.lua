@@ -12,6 +12,26 @@ function SilentRotate:addHistoryMessage(msg, mode, timestamp)
     table.insert(SilentRotate.db.profile.history.messages, { mode = mode.modeName, timestamp = hrTime, text = msg })
 end
 
+-- Add one message for a spell cast
+-- If destName is nil, there is no target
+function SilentRotate:addHistorySpellMessage(sourceName, destName, spellName, failed, mode, timestamp)
+    local msg
+    if failed then
+        msg = string.format(L["HISTORY_SPELLCAST_FAILURE"], sourceName, spellName, destName)
+    elseif destName then
+        msg = string.format(L["HISTORY_SPELLCAST_SUCCESS"], sourceName, spellName, destName)
+    else
+        msg = string.format(L["HISTORY_SPELLCAST_NOTARGET"], sourceName, spellName)
+    end
+    self:addHistoryMessage(msg, mode, timestamp)
+end
+
+-- Add one message for a debuff applied
+function SilentRotate:addHistoryDebuffMessage(unitName, spellName, mode, timestamp)
+    local msg = string.format(L["HISTORY_DEBUFF_RECEIVED"], unitName, spellName)
+    self:addHistoryMessage(msg, mode, timestamp)
+end
+
 -- Load history messages from config
 function SilentRotate:loadHistory()
     for _, item in pairs(SilentRotate.db.profile.history.messages) do
