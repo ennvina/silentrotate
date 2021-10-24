@@ -406,6 +406,14 @@ SilentRotate.modes = {
                         end
                     end
                 end
+            elseif (event == "SPELL_CAST_SUCCESS") and spellName == self.metadata.totemicCall then
+                local totemGUID = self.metadata.summoners[sourceGUID]
+                local totem = self.metadata.summons[totemGUID]
+                if totem and totem.summoned then
+                    totem.summoned = false
+                    local historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_CANCEL"), totem.ownerName, spellName)
+                    SilentRotate:addHistoryMessage(historyMessage, self)
+                end
             end
         end,
         targetGUID = function(self, sourceGUID, destGUID) return sourceGUID end, -- Target is the caster itself
@@ -446,6 +454,7 @@ SilentRotate.modes = {
         end,
         metadata = {
             groundingTotemEffectName = GetSpellInfo(8178), -- The buff is the name from spellId+1, not from spellId
+            totemicCall = GetSpellInfo(36936),
             summons = {},
             summoners = {}
         },
