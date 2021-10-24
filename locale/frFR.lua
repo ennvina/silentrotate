@@ -3,6 +3,14 @@ if not L then return end
 L["LOADED_MESSAGE"] = "SilentRotate chargé, utilisez /silentrotate pour les options"
 L["TRANQ_WINDOW_HIDDEN"] = "SilentRotate window hidden. Use /silentrotate toggle to get it back"
 
+    -- Buttons
+L["BUTTON_SETTINGS"] = "Paramètres"
+L["BUTTON_RESET_ROTATION"] = "Réinitialiser la rotation"
+L["BUTTON_PRINT_ROTATION"] = "Afficher la rotation"
+L["BUTTON_HISTORY"] = "Historique"
+L["BUTTON_RESPAWN_HISTORY"] = "Montrer les anciens messages"
+L["BUTTON_CLEAR_HISTORY"] = "Effacer"
+
     -- Settings
 L["SETTING_GENERAL"] = "Général"
 L["SETTING_GENERAL_REPORT"] = "Merci de signaler tout bug rencontré sur"

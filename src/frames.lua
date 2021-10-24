@@ -219,11 +219,12 @@ function SilentRotate:createMainFrameButtons(baseFrame)
                 highlight = 'Interface/Buttons/UI-Panel-MinimizeButton-Highlight',
             },
             callback = SilentRotate.toggleDisplay,
-            texCoord = {0.08, 0.9, 0.1, 0.9}
+            texCoord = {0.08, 0.9, 0.1, 0.9},
         },
         {
             texture = 'Interface/GossipFrame/BinderGossipIcon',
-            callback = SilentRotate.toggleSettings
+            callback = SilentRotate.toggleSettings,
+            tooltip = L["BUTTON_SETTINGS"],
         },
         {
             texture = 'Interface/Buttons/UI-RefreshButton',
@@ -231,15 +232,18 @@ function SilentRotate:createMainFrameButtons(baseFrame)
                     SilentRotate:updateRaidStatus()
                     SilentRotate:resetRotation()
                     SilentRotate:sendSyncOrderRequest()
-                end
+                end,
+            tooltip = L["BUTTON_RESET_ROTATION"],
         },
         {
             texture = 'Interface/Buttons/UI-GuildButton-MOTD-Up',
-            callback = SilentRotate.printRotationSetup
+            callback = SilentRotate.printRotationSetup,
+            tooltip = L["BUTTON_PRINT_ROTATION"],
         },
         {
             texture = 'Interface/Buttons/UI-GuildButton-OfficerNote-Up',
-            callback = SilentRotate.toggleHistory
+            callback = SilentRotate.toggleHistory,
+            tooltip = L["BUTTON_HISTORY"],
         },
     }
 
@@ -256,15 +260,17 @@ function SilentRotate:createHistoryFrameButtons(baseFrame)
                 highlight = 'Interface/Buttons/UI-Panel-MinimizeButton-Highlight',
             },
             callback = SilentRotate.toggleHistory,
-            texCoord = {0.08, 0.9, 0.1, 0.9}
+            texCoord = {0.08, 0.9, 0.1, 0.9},
         },
         {
             texture = 'Interface/GossipFrame/BinderGossipIcon',
-            callback = SilentRotate.toggleSettings
+            callback = SilentRotate.toggleSettings,
+            tooltip = L["BUTTON_SETTINGS"],
         },
         {
             texture = 'Interface/Buttons/UI-RefreshButton',
             callback = SilentRotate.respawnHistory,
+            tooltip = L["BUTTON_RESPAWN_HISTORY"],
         },
         {
             texture = {
@@ -273,7 +279,8 @@ function SilentRotate:createHistoryFrameButtons(baseFrame)
                 highlight = 'Interface/Buttons/CancelButton-Highlight',
             },
             callback = SilentRotate.clearHistory,
-            texCoord = {0.2, 0.8, 0.2, 0.8}
+            texCoord = {0.2, 0.8, 0.2, 0.8},
+            tooltip = L["BUTTON_CLEAR_HISTORY"],
         },
     }
 
@@ -285,13 +292,13 @@ function SilentRotate:createButtons(baseFrame, buttons)
     local position = 5
 
     for key, button in pairs(buttons) do
-        SilentRotate:createButton(baseFrame, position, button.texture, button.callback, button.texCoord)
+        SilentRotate:createButton(baseFrame, position, button.texture, button.callback, button.texCoord, button.tooltip)
         position = position + 15
     end
 end
 
 -- Create a single button in the title bar
-function SilentRotate:createButton(baseFrame, position, texture, callback, texCoord)
+function SilentRotate:createButton(baseFrame, position, texture, callback, texCoord, tooltip)
 
     local button = CreateFrame("Button", nil, baseFrame)
     button:SetPoint('RIGHT', -position, 0)
@@ -328,6 +335,17 @@ function SilentRotate:createButton(baseFrame, position, texture, callback, texCo
     end
 
     button:SetScript("OnClick", callback)
+
+    if tooltip then
+        button:SetScript("OnEnter", function()
+            GameTooltip:SetOwner(button, "ANCHOR_RIGHT")
+            GameTooltip_SetTitle(GameTooltip, tooltip)
+            GameTooltip:Show()
+        end)
+        button:SetScript("OnLeave", function()
+            GameTooltip:Hide()
+        end)
+    end
 
     return button
 end

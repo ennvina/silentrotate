@@ -3,6 +3,14 @@ if not L then return end
 L["LOADED_MESSAGE"] = "SilentRotate 已加載, 輸入 /silentrotate 進入設定"
 L["TRANQ_WINDOW_HIDDEN"] = "SilentRotate 窗口隱藏. 輸入 /silentrotate toggle 顯示窗口"
 
+    -- Buttons
+L["BUTTON_SETTINGS"] = "Settings"
+L["BUTTON_RESET_ROTATION"] = "Reset Rotation"
+L["BUTTON_PRINT_ROTATION"] = "Print Rotation"
+L["BUTTON_HISTORY"] = "History"
+L["BUTTON_RESPAWN_HISTORY"] = "Respawn old messages"
+L["BUTTON_CLEAR_HISTORY"] = "Clear"
+
     -- Settings
 L["SETTING_GENERAL"] = "General"
 L["SETTING_GENERAL_REPORT"] = "請報告問題: "
