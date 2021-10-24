@@ -215,7 +215,7 @@ function SilentRotate:createMainFrameButtons(baseFrame)
         {
             texture = 'Interface/Buttons/UI-Panel-MinimizeButton-Up',
             callback = SilentRotate.toggleDisplay,
-            texCoord = {0.18, 0.8, 0.2, 0.8}
+            texCoord = {0.08, 0.9, 0.1, 0.9}
         },
         {
             texture = 'Interface/GossipFrame/BinderGossipIcon',
@@ -248,7 +248,7 @@ function SilentRotate:createHistoryFrameButtons(baseFrame)
         {
             texture = 'Interface/Buttons/UI-Panel-MinimizeButton-Up',
             callback = SilentRotate.toggleHistory,
-            texCoord = {0.18, 0.8, 0.2, 0.8}
+            texCoord = {0.08, 0.9, 0.1, 0.9}
         },
         {
             texture = 'Interface/GossipFrame/BinderGossipIcon',
@@ -261,7 +261,7 @@ function SilentRotate:createHistoryFrameButtons(baseFrame)
         {
             texture = 'Interface/Buttons/CancelButton-Up',
             callback = SilentRotate.clearHistory,
-            texCoord = {0.2, 0.8, 0.2, 0.78}
+            texCoord = {0.2, 0.8, 0.2, 0.8}
         },
     }
 
@@ -270,7 +270,7 @@ end
 
 -- Create title bar buttons
 function SilentRotate:createButtons(baseFrame, buttons)
-    local position = 7
+    local position = 5
 
     for key, button in pairs(buttons) do
         SilentRotate:createButton(baseFrame, position, button.texture, button.callback, button.texCoord)
@@ -283,8 +283,8 @@ function SilentRotate:createButton(baseFrame, position, texture, callback, texCo
 
     local button = CreateFrame("Button", nil, baseFrame)
     button:SetPoint('RIGHT', -position, 0)
-    button:SetWidth(12)
-    button:SetHeight(12)
+    button:SetWidth(14)
+    button:SetHeight(14)
 
     local normal = button:CreateTexture()
     normal:SetTexture(texture)
