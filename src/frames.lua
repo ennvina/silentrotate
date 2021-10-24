@@ -270,11 +270,11 @@ end
 
 -- Create title bar buttons
 function SilentRotate:createButtons(baseFrame, buttons)
-    local position = 5
+    local position = 7
 
     for key, button in pairs(buttons) do
-        SilentRotate:createButton(baseFrame, position, button.texture, button.callback, button.textCoord)
-        position = position + 13
+        SilentRotate:createButton(baseFrame, position, button.texture, button.callback, button.texCoord)
+        position = position + 15
     end
 end
 
@@ -283,8 +283,8 @@ function SilentRotate:createButton(baseFrame, position, texture, callback, texCo
 
     local button = CreateFrame("Button", nil, baseFrame)
     button:SetPoint('RIGHT', -position, 0)
-    button:SetWidth(10)
-    button:SetHeight(10)
+    button:SetWidth(12)
+    button:SetHeight(12)
 
     local normal = button:CreateTexture()
     normal:SetTexture(texture)
