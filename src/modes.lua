@@ -402,7 +402,7 @@ SilentRotate.modes = {
                             else
                                 historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_ABSORB_NOSPELL"), totem.ownerName, totem.killedBy)
                             end
-                            SilentRotate:addHistoryMessage(historyMessage, self, totem.killedAt)
+                            SilentRotate:addHistoryMessage(historyMessage, self)
                         end
                     end
                 end

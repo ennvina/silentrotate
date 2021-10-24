@@ -4,17 +4,22 @@ local L = LibStub("AceLocale-3.0"):GetLocale("SilentRotate")
 -- Add one message to current history and save it to config
 -- @param message   Message to add
 -- @param mode      The mode object corresponding to the message
--- @param timestamp The server time; if nil, then GetServerTime() is used
-function SilentRotate:addHistoryMessage(msg, mode, timestamp)
+function SilentRotate:addHistoryMessage(msg, mode)
     local modeName = WrapTextInColorCode(L["FILTER_SHOW_"..mode.modeNameUpper], self:getModeColor(mode))
-    local hrTime = date("%H:%M:%S", timestamp or GetServerTime())
+    local timestamp = GetTime()
+    local hrTime = date("%H:%M:%S", GetServerTime())
     SilentRotate.historyFrame.backgroundFrame.textFrame:AddMessage(string.format("%s [%s] %s", modeName, hrTime, msg))
-    table.insert(SilentRotate.db.profile.history.messages, { mode = mode.modeName, timestamp = hrTime, text = msg })
+    table.insert(SilentRotate.db.profile.history.messages, {
+        mode = mode.modeName,
+        timestamp = timestamp,
+        humanReadableTime = hrTime,
+        text = msg
+    })
 end
 
 -- Add one message for a spell cast
 -- If destName is nil, there is no target
-function SilentRotate:addHistorySpellMessage(hunter, sourceName, destName, spellName, failed, mode, timestamp)
+function SilentRotate:addHistorySpellMessage(hunter, sourceName, destName, spellName, failed, mode)
     local msg
     if type(mode.customHistoryFunc) == 'function' then
         msg = mode.customHistoryFunc(mode, hunter, sourceName, destName, spellName, failed)
@@ -25,18 +30,18 @@ function SilentRotate:addHistorySpellMessage(hunter, sourceName, destName, spell
     else
         msg = string.format(self:getHistoryPattern("HISTORY_SPELLCAST_NOTARGET"), sourceName, spellName)
     end
-    self:addHistoryMessage(msg, mode, timestamp)
+    self:addHistoryMessage(msg, mode)
 end
 
 -- Add one message for a debuff applied
-function SilentRotate:addHistoryDebuffMessage(hunter, unitName, spellName, mode, timestamp)
+function SilentRotate:addHistoryDebuffMessage(hunter, unitName, spellName, mode)
     local msg
     if type(mode.customHistoryFunc) == 'function' then
         msg = mode.customHistoryFunc(mode, hunter, nil, destName, spellName)
     else
         msg = string.format(self:getHistoryPattern("HISTORY_DEBUFF_RECEIVED"), unitName, spellName)
     end
-    self:addHistoryMessage(msg, mode, timestamp)
+    self:addHistoryMessage(msg, mode)
 end
 
 function SilentRotate:getHistoryPattern(localeKey)
@@ -51,9 +56,11 @@ function SilentRotate:loadHistory()
         local mode = SilentRotate:getMode(item.mode)
         if mode then
             local modeName = WrapTextInColorCode(L["FILTER_SHOW_"..mode.modeNameUpper], self:getModeColor(mode))
-            local hrTime = item.timestamp
+            local hrTime = item.humanReadableTime
             local msg = item.text
             SilentRotate.historyFrame.backgroundFrame.textFrame:AddMessage(string.format("%s [%s] %s", modeName, hrTime, msg))
+            -- Hack the timestamp so that fading actually relates to when the message was added
+            SilentRotate.historyFrame.backgroundFrame.textFrame.historyBuffer:GetEntryAtIndex(1).timestamp = item.timestamp
         end
     end
 end
