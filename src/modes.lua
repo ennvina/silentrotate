@@ -153,7 +153,7 @@ SilentRotate.modes = {
         -- auraTest = nil,
         customCombatlogFunc = function(self, event, sourceGUID, sourceName, sourceFlags, destGUID, destName, spellId, spellName)
             if event == "SPELL_AURA_APPLIED" and SilentRotate:isBossFrenzy(spellName, sourceGUID) then
-                local historyMessage = string.format(L["HISTORY_TRANQSHOT_FRENZY"], sourceName, spellName)
+                local historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_TRANQSHOT_FRENZY"), sourceName, spellName)
                 SilentRotate:addHistoryMessage(historyMessage, self)
                 if SilentRotate:isPlayerNextTranq() then
                     SilentRotate:throwTranqAlert()
@@ -335,7 +335,7 @@ SilentRotate.modes = {
                 if (event == "UNIT_DESTROYED") then
                     if self.metadata.summons[destGUID].summoned then
                         self.metadata.summons[destGUID].summoned = false
-                        local historyMessage = string.format(L["HISTORY_GROUNDING_EXPIRE"], self.metadata.summons[destGUID].ownerName)
+                        local historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_EXPIRE"), self.metadata.summons[destGUID].ownerName)
                         SilentRotate:addHistoryMessage(historyMessage, self)
                     end
                 elseif sourceName and spellName then
@@ -367,9 +367,9 @@ SilentRotate.modes = {
                         if hunter then
                             local historyMessage
                             if totem.killedWith then
-                                historyMessage = string.format(L["HISTORY_GROUNDING_ABSORB"], totem.ownerName, totem.killedWith, totem.killedBy)
+                                historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_ABSORB"), totem.ownerName, totem.killedWith, totem.killedBy)
                             else
-                                historyMessage = string.format(L["HISTORY_GROUNDING_ABSORB_NOSPELL"], totem.ownerName, totem.killedBy)
+                                historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_ABSORB_NOSPELL"), totem.ownerName, totem.killedBy)
                             end
                             SilentRotate:addHistoryMessage(historyMessage, self, totem.killedAt)
                         end
@@ -398,7 +398,7 @@ SilentRotate.modes = {
             end
         end,
         customHistoryFunc = function(mode, hunter, sourceName, destName, spellName, failed)
-            return string.format(L["HISTORY_GROUNDING_SUMMON"], sourceName, hunter.subgroup or 0)
+            return string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_SUMMON"), sourceName, hunter.subgroup or 0)
         end,
         announceArg = function(self, hunter, destName) return hunter.subgroup or 0 end,
         tooltip = function(self, hunter)

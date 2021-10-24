@@ -367,6 +367,8 @@ function SilentRotate:createTextFrame(baseFrame)
     local fontSize = constants.fontSize
     textFrame:SetFont(fontFace, fontSize)
     textFrame:SetTextColor(1,1,1,1)
+    textFrame:SetShadowColor(0,0,0,1)
+    textFrame:SetShadowOffset(1,-1)
     textFrame:SetJustifyH("LEFT")
 
     textFrame:SetTimeVisible(SilentRotate.constants.history.defaultTimeVisible)

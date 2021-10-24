@@ -19,11 +19,11 @@ function SilentRotate:addHistorySpellMessage(hunter, sourceName, destName, spell
     if type(mode.customHistoryFunc) == 'function' then
         msg = mode.customHistoryFunc(mode, hunter, sourceName, destName, spellName, failed)
     elseif failed then
-        msg = string.format(L["HISTORY_SPELLCAST_FAILURE"], sourceName, spellName, destName)
+        msg = string.format(self:getHistoryPattern("HISTORY_SPELLCAST_FAILURE"), sourceName, spellName, destName)
     elseif destName then
-        msg = string.format(L["HISTORY_SPELLCAST_SUCCESS"], sourceName, spellName, destName)
+        msg = string.format(self:getHistoryPattern("HISTORY_SPELLCAST_SUCCESS"), sourceName, spellName, destName)
     else
-        msg = string.format(L["HISTORY_SPELLCAST_NOTARGET"], sourceName, spellName)
+        msg = string.format(self:getHistoryPattern("HISTORY_SPELLCAST_NOTARGET"), sourceName, spellName)
     end
     self:addHistoryMessage(msg, mode, timestamp)
 end
@@ -34,9 +34,15 @@ function SilentRotate:addHistoryDebuffMessage(hunter, unitName, spellName, mode,
     if type(mode.customHistoryFunc) == 'function' then
         msg = mode.customHistoryFunc(mode, hunter, nil, destName, spellName)
     else
-        msg = string.format(L["HISTORY_DEBUFF_RECEIVED"], unitName, spellName)
+        msg = string.format(self:getHistoryPattern("HISTORY_DEBUFF_RECEIVED"), unitName, spellName)
     end
     self:addHistoryMessage(msg, mode, timestamp)
+end
+
+function SilentRotate:getHistoryPattern(localeKey)
+    local colorBegin = "|cffb3b3b3"
+    local colorEnd = "|r"
+    return colorBegin..L[localeKey]:gsub("(%%s)", colorEnd.."%1"..colorBegin)..colorEnd
 end
 
 -- Load history messages from config
