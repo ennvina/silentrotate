@@ -213,7 +213,11 @@ end
 function SilentRotate:createMainFrameButtons(baseFrame)
     local buttons = {
         {
-            texture = 'Interface/Buttons/UI-Panel-MinimizeButton-Up',
+            texture = {
+                normal = 'Interface/Buttons/UI-Panel-MinimizeButton-Up',
+                pushed = 'Interface/Buttons/UI-Panel-MinimizeButton-Down',
+                highlight = 'Interface/Buttons/UI-Panel-MinimizeButton-Highlight',
+            },
             callback = SilentRotate.toggleDisplay,
             texCoord = {0.08, 0.9, 0.1, 0.9}
         },
@@ -246,7 +250,11 @@ end
 function SilentRotate:createHistoryFrameButtons(baseFrame)
     local buttons = {
         {
-            texture = 'Interface/Buttons/UI-Panel-MinimizeButton-Up',
+            texture = {
+                normal = 'Interface/Buttons/UI-Panel-MinimizeButton-Up',
+                pushed = 'Interface/Buttons/UI-Panel-MinimizeButton-Down',
+                highlight = 'Interface/Buttons/UI-Panel-MinimizeButton-Highlight',
+            },
             callback = SilentRotate.toggleHistory,
             texCoord = {0.08, 0.9, 0.1, 0.9}
         },
@@ -259,7 +267,11 @@ function SilentRotate:createHistoryFrameButtons(baseFrame)
             callback = SilentRotate.respawnHistory,
         },
         {
-            texture = 'Interface/Buttons/CancelButton-Up',
+            texture = {
+                normal = 'Interface/Buttons/CancelButton-Up',
+                pushed = 'Interface/Buttons/CancelButton-Down',
+                highlight = 'Interface/Buttons/CancelButton-Highlight',
+            },
             callback = SilentRotate.clearHistory,
             texCoord = {0.2, 0.8, 0.2, 0.8}
         },
@@ -286,18 +298,26 @@ function SilentRotate:createButton(baseFrame, position, texture, callback, texCo
     button:SetWidth(14)
     button:SetHeight(14)
 
+    if type(texture) == 'string' then
+        texture = {
+            normal = texture,
+            highlight = texture,
+            pushed = texture,
+        }
+    end
+
     local normal = button:CreateTexture()
-    normal:SetTexture(texture)
+    normal:SetTexture(texture.normal)
     normal:SetAllPoints()
     button:SetNormalTexture(normal)
 
     local highlight = button:CreateTexture()
-    highlight:SetTexture(texture)
+    highlight:SetTexture(texture.highlight)
     highlight:SetAllPoints()
     button:SetHighlightTexture(highlight)
 
     local pushed = button:CreateTexture()
-    pushed:SetTexture(texture)
+    pushed:SetTexture(texture.pushed)
     pushed:SetAllPoints()
     button:SetPushedTexture(pushed)
 
