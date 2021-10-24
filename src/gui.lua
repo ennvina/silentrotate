@@ -14,7 +14,7 @@ function SilentRotate:initGui()
     SilentRotate:createHorizontalResizer(mainFrame, SilentRotate.db.profile.windows[1], "RIGHT", rotationFrame, backupFrame)
 
     local historyFrame = SilentRotate:createHistoryFrame()
-    local historyTitleFrame = SilentRotate:createTitleFrame(historyFrame)
+    local historyTitleFrame = SilentRotate:createTitleFrame(historyFrame, L['BUTTON_HISTORY'])
     SilentRotate:createHistoryFrameButtons(historyTitleFrame)
     local historyBackgroundFrame = SilentRotate:createBackgroundFrame(historyFrame, SilentRotate.constants.titleBarHeight, SilentRotate.db.profile.history.height)
     SilentRotate:createTextFrame(historyBackgroundFrame)

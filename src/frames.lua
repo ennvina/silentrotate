@@ -66,7 +66,7 @@ function SilentRotate:createHistoryFrame()
 end
 
 -- Create Title frame
-function SilentRotate:createTitleFrame(baseFrame)
+function SilentRotate:createTitleFrame(baseFrame, subtitle)
     local titleFrame = CreateFrame("Frame", 'rotationFrame', baseFrame)
     titleFrame:SetPoint('TOPLEFT')
     titleFrame:SetPoint('TOPRIGHT')
@@ -81,7 +81,11 @@ function SilentRotate:createTitleFrame(baseFrame)
     titleFrame.text:SetShadowColor(0,0,0,0.5)
     titleFrame.text:SetShadowOffset(1,-1)
     titleFrame.text:SetPoint("LEFT",5,0)
-    titleFrame.text:SetText('SilentRotate')
+    if subtitle then
+        titleFrame.text:SetText(string.format('SilentRotate - %s', subtitle))
+    else
+        titleFrame.text:SetText('SilentRotate')
+    end
     titleFrame.text:SetTextColor(1,1,1,1)
 
     baseFrame.titleFrame = titleFrame
@@ -96,7 +100,7 @@ function SilentRotate:createCornerResizer(baseFrame, windowConfig)
 
     resizer:SetPoint("BOTTOMRIGHT")
 
-    local minWidth = 100
+    local minWidth = 200
     local minHeight = 50
     local maxWidth = 500
     local maxHeight = 500
