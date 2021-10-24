@@ -42,7 +42,7 @@ end
 function SilentRotate:getHistoryPattern(localeKey)
     local colorBegin = "|cffb3b3b3"
     local colorEnd = "|r"
-    return colorBegin..L[localeKey]:gsub("(%%s)", colorEnd.."%1"..colorBegin)..colorEnd
+    return colorBegin..L[localeKey]:gsub("(%%s)", colorEnd.."%1"..colorBegin):gsub("||([^|]*)||", colorEnd.."%1"..colorBegin)..colorEnd
 end
 
 -- Load history messages from config
