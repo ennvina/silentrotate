@@ -38,6 +38,20 @@ function SilentRotate:activateMode(modeName, mainFrame)
     end
 end
 
+-- Get the color associated to a specific mode
+function SilentRotate:getModeColor(mode)
+    if type(mode.color) == 'string' then
+        return mode.color
+    elseif type(mode.color) == 'function' then
+        return mode.color()
+    elseif type(mode.wanted) == 'string' then
+        -- Assume a wingle string for mode.wanted is always the class name
+        return select(4, GetClassColor(mode.wanted))
+    else
+        return 'ffffffff'
+    end
+end
+
 -- Return true if the player is recommended for a specific mode
 -- If className is nil, the class is fetched from the unit
 -- If mode is nil, use the current mode instead
@@ -142,6 +156,7 @@ SilentRotate.modes = {
         oldModeName = 'hunterz',
         project = true,
         default = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC,
+        -- color = nil,
         wanted = 'HUNTER',
         cooldown = 20,
         -- effectDuration = nil,
@@ -176,6 +191,7 @@ SilentRotate.modes = {
         oldModeName = 'healerz',
         project = true,
         default = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC,
+        color = 'ff3fe7cc', -- Green-ish gooey of Loatheb HS card
         wanted = {'PRIEST', 'PALADIN', 'SHAMAN', 'DRUID'},
         cooldown = 60,
         -- effectDuration = nil,
@@ -204,6 +220,7 @@ SilentRotate.modes = {
         oldModeName = 'roguez',
         project = true,
         default = false,
+        -- color = nil,
         wanted = 'ROGUE',
         cooldown = 30,
         effectDuration = 10,
@@ -225,6 +242,7 @@ SilentRotate.modes = {
         oldModeName = 'fearz',
         project = true,
         default = true,
+        color = select(4,GetClassColor('PRIEST')),
         wanted = function(self, className, raceName) return className == 'PRIEST' and (WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC or raceName == 'Dwarf') end,
         cooldown = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 30 or 180,
         effectDuration = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 600 or 180,
@@ -246,6 +264,7 @@ SilentRotate.modes = {
         oldModeName = 'tauntz',
         project = true,
         default = false,
+        color = select(4,GetClassColor('WARRIOR')),
         wanted = {'WARRIOR', 'DRUID'},
         cooldown = 600,
         effectDuration = 6,
@@ -270,6 +289,7 @@ SilentRotate.modes = {
         oldModeName = 'misdiz',
         project = WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC,
         default = WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC,
+        -- color = nil,
         wanted = 'HUNTER',
         cooldown = 120,
         effectDuration = 30,
@@ -291,6 +311,7 @@ SilentRotate.modes = {
         oldModeName = 'shamanz',
         project = WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC,
         default = WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC,
+        -- color = nil,
         wanted = 'SHAMAN',
         cooldown = 600,
         effectDuration = 40,
@@ -314,6 +335,7 @@ SilentRotate.modes = {
     grounding = {
         project = true,
         default = false,
+        -- color = nil,
         wanted = 'SHAMAN',
         cooldown = 15,
         effectDuration = 45,
@@ -423,6 +445,7 @@ SilentRotate.modes = {
     brez = {
         project = true,
         default = false,
+        -- color = nil,
         wanted = 'DRUID',
         cooldown = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 1800 or 1200,
         -- effectDuration = nil,
@@ -443,6 +466,7 @@ SilentRotate.modes = {
     innerv = {
         project = true,
         default = false,
+        -- color = nil,
         wanted = 'DRUID',
         cooldown = 360,
         effectDuration = 20,
