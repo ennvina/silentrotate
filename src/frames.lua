@@ -102,8 +102,8 @@ function SilentRotate:createCornerResizer(baseFrame, windowConfig)
 
     local minWidth = 200
     local minHeight = 50
-    local maxWidth = 500
-    local maxHeight = 500
+    local maxWidth = 800
+    local maxHeight = 1000
     resizer:Init(baseFrame, minWidth, minHeight, maxWidth, maxHeight)
 
     resizer:SetOnResizeStoppedCallback(function(frame)
