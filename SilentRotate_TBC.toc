@@ -36,3 +36,4 @@ src\defaults.lua
 src\settings.lua
 src\utils.lua
 src\modes.lua
+src\history.lua

@@ -48,7 +48,7 @@ function SilentRotate:LoadDefaults()
 				visible = false,
 				width = 400,
 				height = 200,
-				modes = {},
+				messages = {},
 			},
 
 			-- Miscellaneous

@@ -26,6 +26,7 @@ function SilentRotate:init()
     SilentRotate.testMode = false
 
     SilentRotate:initGui()
+    SilentRotate:loadHistory()
     SilentRotate:updateRaidStatus()
     SilentRotate:applySettings()
 
