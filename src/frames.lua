@@ -215,7 +215,7 @@ function SilentRotate:createMainFrameButtons(baseFrame)
         {
             texture = 'Interface/Buttons/UI-Panel-MinimizeButton-Up',
             callback = SilentRotate.toggleDisplay,
-            textCoord = {0.18, 0.8, 0.2, 0.8}
+            texCoord = {0.18, 0.8, 0.2, 0.8}
         },
         {
             texture = 'Interface/GossipFrame/BinderGossipIcon',
@@ -248,7 +248,7 @@ function SilentRotate:createHistoryFrameButtons(baseFrame)
         {
             texture = 'Interface/Buttons/UI-Panel-MinimizeButton-Up',
             callback = SilentRotate.toggleHistory,
-            textCoord = {0.18, 0.8, 0.2, 0.8}
+            texCoord = {0.18, 0.8, 0.2, 0.8}
         },
         {
             texture = 'Interface/GossipFrame/BinderGossipIcon',
@@ -261,6 +261,7 @@ function SilentRotate:createHistoryFrameButtons(baseFrame)
         {
             texture = 'Interface/Buttons/CancelButton-Up',
             callback = SilentRotate.clearHistory,
+            texCoord = {0.2, 0.8, 0.2, 0.78}
         },
     }
 
@@ -278,7 +279,7 @@ function SilentRotate:createButtons(baseFrame, buttons)
 end
 
 -- Create a single button in the title bar
-function SilentRotate:createButton(baseFrame, position, texture, callback, textCoord)
+function SilentRotate:createButton(baseFrame, position, texture, callback, texCoord)
 
     local button = CreateFrame("Button", nil, baseFrame)
     button:SetPoint('RIGHT', -position, 0)
@@ -295,9 +296,15 @@ function SilentRotate:createButton(baseFrame, position, texture, callback, textC
     highlight:SetAllPoints()
     button:SetHighlightTexture(highlight)
 
-    if (textCoord) then
-        normal:SetTexCoord(unpack(textCoord))
-        highlight:SetTexCoord(unpack(textCoord))
+    local pushed = button:CreateTexture()
+    pushed:SetTexture(texture)
+    pushed:SetAllPoints()
+    button:SetPushedTexture(pushed)
+
+    if (texCoord) then
+        normal:SetTexCoord(unpack(texCoord))
+        highlight:SetTexCoord(unpack(texCoord))
+        pushed:SetTexCoord(unpack(texCoord))
     end
 
     button:SetScript("OnClick", callback)
