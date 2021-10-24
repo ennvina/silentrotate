@@ -78,3 +78,9 @@ end
 function SilentRotate:respawnHistory()
     SilentRotate.historyFrame.backgroundFrame.textFrame:ResetAllFadeTimes()
 end
+
+-- Set the font size for displaying log messages
+function SilentRotate:setHistoryFontSize(fontSize)
+    local fontFace = SilentRotate.constants.history.fontFace
+    SilentRotate.historyFrame.backgroundFrame.textFrame:SetFont(fontFace, fontSize)
+end

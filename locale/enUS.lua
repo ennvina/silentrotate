@@ -26,10 +26,6 @@ L["SHOW_WHEN_TARGETING_BOSS"] = "Show window when you target a tranq-able boss"
 L["SHOW_WHEN_TARGETING_BOSS_DESC"] = "Show window when you target a tranq-able boss"
 L["WINDOW_LOCKED"] = "SilentRotate: Window locked"
 L["WINDOW_UNLOCKED"] = "SilentRotate: Window unlocked"
-L["HISTORY_FADEOUT"] = "Time to fade History"
-L["HISTORY_FADEOUT_DESC"] = "Time, in seconds, to keep messages visible in the History window.\n" ..
-        "Old messages can be displayed back, using the Respawn button.\n" ..
-        "Hitting the Clear button erases all messages, current and past, forever."
 
 L["TEST_MODE_HEADER"] = "Test mode"
 L["ENABLE_ARCANE_SHOT_TESTING"] = "Toggle testing mode"
@@ -86,16 +82,6 @@ L["TRANQ_NOW_LOCAL_ALERT_MESSAGE"] = "USE TRANQSHOT NOW !"
 L["BROADCAST_MESSAGE_HEADER"] = "Rotation setup text broadcast"
 L["USE_MULTILINE_ROTATION_REPORT"] = "Use multiline for main rotation when reporting"
 L["USE_MULTILINE_ROTATION_REPORT_DESC"] = "Check this option if you want more comprehensible order display"
-
-L["HISTORY_DEBUFF_RECEIVED"] = "%s is afflicted by %s."
-L["HISTORY_SPELLCAST_NOTARGET"] = "%s casts %s."
-L["HISTORY_SPELLCAST_SUCCESS"] = "%s casts %s on %s."
-L["HISTORY_SPELLCAST_FAILURE"] = "%s FAILS to cast %s on %s."
-L["HISTORY_TRANQSHOT_FRENZY"] = "%s enters %s."
-L["HISTORY_GROUNDING_SUMMON"] = "Totem of %s is protecting group %s."
-L["HISTORY_GROUNDING_EXPIRE"] = "Totem of %s expires."
-L["HISTORY_GROUNDING_ABSORB"] = "Totem of %s absorbs %s from %s."
-L["HISTORY_GROUNDING_ABSORB_NOSPELL"] = "Totem of %s absorbs attack from %s."
 
     --- Modes
 L["SETTING_MODES"] = "Modes"
@@ -175,6 +161,24 @@ L["ENABLE_NEXT_TO_TRANQ_SOUND"] = "Play a sound when you are the next to shoot"
 L["ENABLE_TRANQ_NOW_SOUND"] = "Play a sound when you have to shoot your spell"
 L["TRANQ_NOW_SOUND_CHOICE"] = "Select the sound you want to use for the 'cast now' alert"
 L["DBM_SOUND_WARNING"] = "DBM is playing the 'flag taken' sound on each frenzy, it may prevent you from earing gentle sounds from SilentRotate. I would either suggest to pick a strong sound or disable DBM frenzy sound."
+
+    --- History
+L["SETTING_HISTORY"] = "History"
+L["HISTORY_FADEOUT"] = "Time to Fade"
+L["HISTORY_FADEOUT_DESC"] = "Time, in seconds, to keep messages visible in the History window.\n" ..
+        "Old messages can be displayed back, using the Respawn button.\n" ..
+        "Hitting the Clear button erases all messages, current and past, forever."
+L["HISTORY_FONTSIZE"] = "Font Size"
+
+L["HISTORY_DEBUFF_RECEIVED"] = "%s is afflicted by %s."
+L["HISTORY_SPELLCAST_NOTARGET"] = "%s casts %s."
+L["HISTORY_SPELLCAST_SUCCESS"] = "%s casts %s on %s."
+L["HISTORY_SPELLCAST_FAILURE"] = "%s FAILS to cast %s on %s."
+L["HISTORY_TRANQSHOT_FRENZY"] = "%s enters %s."
+L["HISTORY_GROUNDING_SUMMON"] = "Totem of %s is protecting group %s."
+L["HISTORY_GROUNDING_EXPIRE"] = "Totem of %s expires."
+L["HISTORY_GROUNDING_ABSORB"] = "Totem of %s absorbs %s from %s."
+L["HISTORY_GROUNDING_ABSORB_NOSPELL"] = "Totem of %s absorbs attack from %s."
 
     --- Icons
 L["DISPLAY_BLIND_ICON"] = "Show an icon for players without SilentRotate"

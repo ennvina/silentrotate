@@ -83,16 +83,6 @@ L["BROADCAST_MESSAGE_HEADER"] = "Объявление очередности"
 L["USE_MULTILINE_ROTATION_REPORT"] = "Использовать многострочный вывод при объявлении очередности"
 L["USE_MULTILINE_ROTATION_REPORT_DESC"] = "Выберите для более понятного порядка отображения очередности"
 
-L["HISTORY_DEBUFF_RECEIVED"] = "%s is afflicted by %s."
-L["HISTORY_SPELLCAST_NOTARGET"] = "%s casts %s."
-L["HISTORY_SPELLCAST_SUCCESS"] = "%s casts %s on %s."
-L["HISTORY_SPELLCAST_FAILURE"] = "%s FAILS to cast %s on %s."
-L["HISTORY_TRANQSHOT_FRENZY"] = "%s enters %s."
-L["HISTORY_GROUNDING_SUMMON"] = "Totem of %s is protecting group %s."
-L["HISTORY_GROUNDING_EXPIRE"] = "Totem of %s expires."
-L["HISTORY_GROUNDING_ABSORB"] = "Totem of %s absorbs %s from %s."
-L["HISTORY_GROUNDING_ABSORB_NOSPELL"] = "Totem of %s absorbs attack from %s."
-
     --- Modes
 L["SETTING_MODES"] = "Modes"
 L["FILTER_SHOW_TRANQSHOT"] = "Tranq"
@@ -171,6 +161,24 @@ L["ENABLE_NEXT_TO_TRANQ_SOUND"] = "Проигрывать звук когда п
 L["ENABLE_TRANQ_NOW_SOUND"] = "Проигрывать звук когда пора использовать Усмиряющий выстрел"
 L["TRANQ_NOW_SOUND_CHOICE"] = "Выберите звук для Усмиряющего выстрела"
 L["DBM_SOUND_WARNING"] = "DBM проигрывает звук для каждого Бешенства, из-за этого вы можете не устышать оповещение от SilentRotate. Рекомендуется выбрать хорошо различимый звук для SilentRotate или отключить оповещение от DBM"
+
+    --- History
+L["SETTING_HISTORY"] = "History"
+L["HISTORY_FADEOUT"] = "Time to Fade"
+L["HISTORY_FADEOUT_DESC"] = "Time, in seconds, to keep messages visible in the History window.\n" ..
+        "Old messages can be displayed back, using the Respawn button.\n" ..
+        "Hitting the Clear button erases all messages, current and past, forever."
+L["HISTORY_FONTSIZE"] = "Font Size"
+
+L["HISTORY_DEBUFF_RECEIVED"] = "%s is afflicted by %s."
+L["HISTORY_SPELLCAST_NOTARGET"] = "%s casts %s."
+L["HISTORY_SPELLCAST_SUCCESS"] = "%s casts %s on %s."
+L["HISTORY_SPELLCAST_FAILURE"] = "%s FAILS to cast %s on %s."
+L["HISTORY_TRANQSHOT_FRENZY"] = "%s enters %s."
+L["HISTORY_GROUNDING_SUMMON"] = "Totem of %s is protecting group %s."
+L["HISTORY_GROUNDING_EXPIRE"] = "Totem of %s expires."
+L["HISTORY_GROUNDING_ABSORB"] = "Totem of %s absorbs %s from %s."
+L["HISTORY_GROUNDING_ABSORB_NOSPELL"] = "Totem of %s absorbs attack from %s."
 
     --- Icons
 L["DISPLAY_BLIND_ICON"] = "Show an icon for players without SilentRotate"

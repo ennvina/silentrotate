@@ -51,6 +51,7 @@ function SilentRotate:LoadDefaults()
 				messages = {},
 			},
 			historyTimeVisible = 600, -- 10 minutes
+			historyFontSize = 12,
 
 			-- Miscellaneous
 			lock = false,

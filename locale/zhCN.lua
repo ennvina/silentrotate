@@ -83,16 +83,6 @@ L["BROADCAST_MESSAGE_HEADER"] = "循环顺序广播频道选择"
 L["USE_MULTILINE_ROTATION_REPORT"] = "连续多行发送宁神通告"
 L["USE_MULTILINE_ROTATION_REPORT_DESC"] = "如果您想要以更易于理解的顺序显示，请选中此选项。"
 
-L["HISTORY_DEBUFF_RECEIVED"] = "%s is afflicted by %s."
-L["HISTORY_SPELLCAST_NOTARGET"] = "%s casts %s."
-L["HISTORY_SPELLCAST_SUCCESS"] = "%s casts %s on %s."
-L["HISTORY_SPELLCAST_FAILURE"] = "%s FAILS to cast %s on %s."
-L["HISTORY_TRANQSHOT_FRENZY"] = "%s enters %s."
-L["HISTORY_GROUNDING_SUMMON"] = "Totem of %s is protecting group %s."
-L["HISTORY_GROUNDING_EXPIRE"] = "Totem of %s expires."
-L["HISTORY_GROUNDING_ABSORB"] = "Totem of %s absorbs %s from %s."
-L["HISTORY_GROUNDING_ABSORB_NOSPELL"] = "Totem of %s absorbs attack from %s."
-
     --- Modes
 L["SETTING_MODES"] = "模式"
 L["FILTER_SHOW_TRANQSHOT"] = "宁神"
@@ -171,6 +161,24 @@ L["ENABLE_NEXT_TO_TRANQ_SOUND"] = "当下一个宁神射击是您时，播放提
 L["ENABLE_TRANQ_NOW_SOUND"] = "当您需要立即宁神射击时，播放提示音"
 L["TRANQ_NOW_SOUND_CHOICE"] = "选择要用于“宁神射击”提示的声音"
 L["DBM_SOUND_WARNING"] = "DBM在激怒时播放的'flag taken'提示音，可能导致您无法听到SilentRotate的提示音。建议选择一个响亮的提示音，或者在DBM中禁用激怒的警告。"
+
+    --- History
+L["SETTING_HISTORY"] = "History"
+L["HISTORY_FADEOUT"] = "Time to Fade"
+L["HISTORY_FADEOUT_DESC"] = "Time, in seconds, to keep messages visible in the History window.\n" ..
+        "Old messages can be displayed back, using the Respawn button.\n" ..
+        "Hitting the Clear button erases all messages, current and past, forever."
+L["HISTORY_FONTSIZE"] = "Font Size"
+
+L["HISTORY_DEBUFF_RECEIVED"] = "%s is afflicted by %s."
+L["HISTORY_SPELLCAST_NOTARGET"] = "%s casts %s."
+L["HISTORY_SPELLCAST_SUCCESS"] = "%s casts %s on %s."
+L["HISTORY_SPELLCAST_FAILURE"] = "%s FAILS to cast %s on %s."
+L["HISTORY_TRANQSHOT_FRENZY"] = "%s enters %s."
+L["HISTORY_GROUNDING_SUMMON"] = "Totem of %s is protecting group %s."
+L["HISTORY_GROUNDING_EXPIRE"] = "Totem of %s expires."
+L["HISTORY_GROUNDING_ABSORB"] = "Totem of %s absorbs %s from %s."
+L["HISTORY_GROUNDING_ABSORB_NOSPELL"] = "Totem of %s absorbs attack from %s."
 
     --- Icons
 L["DISPLAY_BLIND_ICON"] = "Show an icon for players without SilentRotate"
