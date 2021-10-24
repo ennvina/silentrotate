@@ -250,6 +250,18 @@ function SilentRotate:createHistoryFrameButtons(baseFrame)
             callback = SilentRotate.toggleHistory,
             textCoord = {0.18, 0.8, 0.2, 0.8}
         },
+        {
+            texture = 'Interface/GossipFrame/BinderGossipIcon',
+            callback = SilentRotate.toggleSettings
+        },
+        {
+            texture = 'Interface/Buttons/UI-RefreshButton',
+            callback = SilentRotate.respawnHistory,
+        },
+        {
+            texture = 'Interface/Buttons/CancelButton-Up',
+            callback = SilentRotate.clearHistory,
+        },
     }
 
     return SilentRotate:createButtons(baseFrame, buttons)
