@@ -293,6 +293,27 @@ function SilentRotate:createButton(baseFrame, position, texture, callback, textC
     return button
 end
 
+-- Create scroll frame with text button
+function SilentRotate:createTextFrame(baseFrame)
+    local constants = SilentRotate.constants.history
+    local textFrame = CreateFrame("ScrollingMessageFrame", nil, baseFrame)
+
+    local margin = constants.margin
+    textFrame:SetPoint('BOTTOMLEFT', margin, margin)
+    textFrame:SetPoint('TOPRIGHT', -margin, -margin)
+
+    local fontFace = constants.fontFace
+    local fontSize = constants.fontSize
+    local timeVisible = constants.timeVisible
+    textFrame:SetFont(fontFace, fontSize)
+    textFrame:SetTextColor(1,1,1,1)
+    textFrame:SetJustifyH("LEFT")
+    textFrame:SetTimeVisible(timeVisible)
+
+    baseFrame.textFrame = textFrame
+    return textFrame
+end
+
 -- Create Mode frame
 function SilentRotate:createModeFrame(baseFrame)
     local modeFrame = CreateFrame("Frame", 'modeFrame', baseFrame)
