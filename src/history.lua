@@ -14,9 +14,11 @@ end
 
 -- Add one message for a spell cast
 -- If destName is nil, there is no target
-function SilentRotate:addHistorySpellMessage(sourceName, destName, spellName, failed, mode, timestamp)
+function SilentRotate:addHistorySpellMessage(hunter, sourceName, destName, spellName, failed, mode, timestamp)
     local msg
-    if failed then
+    if type(mode.customHistoryFunc) == 'function' then
+        msg = mode.customHistoryFunc(mode, hunter, sourceName, destName, spellName, failed)
+    elseif failed then
         msg = string.format(L["HISTORY_SPELLCAST_FAILURE"], sourceName, spellName, destName)
     elseif destName then
         msg = string.format(L["HISTORY_SPELLCAST_SUCCESS"], sourceName, spellName, destName)
@@ -27,8 +29,13 @@ function SilentRotate:addHistorySpellMessage(sourceName, destName, spellName, fa
 end
 
 -- Add one message for a debuff applied
-function SilentRotate:addHistoryDebuffMessage(unitName, spellName, mode, timestamp)
-    local msg = string.format(L["HISTORY_DEBUFF_RECEIVED"], unitName, spellName)
+function SilentRotate:addHistoryDebuffMessage(hunter, unitName, spellName, mode, timestamp)
+    local msg
+    if type(mode.customHistoryFunc) == 'function' then
+        msg = mode.customHistoryFunc(mode, hunter, nil, destName, spellName)
+    else
+        msg = string.format(L["HISTORY_DEBUFF_RECEIVED"], unitName, spellName)
+    end
     self:addHistoryMessage(msg, mode, timestamp)
 end
 
