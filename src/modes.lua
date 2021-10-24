@@ -353,6 +353,15 @@ SilentRotate.modes = {
                     killedWith = nil,
                 }
                 self.metadata.summoners[sourceGUID] = destGUID
+                -- Hack for tracking when the totem expires
+                -- Because the game client does not always fire the UNIT_DESTROYED event
+                -- Wait 2 seconds after the summon to leave some time in case of lag
+                C_Timer.After(self.effectDuration+2, function()
+                    if self.metadata.summoners[sourceGUID] == destGUID and self.metadata.summons[destGUID].summoned then
+                        -- Force-fire a false event
+                        self:customCombatlogFunc("UNIT_DESTROYED", nil, nil, nil, destGUID, destName)
+                    end
+                end)
             elseif destGUID and self.metadata.summons[destGUID] then
                 if (event == "UNIT_DESTROYED") then
                     if self.metadata.summons[destGUID].summoned then
