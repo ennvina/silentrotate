@@ -406,13 +406,27 @@ SilentRotate.modes = {
                         end
                     end
                 end
-            elseif (event == "SPELL_CAST_SUCCESS") and spellName == self.metadata.totemicCall then
-                local totemGUID = self.metadata.summoners[sourceGUID]
-                local totem = self.metadata.summons[totemGUID]
-                if totem and totem.summoned then
-                    totem.summoned = false
-                    local historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_CANCEL"), totem.ownerName, spellName)
-                    SilentRotate:addHistoryMessage(historyMessage, self)
+            elseif (event == "SPELL_CAST_SUCCESS") then
+                -- cancellersQuickSearch is built lazy
+                local cancellersQuickSearch = self.metadata.cancellersQuickSearch
+                if not cancellersQuickSearch then
+                    cancellersQuickSearch = {}
+                    for _, cancellerSpellName in pairs(self.metadata.cancellers) do
+                        if cancellerSpellName then -- Mus check existence because not all spells exist in all 'projects'
+                            cancellersQuickSearch[cancellerSpellName] = true
+                        end
+                    end
+                    self.metadata.cancellersQuickSearch = cancellersQuickSearch
+                end
+
+                if self.metadata.cancellersQuickSearch[spellName] then
+                    local totemGUID = self.metadata.summoners[sourceGUID]
+                    local totem = self.metadata.summons[totemGUID]
+                    if totem and totem.summoned then
+                        totem.summoned = false
+                        local historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_CANCEL"), totem.ownerName, spellName)
+                        SilentRotate:addHistoryMessage(historyMessage, self)
+                    end
                 end
             end
         end,
@@ -454,7 +468,16 @@ SilentRotate.modes = {
         end,
         metadata = {
             groundingTotemEffectName = GetSpellInfo(8178), -- The buff is the name from spellId+1, not from spellId
-            totemicCall = GetSpellInfo(36936),
+            cancellers = {
+                (GetSpellInfo(8835)), -- Grace of Air Totem rank 1
+                (GetSpellInfo(10595)), -- Nature Resistance Totem rank 1
+                (GetSpellInfo(6495)), -- Sentry Totem
+                (GetSpellInfo(25908)), -- Tranquil Air Totem
+                (GetSpellInfo(8512)), -- Windfury Totem rank 1
+                (GetSpellInfo(15107)), -- Wind Wall Totem rank 1
+                (GetSpellInfo(3738)), -- Wrath of Air Totem rank 1, introduced in Burning Crusade
+                (GetSpellInfo(36936)), -- Totemic Call, introduced in Burning Crusade
+            },
             summons = {},
             summoners = {}
         },
