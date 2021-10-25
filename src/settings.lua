@@ -60,7 +60,9 @@ function SilentRotate:CreateConfig()
 
     local function setForMode(...)
         set(...)
-        SilentRotate:applyModeFrameSettings()
+        for _, mainFrame in pairs(SilentRotate.mainFrames) do
+            SilentRotate:applyModeFrameSettings(mainFrame)
+        end
     end
 
 	local options = {
@@ -134,14 +136,6 @@ function SilentRotate:CreateConfig()
                         type = "toggle",
                         order = 9,
                         width = "full",
-                    },
-                    mainFrameWidth = {
-                        name = L["WINDOW_WIDTH"],
-                        type = "range",
-                        order = 10,
-                        width = "full",
-                        min = 100,
-                        max = 300,
                     },
                     testHeader = {
                         name = L["TEST_MODE_HEADER"],
@@ -442,6 +436,30 @@ function SilentRotate:CreateConfig()
                     },
                 }
             },
+            history = {
+                name = L['SETTING_HISTORY'],
+                type = "group",
+                order = 6,
+                args = {
+                    historyTimeVisible = {
+                        name = L["HISTORY_FADEOUT"],
+                        desc = L["HISTORY_FADEOUT_DESC"],
+                        type = "range",
+                        min = 5,
+                        max = 3600,
+                        order = 1,
+                        width = "full",
+                    },
+                    historyFontSize = {
+                        name = L["HISTORY_FONTSIZE"],
+                        type = "range",
+                        min = 8,
+                        max = 24,
+                        order = 2,
+                        width = "full",
+                    },
+                }
+            },
         }
 	}
 
@@ -519,6 +537,7 @@ function SilentRotate:CreateConfig()
     AceConfigDialog:AddToBlizOptions(Addon, L['SETTING_ANNOUNCES'], Addon, "announces")
     AceConfigDialog:AddToBlizOptions(Addon, L["SETTING_NAMES"], Addon, "names")
     AceConfigDialog:AddToBlizOptions(Addon, L["SETTING_SOUNDS"], Addon, "sounds")
+    AceConfigDialog:AddToBlizOptions(Addon, L["SETTING_HISTORY"], Addon, "history")
     AceConfigDialog:AddToBlizOptions(Addon, L["SETTING_PROFILES"], Addon, "profile")
 
     AceConfigDialog:SetDefaultSize(Addon, 895, 570)

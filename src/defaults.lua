@@ -3,8 +3,13 @@ local L = LibStub("AceLocale-3.0"):GetLocale("SilentRotate")
 function SilentRotate:LoadDefaults()
 	self.defaults = {
 	    profile = {
-			-- Window
-			mainFrameWidth = 150,
+			-- Main windows, at least one always exists
+			windows = {
+				{
+					visible = true,
+					width = 150,
+				}
+			},
 
 			-- Messaging
 			enableAnnounces = true,
@@ -37,6 +42,16 @@ function SilentRotate:LoadDefaults()
 			enableNextToTranqSound = true,
 			enableTranqNowSound = true,
 			tranqNowSound = 'alarm1',
+
+			-- History
+			history = {
+				visible = false,
+				width = 400,
+				height = 200,
+				messages = {},
+			},
+			historyTimeVisible = 600, -- 10 minutes
+			historyFontSize = 12,
 
 			-- Miscellaneous
 			lock = false,

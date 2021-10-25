@@ -14,7 +14,7 @@ function SilentRotate:enableHunterFrameDragging(hunter, movable)
 end
 
 -- configure hunter frame drag behavior
-function SilentRotate:configureHunterFrameDrag(hunter)
+function SilentRotate:configureHunterFrameDrag(hunter, mainFrame)
 
     hunter.frame:RegisterForDrag("LeftButton")
     hunter.frame:SetClampedToScreen(true)
@@ -31,12 +31,12 @@ function SilentRotate:configureHunterFrameDrag(hunter)
             hunter.frame:SetScript(
                 "OnUpdate",
                 function ()
-                    SilentRotate:setDropHintPosition(hunter.frame)
+                    SilentRotate:setDropHintPosition(hunter.frame, mainFrame)
                 end
             )
 
-            SilentRotate.mainFrame.dropHintFrame:Show()
-            SilentRotate.mainFrame.backupFrame:Show()
+            mainFrame.dropHintFrame:Show()
+            mainFrame.backupFrame:Show()
         end
     )
 
@@ -44,35 +44,35 @@ function SilentRotate:configureHunterFrameDrag(hunter)
         "OnDragStop",
         function()
             hunter.frame:StopMovingOrSizing()
-            hunter.frame:SetFrameStrata(SilentRotate.mainFrame:GetFrameStrata())
-            SilentRotate.mainFrame.dropHintFrame:Hide()
+            hunter.frame:SetFrameStrata(mainFrame:GetFrameStrata())
+            mainFrame.dropHintFrame:Hide()
 
             -- Removes the onUpdate event used for drag & drop
             hunter.frame:SetScript("OnUpdate", nil)
 
             if (#SilentRotate.rotationTables.backup < 1) then
-                SilentRotate.mainFrame.backupFrame:Hide()
+                mainFrame.backupFrame:Hide()
             end
 
-            local group, position = SilentRotate:getDropPosition(hunter.frame)
+            local group, position = SilentRotate:getDropPosition(hunter.frame, mainFrame)
             SilentRotate:handleDrop(hunter, group, position)
             SilentRotate:sendSyncOrder(false)
         end
     )
 end
 
-function SilentRotate:getDragFrameHeight(hunterFrame)
-    return math.abs(hunterFrame:GetTop() - SilentRotate.mainFrame.rotationFrame:GetTop())
+function SilentRotate:getDragFrameHeight(hunterFrame, mainFrame)
+    return math.abs(hunterFrame:GetTop() - mainFrame.rotationFrame:GetTop())
 end
 
 -- create and initialize the drop hint frame
-function SilentRotate:createDropHintFrame()
+function SilentRotate:createDropHintFrame(mainFrame)
 
-    local hintFrame = CreateFrame("Frame", nil, SilentRotate.mainFrame.rotationFrame)
+    local hintFrame = CreateFrame("Frame", nil, mainFrame.rotationFrame)
 
-    hintFrame:SetPoint('TOP', SilentRotate.mainFrame.rotationFrame, 'TOP', 0, 0)
+    hintFrame:SetPoint('TOP', mainFrame.rotationFrame, 'TOP', 0, 0)
     hintFrame:SetHeight(SilentRotate.constants.hunterFrameHeight)
-    hintFrame:SetWidth(SilentRotate.db.profile.mainFrameWidth - 10)
+    hintFrame:SetWidth(SilentRotate.db.profile.windows[1].width - 10)
 
     hintFrame.texture = hintFrame:CreateTexture(nil, "BACKGROUND")
     hintFrame.texture:SetColorTexture(SilentRotate.colors.white:GetRGB())
@@ -83,17 +83,17 @@ function SilentRotate:createDropHintFrame()
 
     hintFrame:Hide()
 
-    SilentRotate.mainFrame.dropHintFrame = hintFrame
+    mainFrame.dropHintFrame = hintFrame
 end
 
 -- Set the drop hint frame position to match dragged frame position
-function SilentRotate:setDropHintPosition(hunterFrame)
+function SilentRotate:setDropHintPosition(hunterFrame, mainFrame)
 
     local hunterFrameHeight = SilentRotate.constants.hunterFrameHeight
     local hunterFrameSpacing = SilentRotate.constants.hunterFrameSpacing
     local hintPosition = 0
 
-    local group, position = SilentRotate:getDropPosition(hunterFrame)
+    local group, position = SilentRotate:getDropPosition(hunterFrame, mainFrame)
 
     if (group == 'ROTATION') then
         if (position == 0) then
@@ -102,7 +102,7 @@ function SilentRotate:setDropHintPosition(hunterFrame)
             hintPosition = (position) * (hunterFrameHeight + hunterFrameSpacing) - hunterFrameSpacing / 2;
         end
     else
-        hintPosition = SilentRotate.mainFrame.rotationFrame:GetHeight()
+        hintPosition = mainFrame.rotationFrame:GetHeight()
 
         if (position == 0) then
             hintPosition = hintPosition - 2
@@ -111,13 +111,13 @@ function SilentRotate:setDropHintPosition(hunterFrame)
         end
     end
 
-    SilentRotate.mainFrame.dropHintFrame:SetPoint('TOP', 0 , -hintPosition)
+    mainFrame.dropHintFrame:SetPoint('TOP', 0 , -hintPosition)
 end
 
 -- Compute drop group and position
-function SilentRotate:getDropPosition(hunterFrame)
+function SilentRotate:getDropPosition(hunterFrame, mainFrame)
 
-    local height = SilentRotate:getDragFrameHeight(hunterFrame)
+    local height = SilentRotate:getDragFrameHeight(hunterFrame, mainFrame)
     local group = 'ROTATION'
     local position = 0
 
@@ -125,21 +125,21 @@ function SilentRotate:getDropPosition(hunterFrame)
     local hunterFrameSpacing = SilentRotate.constants.hunterFrameSpacing
 
     -- Dragged frame is above rotation frames
-    if (hunterFrame:GetTop() > SilentRotate.mainFrame.rotationFrame:GetTop()) then
+    if (hunterFrame:GetTop() > mainFrame.rotationFrame:GetTop()) then
         height = 0
     end
 
     position = floor(height / (hunterFrameHeight + hunterFrameSpacing))
 
     -- Dragged frame is bellow rotation frame
-    if (height > SilentRotate.mainFrame.rotationFrame:GetHeight()) then
+    if (height > mainFrame.rotationFrame:GetHeight()) then
 
         group = 'BACKUP'
 
         -- Removing rotation frame size from calculation, using it's height as base hintPosition offset
-        height = height - SilentRotate.mainFrame.rotationFrame:GetHeight()
+        height = height - mainFrame.rotationFrame:GetHeight()
 
-        if (height > SilentRotate.mainFrame.backupFrame:GetHeight()) then
+        if (height > mainFrame.backupFrame:GetHeight()) then
             -- Dragged frame is bellow backup frame
             position = #SilentRotate.rotationTables.backup
         else

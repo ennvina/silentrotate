@@ -26,6 +26,7 @@ function SilentRotate:init()
     SilentRotate.testMode = false
 
     SilentRotate:initGui()
+    SilentRotate:loadHistory()
     SilentRotate:updateRaidStatus()
     SilentRotate:applySettings()
 
@@ -40,22 +41,45 @@ function SilentRotate:ProfilesChanged()
     self:applySettings()
 end
 
--- Apply settings
-function SilentRotate:applySettings()
-
-    SilentRotate.mainFrame:ClearAllPoints()
-
-    local config = SilentRotate.db.profile
-    if config.point then
-        SilentRotate.mainFrame:SetPoint(config.point, UIParent, 'BOTTOMLEFT', config.x, config.y)
+-- Apply position, size, and visibility
+function applyWindowSettings(frame, windowConfig)
+    frame:ClearAllPoints()
+    if windowConfig.point then
+        frame:SetPoint(windowConfig.point, UIParent, 'BOTTOMLEFT', windowConfig.x, windowConfig.y)
     else
-        SilentRotate.mainFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
+        frame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
+    end
+    if windowConfig.width then
+        frame:SetWidth(windowConfig.width)
+    end
+    if windowConfig.height then
+        frame:SetHeight(windowConfig.height)
+    end
+    if type(windowConfig.visible) == 'boolean' and not windowConfig.visible then
+        frame:Hide()
     end
 
-    SilentRotate:updateDisplay()
+    local unlocked = not SilentRotate.db.profile.lock
+    frame:EnableMouse(unlocked)
+    frame:SetMovable(unlocked)
+    for _, resizer in pairs(frame.resizers) do
+        resizer:SetShown(unlocked)
+    end
+end
 
-    SilentRotate.mainFrame:EnableMouse(not SilentRotate.db.profile.lock)
-    SilentRotate.mainFrame:SetMovable(not SilentRotate.db.profile.lock)
+-- Apply settings
+function SilentRotate:applySettings()
+    local config = SilentRotate.db.profile
+
+    for _, mainFrame in pairs(SilentRotate.mainFrames) do
+        applyWindowSettings(mainFrame, config.windows[mainFrame.windowIndex])
+    end
+
+    applyWindowSettings(SilentRotate.historyFrame, config.history)
+    SilentRotate:setHistoryTimeVisible(config.historyTimeVisible)
+    SilentRotate:setHistoryFontSize(config.historyFontSize)
+
+    SilentRotate:updateDisplay()
 end
 
 -- Print wrapper, just in case
@@ -126,7 +150,9 @@ SlashCmdList["SILENTROTATE"] = function(msg)
     elseif (cmd == 'report') then
         SilentRotate:printRotationSetup()
     elseif (cmd == 'settings') then
-        SilentRotate:openSettings()
+        SilentRotate:toggleSettings()
+    elseif (cmd == 'history') then
+        SilentRotate:toggleHistory()
     elseif (cmd == 'check' or cmd== 'version') then
         SilentRotate:checkVersions()
     else
@@ -136,24 +162,62 @@ end
 --SlashCmdList["SR"] = SlashCmdList["SILENTROTATE"]
 
 function SilentRotate:showDisplay()
-    if not SilentRotate.mainFrame:IsShown() then
-        SilentRotate.mainFrame:Show()
+    for _, mainFrame in pairs(SilentRotate.mainFrames) do
+        if not mainFrame:IsShown() then
+            mainFrame:Show()
+            SilentRotate.db.profile.windows[mainFrame.windowIndex].visible = true
+        end
     end
 end
 
 function SilentRotate:hideDisplay()
-    if SilentRotate.mainFrame:IsShown() then
-        SilentRotate.mainFrame:Hide()
+    for _, mainFrame in pairs(SilentRotate.mainFrames) do
+        local somethingWasHidden = false
+        if mainFrame:IsShown() then
+            mainFrame:Hide()
+            SilentRotate.db.profile.windows[mainFrame.windowIndex].visible = false
+            somethingWasHidden = true
+        end
+        if somethingWasHidden then
+            SilentRotate:printMessage(L['TRANQ_WINDOW_HIDDEN'])
+        end
+    end
+end
+
+-- If all main frames are hidden, show them all
+-- Otherwise hide the frames that are visible
+function SilentRotate:toggleDisplay()
+    local everythingHidden = true
+    for _, mainFrame in pairs(SilentRotate.mainFrames) do
+        if mainFrame:IsShown() then
+            everythingHidden = false
+            break
+        end
+    end
+
+    if everythingHidden then
+        for _, mainFrame in pairs(SilentRotate.mainFrames) do
+            mainFrame:Show()
+            SilentRotate.db.profile.windows[mainFrame.windowIndex].visible = true
+        end
+    else 
+        for _, mainFrame in pairs(SilentRotate.mainFrames) do
+            if mainFrame:IsShown() then
+                mainFrame:Hide()
+                SilentRotate.db.profile.windows[mainFrame.windowIndex].visible = false
+            end
+        end
         SilentRotate:printMessage(L['TRANQ_WINDOW_HIDDEN'])
     end
 end
 
-function SilentRotate:toggleDisplay()
-    if SilentRotate.mainFrame:IsShown() then
-        SilentRotate.mainFrame:Hide()
-        SilentRotate:printMessage(L['TRANQ_WINDOW_HIDDEN'])
+function SilentRotate:toggleHistory()
+    if SilentRotate.historyFrame:IsShown() then
+        SilentRotate.historyFrame:Hide()
+        SilentRotate.db.profile.history.visible = false
     else
-        SilentRotate.mainFrame:Show()
+        SilentRotate.historyFrame:Show()
+        SilentRotate.db.profile.history.visible = true
     end
 end
 
@@ -163,10 +227,15 @@ function SilentRotate:test()
     SilentRotate:toggleArcaneShotTesting()
 end
 
--- Open ace settings
-function SilentRotate:openSettings()
+-- Toggle Ace settings
+function SilentRotate:toggleSettings()
     local AceConfigDialog = LibStub("AceConfigDialog-3.0")
-    AceConfigDialog:Open("SilentRotate")
+    local aceConfigAppName = "SilentRotate"
+    if AceConfigDialog.OpenFrames[aceConfigAppName] then
+        AceConfigDialog:Close(aceConfigAppName)
+    else
+        AceConfigDialog:Open(aceConfigAppName)
+    end
 end
 
 -- Sends rotation setup to raid channel
@@ -216,9 +285,10 @@ function SilentRotate:printHelp()
     local spacing = '   '
     SilentRotate:printMessage(SilentRotate:colorText('/silentrotate') .. ' commands options :')
     SilentRotate:printMessage(spacing .. SilentRotate:colorText('toggle') .. ' : Show/Hide the main window')
+    SilentRotate:printMessage(spacing .. SilentRotate:colorText('settings') .. ' : Show/hide SilentRotate settings')
+    SilentRotate:printMessage(spacing .. SilentRotate:colorText('history') .. ' : Show/hide history window')
     SilentRotate:printMessage(spacing .. SilentRotate:colorText('lock') .. ' : Lock the main window position')
     SilentRotate:printMessage(spacing .. SilentRotate:colorText('unlock') .. ' : Unlock the main window position')
-    SilentRotate:printMessage(spacing .. SilentRotate:colorText('settings') .. ' : Open SilentRotate settings')
     SilentRotate:printMessage(spacing .. SilentRotate:colorText('report') .. ' : Print the rotation setup to the configured channel')
     SilentRotate:printMessage(spacing .. SilentRotate:colorText('check') .. ' : Print user versions of SilentRotate')
 end

@@ -116,6 +116,7 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
             local announceArg = type(mode.announceArg) == 'function' and mode.announceArg(mode, hunter, destName) or nil
             self:sendSyncTranq(hunter, failed, timestamp)
             self:rotate(hunter, failed, nil, nil, nil, targetGUID, buffName)
+            self:addHistorySpellMessage(hunter, sourceName, destName, spellName, failed, mode)
             if (sourceGUID == UnitGUID("player")) then
                 if failed then
                     self:sendAnnounceMessage(self.db.profile["announce"..mode.modeNameFirstUpper.."FailMessage"], announceArg)
@@ -196,6 +197,7 @@ function SilentRotate:UNIT_AURA(unitID, isEcho)
             end
             -- Send the rotate order, this is the most important part of the addon
             self:rotate(hunter, false, nil, endTime)
+            self:addHistoryDebuffMessage(hunter, hunter.name, name, mode)
             if (UnitIsUnit(unitID, "player")) then
                 -- Announce to the channel selected in the addon options, but announce only ourselves
                 if mode.canFail then

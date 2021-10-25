@@ -3,6 +3,14 @@ if not L then return end
 L["LOADED_MESSAGE"] = "SilentRotate загружен, введите /silentrotate для настройки"
 L["TRANQ_WINDOW_HIDDEN"] = "Окно SilentRotate скрыто. Введите /silentrotate toggle для отображения"
 
+    -- Buttons
+L["BUTTON_SETTINGS"] = "Settings"
+L["BUTTON_RESET_ROTATION"] = "Reset Rotation"
+L["BUTTON_PRINT_ROTATION"] = "Print Rotation"
+L["BUTTON_HISTORY"] = "History"
+L["BUTTON_RESPAWN_HISTORY"] = "Respawn old messages"
+L["BUTTON_CLEAR_HISTORY"] = "Clear"
+
     -- Settings
 L["SETTING_GENERAL"] = "Общие"
 L["SETTING_GENERAL_REPORT"] = "Пожалуйста о всех ошибках сообщайте на"
@@ -18,7 +26,6 @@ L["SHOW_WHEN_TARGETING_BOSS"] = "Показывать окно только ес
 L["SHOW_WHEN_TARGETING_BOSS_DESC"] = "Показывать окно только если ваша цель может быть усмирена"
 L["WINDOW_LOCKED"] = "SilentRotate: Окно закреплено"
 L["WINDOW_UNLOCKED"] = "SilentRotate: Окно откреплено"
-L["WINDOW_WIDTH"] = "Window width"
 
 L["TEST_MODE_HEADER"] = "Тестовый режим"
 L["ENABLE_ARCANE_SHOT_TESTING"] = "Тестовый режим"
@@ -154,6 +161,25 @@ L["ENABLE_NEXT_TO_TRANQ_SOUND"] = "Проигрывать звук когда п
 L["ENABLE_TRANQ_NOW_SOUND"] = "Проигрывать звук когда пора использовать Усмиряющий выстрел"
 L["TRANQ_NOW_SOUND_CHOICE"] = "Выберите звук для Усмиряющего выстрела"
 L["DBM_SOUND_WARNING"] = "DBM проигрывает звук для каждого Бешенства, из-за этого вы можете не устышать оповещение от SilentRotate. Рекомендуется выбрать хорошо различимый звук для SilentRotate или отключить оповещение от DBM"
+
+    --- History
+L["SETTING_HISTORY"] = "History"
+L["HISTORY_FADEOUT"] = "Time to Fade"
+L["HISTORY_FADEOUT_DESC"] = "Time, in seconds, to keep messages visible in the History window.\n" ..
+        "Old messages can be displayed back, using the Respawn button.\n" ..
+        "Hitting the Clear button erases all messages, current and past, forever."
+L["HISTORY_FONTSIZE"] = "Font Size"
+
+L["HISTORY_DEBUFF_RECEIVED"] = "%s is afflicted by %s."
+L["HISTORY_SPELLCAST_NOTARGET"] = "%s casts %s."
+L["HISTORY_SPELLCAST_SUCCESS"] = "%s casts %s on %s."
+L["HISTORY_SPELLCAST_FAILURE"] = "%s FAILS to cast %s on %s."
+L["HISTORY_TRANQSHOT_FRENZY"] = "%s enters %s."
+L["HISTORY_GROUNDING_SUMMON"] = "Totem of %s is protecting ||group|| %s."
+L["HISTORY_GROUNDING_CANCEL"] = "Totem of %s has been cancelled early because of %s."
+L["HISTORY_GROUNDING_EXPIRE"] = "Totem of %s expires."
+L["HISTORY_GROUNDING_ABSORB"] = "Totem of %s absorbs %s from %s."
+L["HISTORY_GROUNDING_ABSORB_NOSPELL"] = "Totem of %s absorbs attack from %s."
 
     --- Icons
 L["DISPLAY_BLIND_ICON"] = "Show an icon for players without SilentRotate"

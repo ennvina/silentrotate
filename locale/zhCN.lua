@@ -3,6 +3,14 @@ if not L then return end
 L["LOADED_MESSAGE"] = "SilentRotate 已加载, 输入 /silentrotate 进入设置"
 L["TRANQ_WINDOW_HIDDEN"] = "SilentRotate 窗口隐藏. 输入 /silentrotate toggle 显示窗口"
 
+    -- Buttons
+L["BUTTON_SETTINGS"] = "Settings"
+L["BUTTON_RESET_ROTATION"] = "Reset Rotation"
+L["BUTTON_PRINT_ROTATION"] = "Print Rotation"
+L["BUTTON_HISTORY"] = "History"
+L["BUTTON_RESPAWN_HISTORY"] = "Respawn old messages"
+L["BUTTON_CLEAR_HISTORY"] = "Clear"
+
     -- Settings
 L["SETTING_GENERAL"] = "一般"
 L["SETTING_GENERAL_REPORT"] = "请报告问题: "
@@ -18,7 +26,6 @@ L["SHOW_WHEN_TARGETING_BOSS"] = "当你的目标是一个可宁神的Boss时，�
 L["SHOW_WHEN_TARGETING_BOSS_DESC"] = "当你的目标是一个可宁神的Boss时，显示窗口"
 L["WINDOW_LOCKED"] = "SilentRotate: 窗口已隐藏"
 L["WINDOW_UNLOCKED"] = "SilentRotate: 窗口已锁定"
-L["WINDOW_WIDTH"] = "Window width"
 
 L["TEST_MODE_HEADER"] = "测试模式"
 L["ENABLE_ARCANE_SHOT_TESTING"] = "切换测试模式"
@@ -154,6 +161,25 @@ L["ENABLE_NEXT_TO_TRANQ_SOUND"] = "当下一个宁神射击是您时，播放提
 L["ENABLE_TRANQ_NOW_SOUND"] = "当您需要立即宁神射击时，播放提示音"
 L["TRANQ_NOW_SOUND_CHOICE"] = "选择要用于“宁神射击”提示的声音"
 L["DBM_SOUND_WARNING"] = "DBM在激怒时播放的'flag taken'提示音，可能导致您无法听到SilentRotate的提示音。建议选择一个响亮的提示音，或者在DBM中禁用激怒的警告。"
+
+    --- History
+L["SETTING_HISTORY"] = "History"
+L["HISTORY_FADEOUT"] = "Time to Fade"
+L["HISTORY_FADEOUT_DESC"] = "Time, in seconds, to keep messages visible in the History window.\n" ..
+        "Old messages can be displayed back, using the Respawn button.\n" ..
+        "Hitting the Clear button erases all messages, current and past, forever."
+L["HISTORY_FONTSIZE"] = "Font Size"
+
+L["HISTORY_DEBUFF_RECEIVED"] = "%s is afflicted by %s."
+L["HISTORY_SPELLCAST_NOTARGET"] = "%s casts %s."
+L["HISTORY_SPELLCAST_SUCCESS"] = "%s casts %s on %s."
+L["HISTORY_SPELLCAST_FAILURE"] = "%s FAILS to cast %s on %s."
+L["HISTORY_TRANQSHOT_FRENZY"] = "%s enters %s."
+L["HISTORY_GROUNDING_SUMMON"] = "Totem of %s is protecting ||group|| %s."
+L["HISTORY_GROUNDING_CANCEL"] = "Totem of %s has been cancelled early because of %s."
+L["HISTORY_GROUNDING_EXPIRE"] = "Totem of %s expires."
+L["HISTORY_GROUNDING_ABSORB"] = "Totem of %s absorbs %s from %s."
+L["HISTORY_GROUNDING_ABSORB_NOSPELL"] = "Totem of %s absorbs attack from %s."
 
     --- Icons
 L["DISPLAY_BLIND_ICON"] = "Show an icon for players without SilentRotate"

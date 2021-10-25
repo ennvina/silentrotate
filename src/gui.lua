@@ -4,61 +4,74 @@ local L = LibStub("AceLocale-3.0"):GetLocale("SilentRotate")
 -- Initialize GUI frames. Shouldn't be called more than once
 function SilentRotate:initGui()
 
-    SilentRotate:createMainFrame()
-    SilentRotate:createTitleFrame()
-    SilentRotate:createButtons()
-    SilentRotate:createModeFrame()
-    SilentRotate:createRotationFrame()
-    SilentRotate:createBackupFrame()
+    local mainFrame = SilentRotate:createMainFrame()
+    local titleFrame = SilentRotate:createTitleFrame(mainFrame)
+    SilentRotate:createMainFrameButtons(titleFrame)
+    SilentRotate:createModeFrame(mainFrame)
+    local rotationFrame = SilentRotate:createRotationFrame(mainFrame)
+    local backupFrame = SilentRotate:createBackupFrame(mainFrame, rotationFrame)
+    SilentRotate:createHorizontalResizer(mainFrame, SilentRotate.db.profile.windows[1], "LEFT", rotationFrame, backupFrame)
+    SilentRotate:createHorizontalResizer(mainFrame, SilentRotate.db.profile.windows[1], "RIGHT", rotationFrame, backupFrame)
 
-    SilentRotate:drawHunterFrames()
-    SilentRotate:createDropHintFrame()
+    local historyFrame = SilentRotate:createHistoryFrame()
+    local historyTitleFrame = SilentRotate:createTitleFrame(historyFrame, L['SETTING_HISTORY'])
+    SilentRotate:createHistoryFrameButtons(historyTitleFrame)
+    local historyBackgroundFrame = SilentRotate:createBackgroundFrame(historyFrame, SilentRotate.constants.titleBarHeight, SilentRotate.db.profile.history.height)
+    SilentRotate:createTextFrame(historyBackgroundFrame)
+    SilentRotate:createCornerResizer(historyFrame, SilentRotate.db.profile.history)
+
+    SilentRotate:drawHunterFrames(mainFrame)
+    SilentRotate:createDropHintFrame(mainFrame)
 
     SilentRotate:updateDisplay()
 end
 
 -- Show/Hide main window based on user settings
 function SilentRotate:updateDisplay()
-
-    if (SilentRotate:isInPveRaid()) then
-        SilentRotate.mainFrame:Show()
-    else
-        if (SilentRotate.db.profile.hideNotInRaid) then
-            SilentRotate.mainFrame:Hide()
+    for _, mainFrame in pairs(SilentRotate.mainFrames) do
+        if (SilentRotate:isInPveRaid()) then
+            mainFrame:Show()
+        else
+            if (SilentRotate.db.profile.hideNotInRaid) then
+                mainFrame:Hide()
+            end
         end
     end
-
-    SilentRotate.mainFrame:SetWidth(SilentRotate.db.profile.mainFrameWidth)
-    SilentRotate.mainFrame.dropHintFrame:SetWidth(SilentRotate.db.profile.mainFrameWidth - 10)
-    SilentRotate:applyModeFrameSettings()
 end
 
 -- render / re-render hunter frames to reflect table changes.
-function SilentRotate:drawHunterFrames()
+function SilentRotate:drawHunterFrames(mainFrame)
 
     -- Different height to reduce spacing between both groups
-    SilentRotate.mainFrame:SetHeight(SilentRotate.constants.rotationFramesBaseHeight + SilentRotate.constants.titleBarHeight)
-    SilentRotate.mainFrame.rotationFrame:SetHeight(SilentRotate.constants.rotationFramesBaseHeight)
+    mainFrame:SetHeight(SilentRotate.constants.rotationFramesBaseHeight + SilentRotate.constants.titleBarHeight)
+    mainFrame.rotationFrame:SetHeight(SilentRotate.constants.rotationFramesBaseHeight)
 
-    SilentRotate:drawList(SilentRotate.rotationTables.rotation, SilentRotate.mainFrame.rotationFrame)
+    SilentRotate:drawList(SilentRotate.rotationTables.rotation, mainFrame.rotationFrame, mainFrame)
 
     if (#SilentRotate.rotationTables.backup > 0) then
-        SilentRotate.mainFrame:SetHeight(SilentRotate.mainFrame:GetHeight() + SilentRotate.constants.rotationFramesBaseHeight)
+        mainFrame:SetHeight(mainFrame:GetHeight() + SilentRotate.constants.rotationFramesBaseHeight)
     end
 
-    SilentRotate.mainFrame.backupFrame:SetHeight(SilentRotate.constants.rotationFramesBaseHeight)
-    SilentRotate:drawList(SilentRotate.rotationTables.backup, SilentRotate.mainFrame.backupFrame)
+    mainFrame.backupFrame:SetHeight(SilentRotate.constants.rotationFramesBaseHeight)
+    SilentRotate:drawList(SilentRotate.rotationTables.backup, mainFrame.backupFrame, mainFrame)
 
 end
 
+-- Method provided for convenience, until hunters will be dedicated to a specific mainFrame
+function SilentRotate:drawHunterFramesOfAllMainFrames()
+    for _, mainFrame in pairs(SilentRotate.mainFrames) do
+        SilentRotate:drawHunterFrames(mainFrame)
+    end
+end
+
 -- Handle the render of a single hunter frames group
-function SilentRotate:drawList(hunterList, parentFrame)
+function SilentRotate:drawList(hunterList, parentFrame, mainFrame)
 
     local index = 1
     local hunterFrameHeight = SilentRotate.constants.hunterFrameHeight
     local hunterFrameSpacing = SilentRotate.constants.hunterFrameSpacing
 
-    if (#hunterList < 1 and parentFrame == SilentRotate.mainFrame.backupFrame) then
+    if (#hunterList < 1 and parentFrame == mainFrame.backupFrame) then
         parentFrame:Hide()
     else
         parentFrame:Show()
@@ -68,7 +81,7 @@ function SilentRotate:drawList(hunterList, parentFrame)
 
         -- Using existing frame if possible
         if (hunter.frame == nil) then
-            SilentRotate:createHunterFrame(hunter, parentFrame)
+            SilentRotate:createHunterFrame(hunter, parentFrame, mainFrame)
         else
             hunter.frame:SetParent(parentFrame)
         end
@@ -84,10 +97,10 @@ function SilentRotate:drawList(hunterList, parentFrame)
         -- Handling parent windows height increase
         if (index == 1) then
             parentFrame:SetHeight(parentFrame:GetHeight() + hunterFrameHeight)
-            SilentRotate.mainFrame:SetHeight(SilentRotate.mainFrame:GetHeight() + hunterFrameHeight)
+            mainFrame:SetHeight(mainFrame:GetHeight() + hunterFrameHeight)
         else
             parentFrame:SetHeight(parentFrame:GetHeight() + hunterFrameHeight + hunterFrameSpacing)
-            SilentRotate.mainFrame:SetHeight(SilentRotate.mainFrame:GetHeight() + hunterFrameHeight + hunterFrameSpacing)
+            mainFrame:SetHeight(mainFrame:GetHeight() + hunterFrameHeight + hunterFrameSpacing)
         end
 
         -- SetColor
@@ -166,10 +179,12 @@ function SilentRotate:setHunterName(hunter)
     if (SilentRotate.db.profile.useClassColor) then
         local _, _classFilename, _ = UnitClass(hunter.name)
         if (_classFilename) then
-            if (_classFilename == "PRIEST") then
+            if _classFilename == "PRIEST" then
                 shadowOpacity = 1.0
-            elseif (_classFilename == "ROGUE" or _classFilename == "PALADIN") then
+            elseif _classFilename == "ROGUE" or _classFilename == "PALADIN" then
                 shadowOpacity = 0.8
+            elseif _classFilename == "SHAMAN" then
+                shadowOpacity = 0.4
             else
                 shadowOpacity = 0.6
             end

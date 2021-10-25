@@ -37,6 +37,13 @@ SilentRotate.constants = {
     ['modeFrameMargin'] = 2,
     ['rotationFramesBaseHeight'] = 20,
 
+    history = {
+        fontFace = "Fonts\\ARIALN.ttf",
+        fontSize = 12,
+        margin = 4,
+        defaultTimeVisible = 600, -- Fallback value in case the configuration is not a number
+    },
+
     ['commsPrefix'] = 'silentrotate',
 
     ['commsChannel'] = 'RAID',

@@ -18,23 +18,37 @@ function SilentRotate:getMode(modeName)
 end
 
 -- Activate the specific mode
-function SilentRotate:activateMode(modeName)
+function SilentRotate:activateMode(modeName, mainFrame)
     local currentMode = self:getMode()
     local paramMode = self:getMode(modeName)
     if currentMode.modeName == paramMode.modeName then return end
 
-    oldFrame = SilentRotate.mainFrame.modeFrames[currentMode.modeName]
+    oldFrame = mainFrame.modeFrames[currentMode.modeName]
     if oldFrame then
         oldFrame.texture:SetColorTexture(SilentRotate.colors.darkBlue:GetRGB())
     end
 
-    newFrame = SilentRotate.mainFrame.modeFrames[modeName]
+    newFrame = mainFrame.modeFrames[modeName]
     if newFrame then
         SilentRotate.db.profile.currentMode = modeName
         newFrame.texture:SetColorTexture(SilentRotate.colors.blue:GetRGB())
         SilentRotate:updateRaidStatus()
         local AceConfigDialog = LibStub("AceConfigDialog-3.0")
         AceConfigDialog:ConfigTableChanged("", Addon)
+    end
+end
+
+-- Get the color associated to a specific mode
+function SilentRotate:getModeColor(mode)
+    if type(mode.color) == 'string' then
+        return mode.color
+    elseif type(mode.color) == 'function' then
+        return mode.color()
+    elseif type(mode.wanted) == 'string' then
+        -- Assume a wingle string for mode.wanted is always the class name
+        return select(4, GetClassColor(mode.wanted))
+    else
+        return 'ffffffff'
     end
 end
 
@@ -142,6 +156,7 @@ SilentRotate.modes = {
         oldModeName = 'hunterz',
         project = true,
         default = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC,
+        -- color = nil,
         wanted = 'HUNTER',
         cooldown = 20,
         -- effectDuration = nil,
@@ -152,8 +167,12 @@ SilentRotate.modes = {
         end,
         -- auraTest = nil,
         customCombatlogFunc = function(self, event, sourceGUID, sourceName, sourceFlags, destGUID, destName, spellId, spellName)
-            if event == "SPELL_AURA_APPLIED" and SilentRotate:isBossFrenzy(spellName, sourceGUID) and SilentRotate:isPlayerNextTranq() then
-                SilentRotate:throwTranqAlert()
+            if event == "SPELL_AURA_APPLIED" and SilentRotate:isBossFrenzy(spellName, sourceGUID) then
+                local historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_TRANQSHOT_FRENZY"), sourceName, spellName)
+                SilentRotate:addHistoryMessage(historyMessage, self)
+                if SilentRotate:isPlayerNextTranq() then
+                    SilentRotate:throwTranqAlert()
+                end
             elseif event == "UNIT_DIED" and SilentRotate:isTranqableBoss(destGUID) then
                 SilentRotate:resetRotation()
             end
@@ -162,6 +181,7 @@ SilentRotate.modes = {
         -- buffName = nil,
         -- buffCanReturn = nil,
         -- customTargetName = nil,
+        -- customHistoryFunc = nil,
         announceArg = function(self, hunter, destName) return destName end,
         -- tooltip = nil,
         -- metadata = nil
@@ -171,6 +191,7 @@ SilentRotate.modes = {
         oldModeName = 'healerz',
         project = true,
         default = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC,
+        color = 'ff3fe7cc', -- Green-ish gooey of Loatheb HS card
         wanted = {'PRIEST', 'PALADIN', 'SHAMAN', 'DRUID'},
         cooldown = 60,
         -- effectDuration = nil,
@@ -189,6 +210,7 @@ SilentRotate.modes = {
         -- buffName = nil,
         -- buffCanReturn = nil,
         -- customTargetName = nil,
+        -- customHistoryFunc = nil,
         announceArg = function(self, hunter, destName) return destName end,
         -- tooltip = nil,
         -- metadata = nil
@@ -198,6 +220,7 @@ SilentRotate.modes = {
         oldModeName = 'roguez',
         project = true,
         default = false,
+        -- color = nil,
         wanted = 'ROGUE',
         cooldown = 30,
         effectDuration = 10,
@@ -209,6 +232,7 @@ SilentRotate.modes = {
         -- buffName = nil,
         -- buffCanReturn = nil,
         -- customTargetName = nil,
+        -- customHistoryFunc = nil,
         announceArg = function(self, hunter, destName) return destName end,
         -- tooltip = nil,
         -- metadata = nil
@@ -218,6 +242,7 @@ SilentRotate.modes = {
         oldModeName = 'fearz',
         project = true,
         default = true,
+        color = select(4,GetClassColor('PRIEST')),
         wanted = function(self, className, raceName) return className == 'PRIEST' and (WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC or raceName == 'Dwarf') end,
         cooldown = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 30 or 180,
         effectDuration = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 600 or 180,
@@ -229,6 +254,7 @@ SilentRotate.modes = {
         buffName = function(self, spellId, spellName) return spellName end,
         buffCanReturn = false,
         -- customTargetName = nil,
+        -- customHistoryFunc = nil,
         announceArg = function(self, hunter, destName) return destName end,
         -- tooltip = nil,
         -- metadata = nil
@@ -238,6 +264,7 @@ SilentRotate.modes = {
         oldModeName = 'tauntz',
         project = true,
         default = false,
+        color = select(4,GetClassColor('WARRIOR')),
         wanted = {'WARRIOR', 'DRUID'},
         cooldown = 600,
         effectDuration = 6,
@@ -252,6 +279,7 @@ SilentRotate.modes = {
         -- buffName = nil,
         -- buffCanReturn = nil,
         -- customTargetName = nil,
+        -- customHistoryFunc = nil,
         announceArg = function(self, hunter, destName) return destName end,
         -- tooltip = nil,
         -- metadata = nil
@@ -261,6 +289,7 @@ SilentRotate.modes = {
         oldModeName = 'misdiz',
         project = WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC,
         default = WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC,
+        -- color = nil,
         wanted = 'HUNTER',
         cooldown = 120,
         effectDuration = 30,
@@ -272,6 +301,7 @@ SilentRotate.modes = {
         buffName = function(self, spellId, spellName) return spellName end,
         buffCanReturn = false,
         -- customTargetName = nil,
+        -- customHistoryFunc = nil,
         announceArg = function(self, hunter, destName) return destName end,
         -- tooltip = nil,
         -- metadata = nil
@@ -281,6 +311,7 @@ SilentRotate.modes = {
         oldModeName = 'shamanz',
         project = WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC,
         default = WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC,
+        -- color = nil,
         wanted = 'SHAMAN',
         cooldown = 600,
         effectDuration = 40,
@@ -294,7 +325,8 @@ SilentRotate.modes = {
         targetGUID = function(self, sourceGUID, destGUID) return sourceGUID end, -- Target is the caster itself
         buffName = function(self, spellId, spellName) return spellName end,
         buffCanReturn = false,
-        customTargetName = function(self, hunter, targetName) return string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup or 0) end,
+        customTargetName = function(self, hunter, targetName) return hunter.subgroup and string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup) end,
+        -- customHistoryFunc = nil,
         announceArg = function(self, hunter, destName) return hunter.subgroup or 0 end,
         -- tooltip = nil,
         -- metadata = nil
@@ -303,13 +335,13 @@ SilentRotate.modes = {
     grounding = {
         project = true,
         default = false,
+        -- color = nil,
         wanted = 'SHAMAN',
         cooldown = 15,
         effectDuration = 45,
         canFail = false,
         spell = GetSpellInfo(8177),
         -- auraTest = nil,
-        -- customCombatlogFunc = nil,
         customCombatlogFunc = function(self, event, sourceGUID, sourceName, sourceFlags, destGUID, destName, spellId, spellName)
             if (event == "SPELL_SUMMON") and sourceGUID and sourceName and spellName == self.spell then
                 self.metadata.summons[destGUID] = {
@@ -321,9 +353,22 @@ SilentRotate.modes = {
                     killedWith = nil,
                 }
                 self.metadata.summoners[sourceGUID] = destGUID
+                -- Hack for tracking when the totem expires
+                -- Because the game client does not always fire the UNIT_DESTROYED event
+                -- Wait 2 seconds after the summon to leave some time in case of lag
+                C_Timer.After(self.effectDuration+2, function()
+                    if self.metadata.summoners[sourceGUID] == destGUID and self.metadata.summons[destGUID].summoned then
+                        -- Force-fire a false event
+                        self:customCombatlogFunc("UNIT_DESTROYED", nil, nil, nil, destGUID, destName)
+                    end
+                end)
             elseif destGUID and self.metadata.summons[destGUID] then
                 if (event == "UNIT_DESTROYED") then
-                    self.metadata.summons[destGUID].summoned = false
+                    if self.metadata.summons[destGUID].summoned then
+                        self.metadata.summons[destGUID].summoned = false
+                        local historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_EXPIRE"), self.metadata.summons[destGUID].ownerName)
+                        SilentRotate:addHistoryMessage(historyMessage, self)
+                    end
                 elseif sourceName and spellName then
                     -- Check if the caster is attacking to the totem
                     -- Because of limitations of the CombatLog, we cannot know for sure if the spell kills the totem
@@ -334,6 +379,7 @@ SilentRotate.modes = {
                     local ownerName = self.metadata.summons[destGUID].ownerName
                     local ownerHostile = not UnitIsPlayer(ownerName) or UnitIsPossessed(ownerName)
                     local casterHostile = not UnitIsPlayer(sourceName) or UnitIsPossessed(sourceName)
+                    local wasSummoned = self.metadata.summons[destGUID].summoned
                     if ownerHostile ~= casterHostile then
                         -- In Classic Era, only damage can kill the totem
                         self.metadata.summons[destGUID].summoned = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and event:sub(-7) ~= "_DAMAGE"
@@ -342,6 +388,44 @@ SilentRotate.modes = {
                         if event:sub(0,5) == "SPELL" then
                             self.metadata.summons[destGUID].killedWith = spellName
                         end
+                    end
+
+                    local totem = self.metadata.summons[destGUID]
+                    local isNowSummoned = totem.summoned
+                    if wasSummoned ~= isNowSummoned then
+                        local ownerGUID = totem.ownerGUID
+                        local hunter = SilentRotate:getHunter(ownerGUID)
+                        if hunter then
+                            local historyMessage
+                            if totem.killedWith then
+                                historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_ABSORB"), totem.ownerName, totem.killedWith, totem.killedBy)
+                            else
+                                historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_ABSORB_NOSPELL"), totem.ownerName, totem.killedBy)
+                            end
+                            SilentRotate:addHistoryMessage(historyMessage, self)
+                        end
+                    end
+                end
+            elseif (event == "SPELL_CAST_SUCCESS") then
+                -- cancellersQuickSearch is built lazy
+                local cancellersQuickSearch = self.metadata.cancellersQuickSearch
+                if not cancellersQuickSearch then
+                    cancellersQuickSearch = {}
+                    for _, cancellerSpellName in pairs(self.metadata.cancellers) do
+                        if cancellerSpellName then -- Mus check existence because not all spells exist in all 'projects'
+                            cancellersQuickSearch[cancellerSpellName] = true
+                        end
+                    end
+                    self.metadata.cancellersQuickSearch = cancellersQuickSearch
+                end
+
+                if self.metadata.cancellersQuickSearch[spellName] then
+                    local totemGUID = self.metadata.summoners[sourceGUID]
+                    local totem = self.metadata.summons[totemGUID]
+                    if totem and totem.summoned then
+                        totem.summoned = false
+                        local historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_CANCEL"), totem.ownerName, spellName)
+                        SilentRotate:addHistoryMessage(historyMessage, self)
                     end
                 end
             end
@@ -354,7 +438,7 @@ SilentRotate.modes = {
             local totem = self.metadata.summons[totemGUID]
             if not totemGUID or totem.summoned then
                 -- Totem still active: display the group where it belongs
-                return string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup or 0)
+                return hunter.subgroup and string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup)
             elseif totem.killedWith then
                 -- Totem destroyed by spell: display the spell name only
                 return totem.killedWith
@@ -365,6 +449,9 @@ SilentRotate.modes = {
                 -- Expired, display nothing
                 return nil
             end
+        end,
+        customHistoryFunc = function(mode, hunter, sourceName, destName, spellName, failed)
+            return string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_SUMMON"), sourceName, hunter.subgroup or 0)
         end,
         announceArg = function(self, hunter, destName) return hunter.subgroup or 0 end,
         tooltip = function(self, hunter)
@@ -381,6 +468,16 @@ SilentRotate.modes = {
         end,
         metadata = {
             groundingTotemEffectName = GetSpellInfo(8178), -- The buff is the name from spellId+1, not from spellId
+            cancellers = {
+                (GetSpellInfo(8835)), -- Grace of Air Totem rank 1
+                (GetSpellInfo(10595)), -- Nature Resistance Totem rank 1
+                (GetSpellInfo(6495)), -- Sentry Totem
+                (GetSpellInfo(25908)), -- Tranquil Air Totem
+                (GetSpellInfo(8512)), -- Windfury Totem rank 1
+                (GetSpellInfo(15107)), -- Wind Wall Totem rank 1
+                (GetSpellInfo(3738)), -- Wrath of Air Totem rank 1, introduced in Burning Crusade
+                (GetSpellInfo(36936)), -- Totemic Call, introduced in Burning Crusade
+            },
             summons = {},
             summoners = {}
         },
@@ -389,6 +486,7 @@ SilentRotate.modes = {
     brez = {
         project = true,
         default = false,
+        -- color = nil,
         wanted = 'DRUID',
         cooldown = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 1800 or 1200,
         -- effectDuration = nil,
@@ -400,6 +498,7 @@ SilentRotate.modes = {
         -- buffName = nil,
         -- buffCanReturn = nil,
         -- customTargetName = nil,
+        -- customHistoryFunc = nil,
         announceArg = function(self, hunter, destName) return destName end,
         -- tooltip = nil,
         -- metadata = nil
@@ -408,6 +507,7 @@ SilentRotate.modes = {
     innerv = {
         project = true,
         default = false,
+        -- color = nil,
         wanted = 'DRUID',
         cooldown = 360,
         effectDuration = 20,
@@ -419,6 +519,7 @@ SilentRotate.modes = {
         buffName = function(self, spellId, spellName) return spellName end,
         buffCanReturn = false,
         -- customTargetName = nil,
+        -- customHistoryFunc = nil,
         announceArg = function(self, hunter, destName) return destName end,
     },
 }

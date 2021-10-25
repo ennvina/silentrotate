@@ -3,6 +3,14 @@ if not L then return end
 L["LOADED_MESSAGE"] = "SilentRotate chargé, utilisez /silentrotate pour les options"
 L["TRANQ_WINDOW_HIDDEN"] = "SilentRotate window hidden. Use /silentrotate toggle to get it back"
 
+    -- Buttons
+L["BUTTON_SETTINGS"] = "Paramètres"
+L["BUTTON_RESET_ROTATION"] = "Réinitialiser la rotation"
+L["BUTTON_PRINT_ROTATION"] = "Afficher la rotation"
+L["BUTTON_HISTORY"] = "Historique"
+L["BUTTON_RESPAWN_HISTORY"] = "Montrer les anciens messages"
+L["BUTTON_CLEAR_HISTORY"] = "Effacer"
+
     -- Settings
 L["SETTING_GENERAL"] = "Général"
 L["SETTING_GENERAL_REPORT"] = "Merci de signaler tout bug rencontré sur"
@@ -18,7 +26,6 @@ L["SHOW_WHEN_TARGETING_BOSS"] = "Afficher la fenêtre principale lorsque vous ci
 L["SHOW_WHEN_TARGETING_BOSS_DESC"] = "Afficher la fenêtre principale lorsque vous ciblez un boss tranquilisable"
 L["WINDOW_LOCKED"] = "SilentRotate: Fenêtre verrouillée"
 L["WINDOW_UNLOCKED"] = "SilentRotate: Fenêtre déverrouillée"
-L["WINDOW_WIDTH"] = "Largeur de la fenêtre"
 
 L["TEST_MODE_HEADER"] = "Test mode"
 L["ENABLE_ARCANE_SHOT_TESTING"] = "Activer/désactiver le mode test"
@@ -154,6 +161,25 @@ L["ENABLE_NEXT_TO_TRANQ_SOUND"] = "Jouer un son lorsque vous êtes le prochain �
 L["ENABLE_TRANQ_NOW_SOUND"] = "Jouer un son au moment ou vous devez tranq"
 L["TRANQ_NOW_SOUND_CHOICE"] = "Son à jouer au moment ou vous devez tranq"
 L["DBM_SOUND_WARNING"] = "DBM joue le son de capture de drapeau à chaque frénésie, cela pourrait couvrir un son trop doux. Je suggère de choisir un son assez marquant ou de désactiver les alertes de frénésie DBM si vous choisissez un son plus doux."
+
+    --- History
+L["SETTING_HISTORY"] = "Historique"
+L["HISTORY_FADEOUT"] = "Temps avant effacement"
+L["HISTORY_FADEOUT_DESC"] = "Temps, en seconds, pour laisser les messages dans la fenêtre d'historique.\n" ..
+        "Le bouton \"Montrer les anciens messages\" ré-affiche les messages masqués par le temps.\n" ..
+        "Le bouton \"Effacer\" supprime pour toujours tous les messages, présents comme passés."
+L["HISTORY_FONTSIZE"] = "Taille de la police de caractères"
+
+L["HISTORY_DEBUFF_RECEIVED"] = "%s est affecté par %s."
+L["HISTORY_SPELLCAST_NOTARGET"] = "%s lance %s."
+L["HISTORY_SPELLCAST_SUCCESS"] = "%s lance %s sur %s."
+L["HISTORY_SPELLCAST_FAILURE"] = "%s ÉCHOUE à lancer %s sur %s."
+L["HISTORY_TRANQSHOT_FRENZY"] = "%s entre en %s."
+L["HISTORY_GROUNDING_SUMMON"] = "Le totem de %s protège le ||groupe|| %s."
+L["HISTORY_GROUNDING_CANCEL"] = "Le totem de %s fut annulé prématurément à cause de %s."
+L["HISTORY_GROUNDING_EXPIRE"] = "Le totem de %s expire."
+L["HISTORY_GROUNDING_ABSORB"] = "Le totem de %s absorbe %s de %s."
+L["HISTORY_GROUNDING_ABSORB_NOSPELL"] = "Le totem de %s absorbe une attaque de %s."
 
     --- Icons
 L["DISPLAY_BLIND_ICON"] = "Afficher une icône pour les joueurs qui n'ont pas installé SilentRotate"

@@ -1,5 +1,17 @@
 ## SilentRotate Changelog
 
+#### v0.9.0-beta (2021-xx-yy)
+
+Major changes have been done to the window system
+Because of that, the window position and size have been reset
+
+- New button in the title bar to display History
+- Buttons in the title bar are sligthly bigger and now have a tooltip
+- The Settings button now toggles the window instead of always opening it
+- If the main window was hidden by the user, it is not reopen on startup
+- Window width is changed by a resizer in the window instead of settings
+- History has its own new tab in the Settings window
+
 #### v0.8.1-beta (2021-10-22)
 
 - Added Innervate mode
