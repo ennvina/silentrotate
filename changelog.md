@@ -1,6 +1,6 @@
 ## SilentRotate Changelog
 
-#### v0.9.0-beta (2021-xx-yy)
+#### v0.9.0-beta (2021-10-25)
 
 Major changes have been done to the window system
 Because of that, the window position and size have been reset
