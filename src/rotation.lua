@@ -239,6 +239,7 @@ end
 -- Return our hunter object from name or GUID
 function SilentRotate:getHunter(searchTerm)
 
+    -- @todo optimize with a reverse table
     for _, hunter in pairs(SilentRotate.hunterTable) do
         if (searchTerm ~= nil and (hunter.GUID == searchTerm or hunter.name == searchTerm)) then
             return hunter

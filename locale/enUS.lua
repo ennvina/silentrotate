@@ -191,7 +191,10 @@ L["DISPLAY_BLIND_ICON_TOOLTIP_DESC"] = "You can disable this options to disable 
 L["TOOLTIP_PLAYER_WITHOUT_ADDON"] = "This player does not use SilentRotate"
 L["TOOLTIP_MAY_RUN_OUDATED_VERSION"] = "Or runs an outdated version, older than 0.7.0"
 L["TOOLTIP_DISABLE_SETTINGS"] = "(You can disable the icon and/or the tooltip in the settings)"
-L["TOOLTIP_COOLDOWN_REMAINING"] = "%s secs left"
+L["TOOLTIP_EFFECT_REMAINING"] = "Effect remaining: %s"
+L["TOOLTIP_COOLDOWN_REMAINING"] = "Cooldown remaining: %s"
+L["TOOLTIP_DURATION_SECONDS"] = "%s sec"
+L["TOOLTIP_DURATION_MINUTES"] = "%s min"
 
     --- Notifications
 L["UPDATE_AVAILABLE"] = "A new version is available, please update to get the latest features."

@@ -191,6 +191,10 @@ L["DISPLAY_BLIND_ICON_TOOLTIP_DESC"] = "En désactivant cette option vous désac
 L["TOOLTIP_PLAYER_WITHOUT_ADDON"] = "Ce joueur n'utilise pas SilentRotate"
 L["TOOLTIP_MAY_RUN_OUDATED_VERSION"] = "Ou possède une version obsolète, inférieure à 0.7.0"
 L["TOOLTIP_DISABLE_SETTINGS"] = "(Vous pouvez désactiver l'icône et/ou l'info-bulle dans les paramètres)"
+L["TOOLTIP_EFFECT_REMAINING"] = "Durée de l'effet : %s"
+L["TOOLTIP_COOLDOWN_REMAINING"] = "Temps de recharge : %s"
+L["TOOLTIP_DURATION_SECONDS"] = "%s sec"
+L["TOOLTIP_DURATION_MINUTES"] = "%s min"
 
     --- Notifications
 L["UPDATE_AVAILABLE"] = "Une nouvelle version est disponible, veuillez mettre à jour pour profiter des dernières fonctionnalités."

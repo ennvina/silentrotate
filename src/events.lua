@@ -164,7 +164,7 @@ function SilentRotate:UNIT_AURA(unitID, isEcho)
     -- Whether the unit really got the debuff or not, it's pointless if the unit is not tracked (e.g. not a healer)
     local hunter = self:getHunter(UnitGUID(unitID))
     if not hunter then return end
-    local previousExpirationTime = hunter.frame.cooldownFrame.statusBar.expirationTime
+    local previousExpirationTime = hunter.expirationTime
 
     if not isEcho then
         -- Try again in 1 second to secure lags between UNIT_AURA and the actual aura applied
@@ -212,7 +212,7 @@ function SilentRotate:UNIT_AURA(unitID, isEcho)
 
     -- The unit is not affected by Corrupted Mind: reset its expiration time
     if previousExpirationTime and previousExpirationTime > 0 then
-        hunter.frame.cooldownFrame.statusBar.expirationTime = 0
+        hunter.expirationTime = 0
     end
 end
 

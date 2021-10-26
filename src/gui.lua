@@ -292,7 +292,7 @@ function SilentRotate:startHunterCooldown(hunter, endTimeOfCooldown, endTimeOfEf
     hunter.endTimeOfEffect = endTimeOfEffect
 
     hunter.frame.cooldownFrame.statusBar:SetMinMaxValues(GetTime(), endTimeOfCooldown or GetTime())
-    hunter.frame.cooldownFrame.statusBar.expirationTime = endTimeOfCooldown
+    hunter.expirationTime = endTimeOfCooldown
     if endTimeOfCooldown and endTimeOfEffect and GetTime() < endTimeOfCooldown and GetTime() < endTimeOfEffect and endTimeOfEffect < endTimeOfCooldown then
         local tickWidth = 3
         local x = hunter.frame.cooldownFrame:GetWidth()*(endTimeOfEffect-GetTime())/(endTimeOfCooldown-GetTime())
@@ -343,8 +343,6 @@ function SilentRotate:startHunterCooldown(hunter, endTimeOfCooldown, endTimeOfEf
         end
     else
         hunter.buffName = ""
-        hunter.endTimeOfEffect = 0
-        endTimeOfEffect = 0
     end
 end
 
