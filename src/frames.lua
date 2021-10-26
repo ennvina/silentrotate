@@ -719,12 +719,23 @@ function SilentRotate.onHunterEnter(frame)
             local tooltipRefreshFunc = function()
                 local effectRemaining = hunter and hunter.endTimeOfEffect-GetTime() or 0
                 local cooldownRemaining = hunter and hunter.expirationTime-GetTime() or 0
+                local text = ''
                 if effectRemaining > 0 or cooldownRemaining > 0 then
                     local hrEffect
                     if effectRemaining > 60 then
                         hrEffect = string.format(L['TOOLTIP_DURATION_MINUTES'], ceil(effectRemaining/60))
                     elseif effectRemaining > 0 then
                         hrEffect = string.format(L['TOOLTIP_DURATION_SECONDS'], ceil(effectRemaining))
+                    end
+                    if hrEffect then
+                        -- The effect is not real if the buff was lost
+                        local _, targetMode = SilentRotate:getHunterTarget(hunter)
+                        if targetMode == 'buff_lost' then
+                            local mode = SilentRotate:getMode() -- @todo get mode of hunter
+                            if mode and not mode.buffCanReturn then
+                                hrEffect = nil
+                            end
+                        end
                     end
 
                     local hrCooldown
@@ -734,7 +745,6 @@ function SilentRotate.onHunterEnter(frame)
                         hrCooldown = string.format(L['TOOLTIP_DURATION_SECONDS'], ceil(cooldownRemaining))
                     end
 
-                    local text = ''
                     if hrEffect then
                         text = string.format(L['TOOLTIP_EFFECT_REMAINING'], hrEffect)
                     end
@@ -745,7 +755,8 @@ function SilentRotate.onHunterEnter(frame)
                         text = text..string.format(L['TOOLTIP_COOLDOWN_REMAINING'], hrCooldown)
                     end 
                     GameTooltip:SetText(text)
-                else
+                end
+                if text == '' then
                     frame.tooltipRefreshTicker:Cancel()
                     frame.tooltipRefreshTicker = nil
                     GameTooltip:Hide()
