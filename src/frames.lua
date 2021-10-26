@@ -697,20 +697,24 @@ end
 
 -- Hunter frame tooltip show
 function SilentRotate:onHunterEnter()
+    local tooltip
+
     local mode = SilentRotate:getMode()
     if mode and mode.tooltip then
-        local tooltip
         if type(mode.tooltip) == 'string' then
             tooltip = mode.tooltip
         elseif type(mode.tooltip) == 'function' then
             local hunter = SilentRotate:getHunter(self.GUID)
             tooltip = mode.tooltip(mode, hunter)
         end
-        if tooltip then
-            GameTooltip:SetOwner(self, "ANCHOR_TOP")
-            GameTooltip:SetText(tooltip)
-            GameTooltip:Show()
-        end
+    elseif self.cooldownFrame.statusBar.expirationTime and GetTime() < self.cooldownFrame.statusBar.expirationTime then
+        tooltip = string.format(L['TOOLTIP_COOLDOWN_REMAINING'], math.ceil(self.cooldownFrame.statusBar.expirationTime-GetTime()))
+    end
+
+    if tooltip then
+        GameTooltip:SetOwner(self, "ANCHOR_TOP")
+        GameTooltip:SetText(tooltip)
+        GameTooltip:Show()
     end
 end
 
