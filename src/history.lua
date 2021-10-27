@@ -100,26 +100,8 @@ function SilentRotate:trackHistoryBuff(hunter)
         hunter.historyTrackerTicker = nil
     end
 
-    if not hunter or not hunter.buffName or not hunter.endTimeOfEffect then
+    if not hunter or not hunter.buffName or not hunter.targetGUID or not hunter.endTimeOfEffect then
         -- Cannot work without sufficient information
-        return
-    end
-
-    if not hunter.targetGUID then
-        -- Special case: track buff without target -> simply track expiration
-        -- @todo replace this costful track with a simple C_Timer.NewTimer maybe?
-        if not hunter.historyTrackerTicker or hunter.historyTrackerTicker:IsCancelled() then
-            local refreshInterval = 1.5
-            hunter.historyTrackerTicker = C_Timer.NewTicker(refreshInterval, function()
-                if GetTime() >= hunter.endTimeOfEffect then
-                    local msg = string.format(self:getHistoryPattern('HISTORY_SPELLCAST_EXPIRE_NOTARGET'), hunter.buffName, hunter.name)
-                    local mode = SilentRotate:getMode() -- @todo get mode from hunter
-                    self:addHistoryMessage(msg, mode)
-                    hunter.historyTrackerTicker:Cancel()
-                    hunter.historyTrackerTicker = nil
-                end
-            end)
-        end
         return
     end
 
