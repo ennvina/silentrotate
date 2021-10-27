@@ -211,12 +211,11 @@ function SilentRotate:setHunterName(hunter)
         end
     end
 
-    local targetName
-    local targetMode
+    local targetName, buffMode
     if SilentRotate.db.profile.appendTarget and hunter.targetGUID then
-        targetName, targetMode = self:getHunterTarget(hunter)
+        targetName, buffMode = self:getHunterTarget(hunter)
     end
-    local showTarget = targetName and targetName ~= "" and targetMode and (targetMode == 'not_a_buff' or targetMode == 'has_buff' or not SilentRotate.db.profile.appendTargetBuffOnly)
+    local showTarget = targetName and targetName ~= "" and buffMode and (buffMode == 'not_a_buff' or buffMode == 'has_buff' or not SilentRotate.db.profile.appendTargetBuffOnly)
     hunter.showingTarget = showTarget
 
     if (SilentRotate.db.profile.appendGroup and hunter.subgroup) then
@@ -229,10 +228,10 @@ function SilentRotate:setHunterName(hunter)
 
     if showTarget then
         local targetColorName
-        if      targetMode == 'buff_expired' then   targetColorName = 'darkGray'
-        elseif  targetMode == 'buff_lost' then      targetColorName = 'lightRed'
-        elseif  targetMode == 'has_buff' then       targetColorName = 'white'
-        else                                        targetColorName = 'white'
+        if      buffMode == 'buff_expired' then targetColorName = 'darkGray'
+        elseif  buffMode == 'buff_lost' then    targetColorName = 'lightRed'
+        elseif  buffMode == 'has_buff' then     targetColorName = 'white'
+        else                                    targetColorName = 'white'
         end
         local mode = self:getMode()
         if type(mode.customTargetName) == 'function' then
@@ -329,8 +328,10 @@ function SilentRotate:startHunterCooldown(hunter, endTimeOfCooldown, endTimeOfEf
                 hunter.nameRefreshTimer = nil
             end)
         end
-    else
-        hunter.buffName = ""
+    end
+
+    if hunter.buffName and hunter.endTimeOfEffect > GetTime() then
+        SilentRotate:trackHistoryBuff(hunter)
     end
 end
 

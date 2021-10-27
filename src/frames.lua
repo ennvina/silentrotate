@@ -729,8 +729,8 @@ function SilentRotate.onHunterEnter(frame)
                     end
                     if hrEffect then
                         -- The effect is not real if the buff was lost
-                        local _, targetMode = SilentRotate:getHunterTarget(hunter)
-                        if targetMode == 'buff_lost' then
+                        local _, buffMode = SilentRotate:getHunterTarget(hunter)
+                        if buffMode == 'buff_lost' then
                             local mode = SilentRotate:getMode() -- @todo get mode of hunter
                             if mode and not mode.buffCanReturn then
                                 hrEffect = nil
