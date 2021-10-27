@@ -53,22 +53,22 @@ end
 -- even if the buff was lost before the end
 function SilentRotate:getHunterTarget(hunter)
     local targetName = SilentRotate:getPlayerGuid(hunter.targetGUID) and select(6, GetPlayerInfoByGUID(hunter.targetGUID))
-    local targetMode
+    local buffMode
 
     if not targetName or targetName == '' then
         -- The target is not available anymore, maybe the player left the raid or it was a non-raid player who moved too far
-        targetMode = nil
+        buffMode = nil
     elseif not UnitIsPlayer(targetName) or not hunter.buffName or hunter.buffName == "" or not hunter.endTimeOfEffect or hunter.endTimeOfEffect == 0 then
-        targetMode = 'not_a_buff'
+        buffMode = 'not_a_buff'
     elseif GetTime() > hunter.endTimeOfEffect  then
-        targetMode = 'buff_expired'
+        buffMode = 'buff_expired'
     elseif not SilentRotate:findAura(targetName, hunter.buffName) then
-        targetMode = 'buff_lost'
+        buffMode = 'buff_lost'
     else
-        targetMode = 'has_buff'
+        buffMode = 'has_buff'
     end
 
-    return targetName, targetMode
+    return targetName, buffMode
 end
 
 -- Checks if a hunter is in a battleground
