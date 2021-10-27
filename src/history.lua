@@ -126,24 +126,24 @@ function SilentRotate:trackHistoryBuff(hunter)
         self:addHistoryMessage(msg, mode)
         return
     else -- buffMode == 'has_buff'
-        if not hunter.historyTrackerTicker or hunter.historyTrackerTicker:IsCancelled() then
-            local refreshInterval = 1.5
-            hunter.historyTrackerMode = mode.modeName
-            hunter.historyTrackerTicker = C_Timer.NewTicker(refreshInterval, function()
-                local targetName, buffMode = SilentRotate:getHunterTarget(hunter)
-                local msg
-                if buffMode == 'buff_lost' then
-                    msg = string.format(self:getHistoryPattern('HISTORY_SPELLCAST_CANCEL'), hunter.buffName, targetName)
-                elseif buffMode == 'buff_expired' then
-                    msg = string.format(self:getHistoryPattern('HISTORY_SPELLCAST_EXPIRE'), hunter.buffName, targetName)
-                end
-                if msg then
-                    local mode = SilentRotate:getMode(hunter.historyTrackerMode)
+        local refreshInterval = 1.5
+        hunter.historyTrackerMode = mode.modeName
+        hunter.historyTrackerTicker = C_Timer.NewTicker(refreshInterval, function()
+            local targetName, buffMode = SilentRotate:getHunterTarget(hunter)
+            local msg
+            if buffMode == 'buff_lost' then
+                msg = string.format(self:getHistoryPattern('HISTORY_SPELLCAST_CANCEL'), hunter.buffName, targetName)
+            elseif buffMode == 'buff_expired' then
+                msg = string.format(self:getHistoryPattern('HISTORY_SPELLCAST_EXPIRE'), hunter.buffName, targetName)
+            end
+            if msg then
+                local mode = SilentRotate:getMode(hunter.historyTrackerMode)
+                if mode then
                     self:addHistoryMessage(msg, mode)
-                    hunter.historyTrackerTicker:Cancel()
-                    hunter.historyTrackerTicker = nil
                 end
-            end)
-        end
+                hunter.historyTrackerTicker:Cancel()
+                hunter.historyTrackerTicker = nil
+            end
+        end)
     end
 end
