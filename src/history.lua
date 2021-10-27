@@ -128,6 +128,7 @@ function SilentRotate:trackHistoryBuff(hunter)
     else -- buffMode == 'has_buff'
         if not hunter.historyTrackerTicker or hunter.historyTrackerTicker:IsCancelled() then
             local refreshInterval = 1.5
+            hunter.historyTrackerMode = mode.modeName
             hunter.historyTrackerTicker = C_Timer.NewTicker(refreshInterval, function()
                 local targetName, buffMode = SilentRotate:getHunterTarget(hunter)
                 local msg
@@ -137,7 +138,7 @@ function SilentRotate:trackHistoryBuff(hunter)
                     msg = string.format(self:getHistoryPattern('HISTORY_SPELLCAST_EXPIRE'), hunter.buffName, targetName)
                 end
                 if msg then
-                    local mode = SilentRotate:getMode() -- @todo get mode from hunter
+                    local mode = SilentRotate:getMode(hunter.historyTrackerMode)
                     self:addHistoryMessage(msg, mode)
                     hunter.historyTrackerTicker:Cancel()
                     hunter.historyTrackerTicker = nil
