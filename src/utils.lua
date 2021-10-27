@@ -40,6 +40,37 @@ function SilentRotate:isEligibleForNextTranq(hunter)
     return SilentRotate:isHunterAliveAndOnline(hunter) and isCooldownShortEnough
 end
 
+-- Get the target name and the buff mode of a hunter
+-- Returns nil, nil if hunter.targerGUID is nil or does not point to a player.
+--
+-- Buff mode is one of the following:
+-- 'has_buff' - the hunter has buffed the target and the buff is still active
+-- 'buff_lost' - the buff was lost before its full duration
+-- 'buff_expired' - the buff is beyond its full duration
+-- 'not_a_buff' - the target is not meant to be buffed by the hunter
+--
+-- It should be noted that 'buff_expired' is always returned if too much time has passed,
+-- even if the buff was lost before the end
+function SilentRotate:getHunterTarget(hunter)
+    local targetName = SilentRotate:getPlayerGuid(hunter.targetGUID) and select(6, GetPlayerInfoByGUID(hunter.targetGUID))
+    local buffMode
+
+    if not targetName or targetName == '' then
+        -- The target is not available anymore, maybe the player left the raid or it was a non-raid player who moved too far
+        buffMode = nil
+    elseif not UnitIsPlayer(targetName) or not hunter.buffName or hunter.buffName == "" or not hunter.endTimeOfEffect or hunter.endTimeOfEffect == 0 then
+        buffMode = 'not_a_buff'
+    elseif GetTime() > hunter.endTimeOfEffect  then
+        buffMode = 'buff_expired'
+    elseif not SilentRotate:findAura(targetName, hunter.buffName) then
+        buffMode = 'buff_lost'
+    else
+        buffMode = 'has_buff'
+    end
+
+    return targetName, buffMode
+end
+
 -- Checks if a hunter is in a battleground
 function SilentRotate:isPlayerInBattleground()
     return UnitInBattleground('player') ~= nil

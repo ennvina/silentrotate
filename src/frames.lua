@@ -624,7 +624,8 @@ function SilentRotate:createCooldownFrame(hunter)
         function(self, elapsed)
             self.statusBar:SetValue(GetTime())
 
-            if (not self.statusBar.expirationTime or self.statusBar.expirationTime < GetTime()) then
+            local hunter = SilentRotate:getHunter(self:GetParent().GUID)
+            if hunter and hunter.expirationTime and GetTime() > hunter.expirationTime then
                 self:Hide()
             end
         end
@@ -680,7 +681,7 @@ function SilentRotate:createBlindIconFrame(hunter)
 end
 
 -- Blind icon tooltip show
-function SilentRotate:onBlindIconEnter()
+function SilentRotate.onBlindIconEnter(frame)
     if (SilentRotate.db.profile.showBlindIconTooltip) then
         GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
         GameTooltip:SetText(L["TOOLTIP_PLAYER_WITHOUT_ADDON"])
@@ -691,30 +692,94 @@ function SilentRotate:onBlindIconEnter()
 end
 
 -- Blind icon tooltip hide
-function SilentRotate:onBlindIconLeave(self, motion)
+function SilentRotate.onBlindIconLeave(frame, motion)
     GameTooltip:Hide()
 end
 
 -- Hunter frame tooltip show
-function SilentRotate:onHunterEnter()
+function SilentRotate.onHunterEnter(frame)
     local mode = SilentRotate:getMode()
     if mode and mode.tooltip then
         local tooltip
         if type(mode.tooltip) == 'string' then
             tooltip = mode.tooltip
         elseif type(mode.tooltip) == 'function' then
-            local hunter = SilentRotate:getHunter(self.GUID)
+            local hunter = SilentRotate:getHunter(frame.GUID)
             tooltip = mode.tooltip(mode, hunter)
         end
         if tooltip then
-            GameTooltip:SetOwner(self, "ANCHOR_TOP")
+            GameTooltip:SetOwner(frame, "ANCHOR_TOP")
             GameTooltip:SetText(tooltip)
+            GameTooltip:Show()
+        end
+
+    else
+        local hunter = SilentRotate:getHunter(frame.GUID)
+        if hunter and ((hunter.endTimeOfEffect and GetTime() < hunter.endTimeOfEffect) or (hunter.expirationTime and GetTime() < hunter.expirationTime)) then
+            local tooltipRefreshFunc = function()
+                local effectRemaining = hunter and hunter.endTimeOfEffect-GetTime() or 0
+                local cooldownRemaining = hunter and hunter.expirationTime-GetTime() or 0
+                local text = ''
+                if effectRemaining > 0 or cooldownRemaining > 0 then
+                    local hrEffect
+                    if effectRemaining > 60 then
+                        hrEffect = string.format(L['TOOLTIP_DURATION_MINUTES'], ceil(effectRemaining/60))
+                    elseif effectRemaining > 0 then
+                        hrEffect = string.format(L['TOOLTIP_DURATION_SECONDS'], ceil(effectRemaining))
+                    end
+                    if hrEffect then
+                        -- The effect is not real if the buff was lost
+                        local _, buffMode = SilentRotate:getHunterTarget(hunter)
+                        if buffMode == 'buff_lost' then
+                            local mode = SilentRotate:getMode() -- @todo get mode of hunter
+                            if mode and not mode.buffCanReturn then
+                                hrEffect = nil
+                            end
+                        end
+                    end
+
+                    local hrCooldown
+                    if cooldownRemaining > 60 then
+                        hrCooldown = string.format(L['TOOLTIP_DURATION_MINUTES'], ceil(cooldownRemaining/60))
+                    elseif cooldownRemaining > 0 then
+                        hrCooldown = string.format(L['TOOLTIP_DURATION_SECONDS'], ceil(cooldownRemaining))
+                    end
+
+                    if hrEffect then
+                        text = string.format(L['TOOLTIP_EFFECT_REMAINING'], hrEffect)
+                    end
+                    if hrCooldown then
+                        if hrEffect then
+                            text = text..'\n'
+                        end
+                        text = text..string.format(L['TOOLTIP_COOLDOWN_REMAINING'], hrCooldown)
+                    end 
+                    GameTooltip:SetText(text)
+                end
+                if text == '' then
+                    frame.tooltipRefreshTicker:Cancel()
+                    frame.tooltipRefreshTicker = nil
+                    GameTooltip:Hide()
+                end
+            end
+
+            if not frame.tooltipRefreshTicker or frame.tooltipRefreshTicker:IsCancelled() then
+                local refreshInterval = 0.5
+                frame.tooltipRefreshTicker = C_Timer.NewTicker(refreshInterval, tooltipRefreshFunc)
+            end
+
+            GameTooltip:SetOwner(frame, "ANCHOR_TOP")
+            tooltipRefreshFunc()
             GameTooltip:Show()
         end
     end
 end
 
 -- Hunter frame tooltip hide
-function SilentRotate:onHunterLeave(self, motion)
+function SilentRotate.onHunterLeave(frame, motion)
     GameTooltip:Hide() -- @TODO hide only if it was shown
+    if frame.tooltipRefreshTicker then
+        frame.tooltipRefreshTicker:Cancel()
+        frame.tooltipRefreshTicker = nil
+    end
 end

@@ -91,3 +91,59 @@ function SilentRotate:setHistoryFontSize(fontSize)
     local fontFace = SilentRotate.constants.history.fontFace
     SilentRotate.historyFrame.backgroundFrame.textFrame:SetFont(fontFace, fontSize)
 end
+
+-- Track the buff provided by the hunter and trigger history events when the buffs expires or is lost
+function SilentRotate:trackHistoryBuff(hunter)
+    if hunter and hunter.historyTrackerTicker then
+        -- Start by clearing any remaining ticker
+        hunter.historyTrackerTicker:Cancel()
+        hunter.historyTrackerTicker = nil
+    end
+
+    if not hunter or not hunter.buffName or not hunter.targetGUID or not hunter.endTimeOfEffect then
+        -- Cannot work without sufficient information
+        return
+    end
+
+    local mode = SilentRotate:getMode() -- @todo get mode from hunter
+    if not mode or mode.buffCanReturn then
+        -- Do not bother with returnable buffs: we never know if they are really gone
+        return
+    end
+
+    local targetName, buffMode = SilentRotate:getHunterTarget(hunter)
+    if buffMode == 'not_a_buff' then
+        -- Nothinig to track
+        return
+    elseif buffMode == 'buff_lost' then
+        -- Track already ended: buff lost
+        local msg = string.format(self:getHistoryPattern('HISTORY_SPELLCAST_CANCEL'), hunter.buffName, targetName)
+        self:addHistoryMessage(msg, mode)
+        return
+    elseif buffMode == 'buff_expired' then
+        -- Track already ended: buff expired
+        local msg = string.format(self:getHistoryPattern('HISTORY_SPELLCAST_EXPIRE'), hunter.buffName, targetName)
+        self:addHistoryMessage(msg, mode)
+        return
+    else -- buffMode == 'has_buff'
+        local refreshInterval = 1.5
+        hunter.historyTrackerMode = mode.modeName
+        hunter.historyTrackerTicker = C_Timer.NewTicker(refreshInterval, function()
+            local targetName, buffMode = SilentRotate:getHunterTarget(hunter)
+            local msg
+            if buffMode == 'buff_lost' then
+                msg = string.format(self:getHistoryPattern('HISTORY_SPELLCAST_CANCEL'), hunter.buffName, targetName)
+            elseif buffMode == 'buff_expired' then
+                msg = string.format(self:getHistoryPattern('HISTORY_SPELLCAST_EXPIRE'), hunter.buffName, targetName)
+            end
+            if msg then
+                local mode = SilentRotate:getMode(hunter.historyTrackerMode)
+                if mode then
+                    self:addHistoryMessage(msg, mode)
+                end
+                hunter.historyTrackerTicker:Cancel()
+                hunter.historyTrackerTicker = nil
+            end
+        end)
+    end
+end

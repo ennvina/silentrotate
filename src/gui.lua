@@ -211,24 +211,11 @@ function SilentRotate:setHunterName(hunter)
         end
     end
 
-    local targetName
-    local targetMode
+    local targetName, buffMode
     if SilentRotate.db.profile.appendTarget and hunter.targetGUID then
-        targetName = SilentRotate:getPlayerGuid(hunter.targetGUID) and select(6, GetPlayerInfoByGUID(hunter.targetGUID))
-        if not targetName or targetName == '' then
-            -- The target is not available anymore, maybe the player left the raid or it was a non-raid player who moved too far
-            targetMode = nil
-        elseif not UnitIsPlayer(targetName) or not hunter.buffName or hunter.buffName == "" or not hunter.endTimeOfEffect or hunter.endTimeOfEffect == 0 then
-            targetMode = 'not_a_buff'
-        elseif GetTime() > hunter.endTimeOfEffect  then
-            targetMode = 'buff_expired'
-        elseif not SilentRotate:findAura(targetName, hunter.buffName) then
-            targetMode = 'buff_lost'
-        else
-            targetMode = 'has_buff'
-        end
+        targetName, buffMode = self:getHunterTarget(hunter)
     end
-    local showTarget = targetName and targetName ~= "" and targetMode and (targetMode == 'not_a_buff' or targetMode == 'has_buff' or not SilentRotate.db.profile.appendTargetBuffOnly)
+    local showTarget = targetName and targetName ~= "" and buffMode and (buffMode == 'not_a_buff' or buffMode == 'has_buff' or not SilentRotate.db.profile.appendTargetBuffOnly)
     hunter.showingTarget = showTarget
 
     if (SilentRotate.db.profile.appendGroup and hunter.subgroup) then
@@ -241,10 +228,10 @@ function SilentRotate:setHunterName(hunter)
 
     if showTarget then
         local targetColorName
-        if      targetMode == 'buff_expired' then   targetColorName = 'darkGray'
-        elseif  targetMode == 'buff_lost' then      targetColorName = 'lightRed'
-        elseif  targetMode == 'has_buff' then       targetColorName = 'white'
-        else                                        targetColorName = 'white'
+        if      buffMode == 'buff_expired' then targetColorName = 'darkGray'
+        elseif  buffMode == 'buff_lost' then    targetColorName = 'lightRed'
+        elseif  buffMode == 'has_buff' then     targetColorName = 'white'
+        else                                    targetColorName = 'white'
         end
         local mode = self:getMode()
         if type(mode.customTargetName) == 'function' then
@@ -292,7 +279,7 @@ function SilentRotate:startHunterCooldown(hunter, endTimeOfCooldown, endTimeOfEf
     hunter.endTimeOfEffect = endTimeOfEffect
 
     hunter.frame.cooldownFrame.statusBar:SetMinMaxValues(GetTime(), endTimeOfCooldown or GetTime())
-    hunter.frame.cooldownFrame.statusBar.expirationTime = endTimeOfCooldown
+    hunter.expirationTime = endTimeOfCooldown
     if endTimeOfCooldown and endTimeOfEffect and GetTime() < endTimeOfCooldown and GetTime() < endTimeOfEffect and endTimeOfEffect < endTimeOfCooldown then
         local tickWidth = 3
         local x = hunter.frame.cooldownFrame:GetWidth()*(endTimeOfEffect-GetTime())/(endTimeOfCooldown-GetTime())
@@ -341,10 +328,10 @@ function SilentRotate:startHunterCooldown(hunter, endTimeOfCooldown, endTimeOfEf
                 hunter.nameRefreshTimer = nil
             end)
         end
-    else
-        hunter.buffName = ""
-        hunter.endTimeOfEffect = 0
-        endTimeOfEffect = 0
+    end
+
+    if hunter.buffName and hunter.endTimeOfEffect > GetTime() then
+        SilentRotate:trackHistoryBuff(hunter)
     end
 end
 

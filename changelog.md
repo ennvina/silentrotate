@@ -1,5 +1,10 @@
 ## SilentRotate Changelog
 
+#### v0.9.1-beta (2021-xx-yy)
+
+- Tooltip shows effect duration and cooldown remaining time
+- History displays effect expiration and early removal, only for buffs
+
 #### v0.9.0-beta (2021-10-25)
 
 Major changes have been done to the window system
