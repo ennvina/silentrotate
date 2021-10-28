@@ -65,12 +65,50 @@ function SilentRotate:LoadDefaults()
 	}
 
 	for modeName, mode in pairs(SilentRotate.modes) do
+		local assignAnnounce = function(isSuccess)
+			-- isSuccess == true -> Success
+			-- isSuccess == false -> Fail
+			-- isSuccess == nil -> Timid Success
+			local keyAddendum, translationAddendum, patternAddendum = "", "", "_SUCCESS"
+			if type(isSuccess) == 'boolean' then
+				if isSuccess then
+					keyAddendum, translationAddendum = "Success", "_SUCCESS"
+				else
+					keyAddendum, translationAddendum, patternAddendum = "Fail", "_FAIL", "_FAIL"
+				end
+			end
+			local key = "announce"..mode.modeNameFirstUpper..keyAddendum.."Message"
+			local translation = "DEFAULT_"..mode.modeNameUpper..translationAddendum.."_ANNOUNCE_MESSAGE"
+			if rawget(L, translation) then
+				self.defaults.profile[key] = L[translation]
+			else
+				local modeFullNameKey = mode.modeNameUpper.."_MODE_FULL_NAME"
+				local modeShortNameKey = "FILTER_SHOW_"..mode.modeNameUpper
+				local modeName
+				if rawget(L, modeFullNameKey) then
+					modeName = L[modeFullNameKey]
+				elseif rawget(L, modeShortNameKey) then
+					modeName = L[modeShortNameKey]
+				else
+					modeName = mode.modeName
+				end
+				if type(isSuccess) == 'boolean' and not isSuccess then
+					-- YELL the mode name for failures
+					modeName = modeName:upper()
+				end
+				if mode.targetGUID then
+					self.defaults.profile[key] = string.format(L["DEFAULT"..patternAddendum.."_PATTERN_WITHTARGET"], modeName)
+				else
+					self.defaults.profile[key] = string.format(L["DEFAULT"..patternAddendum.."_PATTERN_NOTARGET"], modeName)
+				end
+			end
+		end
 		-- Set config for announce messages
 		if mode.canFail then
-			self.defaults.profile["announce"..mode.modeNameFirstUpper.."SuccessMessage"] = L["DEFAULT_"..mode.modeNameUpper.."_SUCCESS_ANNOUNCE_MESSAGE"]
-			self.defaults.profile["announce"..mode.modeNameFirstUpper.."FailMessage"] = L["DEFAULT_"..mode.modeNameUpper.."_FAIL_ANNOUNCE_MESSAGE"]
+			assignAnnounce(true)
+			assignAnnounce(false)
 		else
-			self.defaults.profile["announce"..mode.modeNameFirstUpper.."Message"] = L["DEFAULT_"..mode.modeNameUpper.."_ANNOUNCE_MESSAGE"]
+			assignAnnounce(nil)
 		end
 
 		-- Set config for default visible modes
