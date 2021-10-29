@@ -6,6 +6,9 @@
 - Added Blessing of Freedom mode
 - Tooltip shows effect duration and cooldown remaining time
 - History displays effect expiration and early removal, only for buffs
+- Mouseover the Blind icon no longer causes an error
+- Loatheb mode no longer fails to detect Corrupted Mind debuff
+- Tranqshot mode no longer fails to detect when Tranqshot is cast
 
 #### v0.9.0-beta (2021-10-25)
 
