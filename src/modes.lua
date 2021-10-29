@@ -182,7 +182,7 @@ SilentRotate.modes = {
         -- buffCanReturn = nil,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
-        announceArg = function(self, hunter, destName) return destName end,
+        announceArg = 'destName',
         -- tooltip = nil,
         -- metadata = nil
     },
@@ -211,7 +211,7 @@ SilentRotate.modes = {
         -- buffCanReturn = nil,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
-        announceArg = function(self, hunter, destName) return destName end,
+        announceArg = 'sourceName',
         -- tooltip = nil,
         -- metadata = nil
     },
@@ -233,7 +233,7 @@ SilentRotate.modes = {
         -- buffCanReturn = nil,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
-        announceArg = function(self, hunter, destName) return destName end,
+        announceArg = 'destName',
         -- tooltip = nil,
         -- metadata = nil
     },
@@ -255,7 +255,7 @@ SilentRotate.modes = {
         buffCanReturn = false,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
-        announceArg = function(self, hunter, destName) return destName end,
+        announceArg = 'destName',
         -- tooltip = nil,
         -- metadata = nil
     },
@@ -280,7 +280,7 @@ SilentRotate.modes = {
         -- buffCanReturn = nil,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
-        announceArg = function(self, hunter, destName) return destName end,
+        announceArg = 'destName',
         -- tooltip = nil,
         -- metadata = nil
     },
@@ -302,7 +302,7 @@ SilentRotate.modes = {
         buffCanReturn = false,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
-        announceArg = function(self, hunter, destName) return destName end,
+        announceArg = 'destName',
         -- tooltip = nil,
         -- metadata = nil
     },
@@ -327,7 +327,7 @@ SilentRotate.modes = {
         buffCanReturn = false,
         customTargetName = function(self, hunter, targetName) return hunter.subgroup and string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup) end,
         -- customHistoryFunc = nil,
-        announceArg = function(self, hunter, destName) return hunter.subgroup or 0 end,
+        announceArg = 'sourceGroup',
         -- tooltip = nil,
         -- metadata = nil
     },
@@ -453,7 +453,7 @@ SilentRotate.modes = {
         customHistoryFunc = function(mode, hunter, sourceName, destName, spellName, failed)
             return string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_SUMMON"), sourceName, hunter.subgroup or 0)
         end,
-        announceArg = function(self, hunter, destName) return hunter.subgroup or 0 end,
+        announceArg = 'sourceGroup',
         tooltip = function(self, hunter)
             local totemGUID = self.metadata.summoners[hunter.GUID]
             local totem = self.metadata.summons[totemGUID]
@@ -499,7 +499,7 @@ SilentRotate.modes = {
         -- buffCanReturn = nil,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
-        announceArg = function(self, hunter, destName) return destName end,
+        announceArg = 'destName',
         -- tooltip = nil,
         -- metadata = nil
     },
@@ -520,7 +520,9 @@ SilentRotate.modes = {
         buffCanReturn = false,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
-        announceArg = function(self, hunter, destName) return destName end,
+        announceArg = 'destName',
+        -- tooltip = nil,
+        -- metadata = nil
     },
 
     bop = {
@@ -539,7 +541,9 @@ SilentRotate.modes = {
         buffCanReturn = false,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
-        announceArg = function(self, hunter, destName) return destName end,
+        announceArg = 'destName',
+        -- tooltip = nil,
+        -- metadata = nil
     },
 
     bof = {
@@ -558,7 +562,9 @@ SilentRotate.modes = {
         buffCanReturn = false,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
-        announceArg = function(self, hunter, destName) return destName end,
+        announceArg = 'destName',
+        -- tooltip = nil,
+        -- metadata = nil
     },
 }
 

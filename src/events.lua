@@ -113,18 +113,11 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
             local failed = event == "SPELL_MISSED"
             local targetGUID = type(mode.targetGUID) == 'function' and self:getPlayerGuid(mode.targetGUID(mode, sourceGUID, destGUID)) or nil
             local buffName = type(mode.buffName) == 'function' and mode.buffName(mode, spellId, spellName) or nil
-            local announceArg = type(mode.announceArg) == 'function' and mode.announceArg(mode, hunter, destName) or nil
             self:sendSyncTranq(hunter, failed, timestamp)
             self:rotate(hunter, failed, nil, nil, nil, targetGUID, buffName)
             self:addHistorySpellMessage(hunter, sourceName, destName, spellName, failed, mode)
             if (sourceGUID == UnitGUID("player")) then
-                if failed then
-                    self:sendAnnounceMessage(self.db.profile["announce"..mode.modeNameFirstUpper.."FailMessage"], announceArg)
-                elseif mode.canFail then
-                    self:sendAnnounceMessage(self.db.profile["announce"..mode.modeNameFirstUpper.."SuccessMessage"], announceArg)
-                else
-                    self:sendAnnounceMessage(self.db.profile["announce"..mode.modeNameFirstUpper.."Message"], announceArg)
-                end
+                self:sendSpellAnnounceMessage(mode, spellName, failed, hunter, destName)
             end
         end
     end
@@ -200,11 +193,7 @@ function SilentRotate:UNIT_AURA(unitID, isEcho)
             self:addHistoryDebuffMessage(hunter, hunter.name, name, mode)
             if (UnitIsUnit(unitID, "player")) then
                 -- Announce to the channel selected in the addon options, but announce only ourselves
-                if mode.canFail then
-                    self:sendAnnounceMessage(SilentRotate.db.profile["announce"..mode.modeNameFirstUpper.."SuccessMessage"], type(mode.announceArg) == 'function' and announceArg(mode, hunter, UnitName(unitID)) or nil)
-                else
-                    self:sendAnnounceMessage(SilentRotate.db.profile["announce"..mode.modeNameFirstUpper.."Message"], type(mode.announceArg) == 'function' and announceArg(mode, hunter, UnitName(unitID)) or nil)
-                end
+                self:sendAuraAnnounceMessage(mode, name, hunter)
             end
             return
         end
