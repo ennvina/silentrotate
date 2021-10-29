@@ -65,49 +65,29 @@ function SilentRotate:LoadDefaults()
 	}
 
 	for modeName, mode in pairs(SilentRotate.modes) do
+		-- Set config for announce messages
 		local assignAnnounce = function(isSuccess)
 			-- isSuccess == true -> Success
 			-- isSuccess == false -> Fail
-			-- isSuccess == nil -> Timid Success
-			local keyAddendum, translationAddendum, patternAddendum = "", "", "_SUCCESS"
+			-- isSuccess == nil -> Neither Success nor Fail
+			local keyAddendum, translationAddendum = "", ""
 			if type(isSuccess) == 'boolean' then
 				if isSuccess then
 					keyAddendum, translationAddendum = "Success", "_SUCCESS"
 				else
-					keyAddendum, translationAddendum, patternAddendum = "Fail", "_FAIL", "_FAIL"
+					keyAddendum, translationAddendum = "Fail", "_FAIL"
 				end
 			end
 			local key = "announce"..mode.modeNameFirstUpper..keyAddendum.."Message"
 			local translation = "DEFAULT_"..mode.modeNameUpper..translationAddendum.."_ANNOUNCE_MESSAGE"
-			if rawget(L, translation) then
-				self.defaults.profile[key] = L[translation]
-			else
-				local modeFullNameKey = mode.modeNameUpper.."_MODE_FULL_NAME"
-				local modeShortNameKey = "FILTER_SHOW_"..mode.modeNameUpper
-				local modeName
-				if rawget(L, modeFullNameKey) then
-					modeName = L[modeFullNameKey]
-				elseif rawget(L, modeShortNameKey) then
-					modeName = L[modeShortNameKey]
-				else
-					modeName = mode.modeName
-				end
-				if type(isSuccess) == 'boolean' and not isSuccess then
-					-- YELL the mode name for failures
-					modeName = modeName:upper()
-				end
-				if mode.targetGUID then
-					self.defaults.profile[key] = string.format(L["DEFAULT"..patternAddendum.."_PATTERN_WITHTARGET"], modeName)
-				else
-					self.defaults.profile[key] = string.format(L["DEFAULT"..patternAddendum.."_PATTERN_NOTARGET"], modeName)
-				end
-			end
+			self.defaults.profile[key] = L[translation]
 		end
-		-- Set config for announce messages
 		if mode.canFail then
+			-- If mode can fail, register success and fail messages
 			assignAnnounce(true)
 			assignAnnounce(false)
 		else
+			-- If mode cannot fail, register neutral message
 			assignAnnounce(nil)
 		end
 
