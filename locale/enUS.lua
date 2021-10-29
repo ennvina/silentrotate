@@ -130,9 +130,9 @@ L["BREZ_MODE_DETAILED_DESC"] = "This mode tracks whenever a druid resurrects som
     "Unlike most resurrection spells, Rebirth can be cast in combat."
 L["INNERV_MODE_DETAILED_DESC"] = "This mode tracks whenever a druid regenerates mana to someone with the Innervate spell.\n"..
     "Mana regeneration is greatly increased and continues even if the target keeps on casting spells."
-L["BOP_MODE_DETAILED_DESC"] = "This mode tracks whenever a paladin protects someone from physical damage with a Blessing of Protection at the cost of making impossible to perform physical attacks.\n"..
-    "Usually, this effect also removes the target temporarily from the threat table."
-L["BOF_MODE_DETAILED_DESC"] = "This mode tracks whenever a paladin frees someone from movement-impairing effects, such as roots and slows, with a Blessing of Freedom.\n"..
+L["BOP_MODE_DETAILED_DESC"] = "This mode tracks whenever a paladin protects someone from physical damage with Blessing of Protection at the cost of making impossible to perform physical attacks.\n"..
+    "This effect also removes the target temporarily from the threat table."
+L["BOF_MODE_DETAILED_DESC"] = "This mode tracks whenever a paladin frees someone and prevents movement-impairing effects, such as roots and slows, with Blessing of Freedom.\n"..
     "This effects removes current movement-impairing effects as well as preventing new ones for the next 10 seconds."
 
 L["MODE_BUTTON_DESC"] = "Show the button for activating the mode '%s'"

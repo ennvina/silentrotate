@@ -125,10 +125,8 @@ L["BLOODLUST_MODE_DETAILED_DESC"] = "Ce mode détecte lorsqu'un chaman lance la 
 L["GROUNDING_MODE_DETAILED_DESC"] = "Ce mode détecte lorsqu'un chaman pose un totem de glèbe."
 L["BREZ_MODE_DETAILED_DESC"] = "Ce mode détecte lorsqu'un druide ressuscite un joueur avec le sort Renaissance."
 L["INNERV_MODE_DETAILED_DESC"] = "Ce mode détecte lorsqu'un druide régénère la mana d'un joueur avec le sort Innervation."
-L["BOP_MODE_DETAILED_DESC"] = "This mode tracks whenever a paladin protects someone from physical damage with a Blessing of Protection at the cost of making impossible to perform physical attacks.\n"..
-    "Usually, this effect also removes the target temporarily from the threat table."
-L["BOF_MODE_DETAILED_DESC"] = "This mode tracks whenever a paladin frees someone from movement-impairing effects, such as roots and slows, with a Blessing of Freedom.\n"..
-    "This effects removes current movement-impairing effects as well as preventing new ones for the next 10 seconds."
+L["BOP_MODE_DETAILED_DESC"] = "Ce mode détecte lorsqu'un paladin protège un joueur des dégâts physiques grâce à Bénédiction de protection."
+L["BOF_MODE_DETAILED_DESC"] = "Ce mode détecte lorsqu'un paladin libère un joueur et le prévient des effets affectant le mouvement grâce à Bénédiction de liberté."
 
 L["MODE_BUTTON_DESC"] = "Affiche le bouton pour activer le mode '%s'"
 L["MODE_LABEL"] = "Texte du bouton"

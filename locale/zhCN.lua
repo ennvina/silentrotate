@@ -125,10 +125,8 @@ L["BLOODLUST_MODE_DETAILED_DESC"] = "This mode tracks whenever a hunter has cast
 L["GROUNDING_MODE_DETAILED_DESC"] = "This mode tracks whenever a shaman has cast the Grounding Totem ability."
 L["BREZ_MODE_DETAILED_DESC"] = "This mode tracks whenever a druid resurrects someone with the Rebirth spell."
 L["INNERV_MODE_DETAILED_DESC"] = "This mode tracks whenever a druid regenerates mana to someone with the Innervate spell."
-L["BOP_MODE_DETAILED_DESC"] = "This mode tracks whenever a paladin protects someone from physical damage with a Blessing of Protection at the cost of making impossible to perform physical attacks.\n"..
-    "Usually, this effect also removes the target temporarily from the threat table."
-L["BOF_MODE_DETAILED_DESC"] = "This mode tracks whenever a paladin frees someone from movement-impairing effects, such as roots and slows, with a Blessing of Freedom.\n"..
-    "This effects removes current movement-impairing effects as well as preventing new ones for the next 10 seconds."
+L["BOP_MODE_DETAILED_DESC"] = "This mode tracks whenever a paladin protects someone from physical damage with Blessing of Protection."
+L["BOF_MODE_DETAILED_DESC"] = "This mode tracks whenever a paladin frees someone and prevents movement-impairing effects with Blessing of Freedom."
 
 L["MODE_BUTTON_DESC"] = "显示用于激活'%s'模式的按钮。"
 L["MODE_LABEL"] = "按钮文本"
