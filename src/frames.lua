@@ -683,7 +683,7 @@ end
 -- Blind icon tooltip show
 function SilentRotate.onBlindIconEnter(frame)
     if (SilentRotate.db.profile.showBlindIconTooltip) then
-        GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
+        GameTooltip:SetOwner(frame, "ANCHOR_BOTTOMRIGHT")
         GameTooltip:SetText(L["TOOLTIP_PLAYER_WITHOUT_ADDON"])
         GameTooltip:AddLine(L["TOOLTIP_MAY_RUN_OUDATED_VERSION"])
         GameTooltip:AddLine(L["TOOLTIP_DISABLE_SETTINGS"])
