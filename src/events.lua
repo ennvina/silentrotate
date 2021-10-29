@@ -109,7 +109,7 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
     -- COMBAT_LOG_EVENT_UNFILTERED is used exclusively by spell-based modes
     if mode.spell and self:isSpellInteresting(spellId, spellName, mode.spell) then
         local hunter = self:getHunter(sourceGUID)
-        if event == "SPELL_CAST_SUCCESS" or (mode.canFail and event == "SPELL_MISSED") then
+        if hunter and event == "SPELL_CAST_SUCCESS" or (mode.canFail and event == "SPELL_MISSED") then
             local failed = event == "SPELL_MISSED"
             local targetGUID = type(mode.targetGUID) == 'function' and self:getPlayerGuid(mode.targetGUID(mode, sourceGUID, destGUID)) or nil
             local buffName = type(mode.buffName) == 'function' and mode.buffName(mode, spellId, spellName) or nil
