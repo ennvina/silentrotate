@@ -107,7 +107,7 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
     local mode = self:getMode()
 
     -- COMBAT_LOG_EVENT_UNFILTERED is used exclusively by spell-based modes
-    if mode.spell and self:isSpellInteresting(spellId, spellName, mode.spell) then
+    if self:isSpellInteresting(mode, spellId, spellName) then
         local hunter = self:getHunter(sourceGUID)
         if hunter and event == "SPELL_CAST_SUCCESS" or (mode.canFail and event == "SPELL_MISSED") then
             local failed = event == "SPELL_MISSED"
@@ -179,7 +179,7 @@ function SilentRotate:UNIT_AURA(unitID, isEcho)
         -- name and spellId correspond to the debuff at index i
         -- endTime knows exactly when the debuff ends if unitID is the player, i.e. if UnitIsUnit(unitID, "player")
         -- endTime is set to 0 is unitID is not the player ; this is a known limitation in WoW Classic that makes buff/debuff duration much harder to track
-        if mode.auraTest(spellId, name) then
+        if mode:auraTest(spellId, name) then
             if (endTime and endTime > 0 and previousExpirationTime == endTime) then
                 -- If the endTime matches exactly the previous expirationTime of the status bar, it means we are duplicating an already registered rotation
                 return

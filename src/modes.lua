@@ -82,9 +82,13 @@ end
 
 -- Return true if the spellId/spellName matches one of the spells of spellWanted
 -- spellWanted can be either a spell id, a spell name, a list of ids and names, or a function(spellId, spellName)
-function SilentRotate:isSpellInteresting(spellId, spellName, spellWanted)
+function SilentRotate:isSpellInteresting(mode, spellId, spellName)
+    local spellWanted = mode.spell
 
-    if type(spellWanted) == 'number' then -- Single spell ID
+    if not spellWanted then
+        return false
+
+    elseif type(spellWanted) == 'number' then -- Single spell ID
         return spellWanted == spellId
 
     elseif type(spellWanted) == 'string' then -- Single spell name
@@ -100,7 +104,8 @@ function SilentRotate:isSpellInteresting(spellId, spellName, spellWanted)
         return false
 
     elseif type(spellWanted) == 'function' then -- Functor
-        return spellWanted(spellId, spellName)
+        return spellWanted(mode, spellId, spellName)
+
     end
 
     return false
