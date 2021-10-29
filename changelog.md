@@ -2,6 +2,8 @@
 
 #### v0.9.1-beta (2021-xx-yy)
 
+- Added Blessing of Protection mode
+- Added Blessing of Freedom mode
 - Tooltip shows effect duration and cooldown remaining time
 - History displays effect expiration and early removal, only for buffs
 
