@@ -66,11 +66,29 @@ function SilentRotate:LoadDefaults()
 
 	for modeName, mode in pairs(SilentRotate.modes) do
 		-- Set config for announce messages
+		local assignAnnounce = function(isSuccess)
+			-- isSuccess == true -> Success
+			-- isSuccess == false -> Fail
+			-- isSuccess == nil -> Neither Success nor Fail
+			local keyAddendum, translationAddendum = "", ""
+			if type(isSuccess) == 'boolean' then
+				if isSuccess then
+					keyAddendum, translationAddendum = "Success", "_SUCCESS"
+				else
+					keyAddendum, translationAddendum = "Fail", "_FAIL"
+				end
+			end
+			local key = "announce"..mode.modeNameFirstUpper..keyAddendum.."Message"
+			local translation = "DEFAULT_"..mode.modeNameUpper..translationAddendum.."_ANNOUNCE_MESSAGE"
+			self.defaults.profile[key] = L[translation]
+		end
 		if mode.canFail then
-			self.defaults.profile["announce"..mode.modeNameFirstUpper.."SuccessMessage"] = L["DEFAULT_"..mode.modeNameUpper.."_SUCCESS_ANNOUNCE_MESSAGE"]
-			self.defaults.profile["announce"..mode.modeNameFirstUpper.."FailMessage"] = L["DEFAULT_"..mode.modeNameUpper.."_FAIL_ANNOUNCE_MESSAGE"]
+			-- If mode can fail, register success and fail messages
+			assignAnnounce(true)
+			assignAnnounce(false)
 		else
-			self.defaults.profile["announce"..mode.modeNameFirstUpper.."Message"] = L["DEFAULT_"..mode.modeNameUpper.."_ANNOUNCE_MESSAGE"]
+			-- If mode cannot fail, register neutral message
+			assignAnnounce(nil)
 		end
 
 		-- Set config for default visible modes

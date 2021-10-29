@@ -92,42 +92,6 @@ function SilentRotate:printPrefixedMessage(msg)
     SilentRotate:printMessage(SilentRotate:colorText(SilentRotate.constants.printPrefix) .. msg)
 end
 
--- Send a tranq annouce message to a given channel
-function SilentRotate:sendAnnounceMessage(message, targetName)
-    if SilentRotate.db.profile.enableAnnounces then
-        SilentRotate:sendMessage(
-            message,
-            targetName,
-            SilentRotate.db.profile.channelType,
-            SilentRotate.db.profile.targetChannel
-        )
-    end
-end
-
--- Send a rotation broadcast message
-function SilentRotate:sendRotationSetupBroacastMessage(message)
-    if SilentRotate.db.profile.enableAnnounces then
-        SilentRotate:sendMessage(
-            message,
-            nil,
-            SilentRotate.db.profile.rotationReportChannelType,
-            SilentRotate.db.profile.setupBroadcastTargetChannel
-        )
-    end
-end
-
--- Send a message to a given channel
-function SilentRotate:sendMessage(message, targetName, channelType, targetChannel)
-    local channelNumber
-    if channelType == "CHANNEL" then
-        channelNumber = GetChannelName(targetChannel)
-    end
-    if (targetName ~= nil) then
-        message = string.format(message, targetName)
-    end
-    SendChatMessage(message, channelType, nil, channelNumber or targetChannel)
-end
-
 SLASH_SILENTROTATE1 = "/sr"
 SLASH_SILENTROTATE2 = "/silentrotate"
 SlashCmdList["SILENTROTATE"] = function(msg)
@@ -242,18 +206,18 @@ end
 function SilentRotate:printRotationSetup()
 
     if (IsInRaid() or SilentRotate.testMode) then
-        SilentRotate:sendRotationSetupBroacastMessage('--- ' .. SilentRotate.constants.printPrefix .. SilentRotate:getBroadcastHeaderText() .. ' ---', channel)
+        SilentRotate:sendRotationMessage('--- ' .. SilentRotate.constants.printPrefix .. SilentRotate:getBroadcastHeaderText() .. ' ---', channel)
 
         if (SilentRotate.db.profile.useMultilineRotationReport) then
             SilentRotate:printMultilineRotation(SilentRotate.rotationTables.rotation)
         else
-            SilentRotate:sendRotationSetupBroacastMessage(
+            SilentRotate:sendRotationMessage(
                 SilentRotate:buildGroupMessage(L['BROADCAST_ROTATION_PREFIX'] .. ' : ', SilentRotate.rotationTables.rotation)
             )
         end
 
         if (#SilentRotate.rotationTables.backup > 0) then
-            SilentRotate:sendRotationSetupBroacastMessage(
+            SilentRotate:sendRotationMessage(
                 SilentRotate:buildGroupMessage(L['BROADCAST_BACKUP_PREFIX'] .. ' : ', SilentRotate.rotationTables.backup)
             )
         end
@@ -264,7 +228,7 @@ end
 function SilentRotate:printMultilineRotation(rotationTable, channel)
     local position = 1;
     for key, hunt in pairs(rotationTable) do
-        SilentRotate:sendRotationSetupBroacastMessage(tostring(position) .. ' - ' .. hunt.name)
+        SilentRotate:sendRotationMessage(tostring(position) .. ' - ' .. hunt.name)
         position = position + 1;
     end
 end

@@ -25,6 +25,8 @@ function SilentRotate:addHistorySpellMessage(hunter, sourceName, destName, spell
         msg = mode.customHistoryFunc(mode, hunter, sourceName, destName, spellName, failed)
     elseif failed then
         msg = string.format(self:getHistoryPattern("HISTORY_SPELLCAST_FAILURE"), sourceName, spellName, destName)
+    elseif mode.announceArg == 'sourceGroup' then
+        msg = string.format(self:getHistoryPattern("HISTORY_SPELLCAST_SUCCESS"), sourceName, spellName, string.format(L['DEFAULT_GROUP_SUFFIX_MESSAGE'], hunter.subgroup or 0))
     elseif destName then
         msg = string.format(self:getHistoryPattern("HISTORY_SPELLCAST_SUCCESS"), sourceName, spellName, destName)
     else
