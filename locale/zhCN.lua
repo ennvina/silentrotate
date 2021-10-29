@@ -76,6 +76,8 @@ L["DEFAULT_BLOODLUST_ANNOUNCE_MESSAGE"] = "BLOODLUST group %s"
 L["DEFAULT_GROUNDING_ANNOUNCE_MESSAGE"] = "Grounding Totem group %s"
 L["DEFAULT_BREZ_ANNOUNCE_MESSAGE"] = "Battle-rez cast on %s"
 L["DEFAULT_INNERV_ANNOUNCE_MESSAGE"] = "Innervate cast on %s"
+L["DEFAULT_BOP_ANNOUNCE_MESSAGE"] = "BoP cast on %s"
+L["DEFAULT_BOF_ANNOUNCE_MESSAGE"] = "Freedom cast on %s"
 
 L["TRANQ_NOW_LOCAL_ALERT_MESSAGE"] = "立即使用[宁神射击] !!"
 
@@ -95,8 +97,11 @@ L["FILTER_SHOW_BLOODLUST"] = "BL"
 L["FILTER_SHOW_GROUNDING"] = "Ground"
 L["FILTER_SHOW_BREZ"] = "B-Rez"
 L["FILTER_SHOW_INNERV"] = "Innerv"
+L["FILTER_SHOW_BOP"] = "BoP"
+L["FILTER_SHOW_BOF"] = "Freedom"
 L["NO_MODE_AVAILABLE"] = "<在设置中选择模式>"
 L["MODE_INVISIBLE"] = "这是当前选择的模式，即使按钮不可见，插件也会保持该模式。\n你可能需要单击一个可见按钮才能选择其他模式。"
+
 L["TRANQSHOT_MODE_FULL_NAME"] = "宁神射击"
 L["LOATHEB_MODE_FULL_NAME"] = "洛欧塞布"
 L["DISTRACT_MODE_FULL_NAME"] = "扰乱"
@@ -107,6 +112,9 @@ L["BLOODLUST_MODE_FULL_NAME"] = "Bloodlust/Heroism"
 L["GROUNDING_MODE_FULL_NAME"] = "Grounding Totem"
 L["BREZ_MODE_FULL_NAME"] = "Battle Rez"
 L["INNERV_MODE_FULL_NAME"] = "Innervate"
+L["BOP_MODE_FULL_NAME"] = "Blessing of Protection"
+L["BOF_MODE_FULL_NAME"] = "Blessing of Freedom"
+
 L["TRANQSHOT_MODE_DETAILED_DESC"] = "此模式会监控团队副本中BOSS的狂暴状态，并通知猎人使用[宁神射击]技能。"
 L["LOATHEB_MODE_DETAILED_DESC"] = "此模式会监控洛欧塞布BOSS给治疗职业施放了一个60秒内无法使用治疗技能的[堕落心灵]debuff。"
 L["DISTRACT_MODE_DETAILED_DESC"] = "此模式会监控盗贼玩家使用了[扰乱]技能。"
@@ -117,6 +125,11 @@ L["BLOODLUST_MODE_DETAILED_DESC"] = "This mode tracks whenever a hunter has cast
 L["GROUNDING_MODE_DETAILED_DESC"] = "This mode tracks whenever a shaman has cast the Grounding Totem ability."
 L["BREZ_MODE_DETAILED_DESC"] = "This mode tracks whenever a druid resurrects someone with the Rebirth spell."
 L["INNERV_MODE_DETAILED_DESC"] = "This mode tracks whenever a druid regenerates mana to someone with the Innervate spell."
+L["BOP_MODE_DETAILED_DESC"] = "This mode tracks whenever a paladin protects someone from physical damage with a Blessing of Protection at the cost of making impossible to perform physical attacks.\n"..
+    "Usually, this effect also removes the target temporarily from the threat table."
+L["BOF_MODE_DETAILED_DESC"] = "This mode tracks whenever a paladin frees someone from movement-impairing effects, such as roots and slows, with a Blessing of Freedom.\n"..
+    "This effects removes current movement-impairing effects as well as preventing new ones for the next 10 seconds."
+
 L["MODE_BUTTON_DESC"] = "显示用于激活'%s'模式的按钮。"
 L["MODE_LABEL"] = "按钮文本"
 L["MODE_LABEL_DESC"] = "在按钮上显示用于激活'%s'模式的文本。"

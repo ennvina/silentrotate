@@ -522,6 +522,44 @@ SilentRotate.modes = {
         -- customHistoryFunc = nil,
         announceArg = function(self, hunter, destName) return destName end,
     },
+
+    bop = {
+        project = true,
+        default = false,
+        -- color = nil,
+        wanted = 'PALADIN',
+        cooldown = 300,
+        effectDuration = 10,
+        canFail = false,
+        spell = GetSpellInfo(1022), -- Blessing of Protection rank 1
+        -- auraTest = nil,
+        -- customCombatlogFunc = nil,
+        targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
+        buffName = function(self, spellId, spellName) return spellName end,
+        buffCanReturn = false,
+        -- customTargetName = nil,
+        -- customHistoryFunc = nil,
+        announceArg = function(self, hunter, destName) return destName end,
+    },
+
+    bof = {
+        project = true,
+        default = false,
+        -- color = nil,
+        wanted = 'PALADIN',
+        cooldown = 25,
+        effectDuration = 10,
+        canFail = false,
+        spell = GetSpellInfo(1044), -- Blessing of Freedom
+        -- auraTest = nil,
+        -- customCombatlogFunc = nil,
+        targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
+        buffName = function(self, spellId, spellName) return spellName end,
+        buffCanReturn = false,
+        -- customTargetName = nil,
+        -- customHistoryFunc = nil,
+        announceArg = function(self, hunter, destName) return destName end,
+    },
 }
 
 -- Create a backward compatibility map between old mode names and new ones

@@ -76,6 +76,8 @@ L["DEFAULT_BLOODLUST_ANNOUNCE_MESSAGE"] = "BLOODLUST group %s"
 L["DEFAULT_GROUNDING_ANNOUNCE_MESSAGE"] = "Grounding Totem group %s"
 L["DEFAULT_BREZ_ANNOUNCE_MESSAGE"] = "Battle-rez cast on %s"
 L["DEFAULT_INNERV_ANNOUNCE_MESSAGE"] = "Innervate cast on %s"
+L["DEFAULT_BOP_ANNOUNCE_MESSAGE"] = "BoP cast on %s"
+L["DEFAULT_BOF_ANNOUNCE_MESSAGE"] = "Freedom cast on %s"
 
 L["TRANQ_NOW_LOCAL_ALERT_MESSAGE"] = "СТРЕЛЯЙ СЕЙЧАС !"
 
@@ -95,8 +97,11 @@ L["FILTER_SHOW_BLOODLUST"] = "BL"
 L["FILTER_SHOW_GROUNDING"] = "Ground"
 L["FILTER_SHOW_BREZ"] = "B-Rez"
 L["FILTER_SHOW_INNERV"] = "Innerv"
+L["FILTER_SHOW_BOP"] = "BoP"
+L["FILTER_SHOW_BOF"] = "Freedom"
 L["NO_MODE_AVAILABLE"] = "<Choose modes in settings>"
 L["MODE_INVISIBLE"] = "This is the currently selected mode and it will stay that way even though the button is not visible.\nYou may want to click a visible button mode in order to select another mode."
+
 L["TRANQSHOT_MODE_FULL_NAME"] = "Tranquilizing Shot"
 L["LOATHEB_MODE_FULL_NAME"] = "Loatheb"
 L["DISTRACT_MODE_FULL_NAME"] = "Distract"
@@ -107,6 +112,9 @@ L["BLOODLUST_MODE_FULL_NAME"] = "Bloodlust/Heroism"
 L["GROUNDING_MODE_FULL_NAME"] = "Grounding Totem"
 L["BREZ_MODE_FULL_NAME"] = "Battle Rez"
 L["INNERV_MODE_FULL_NAME"] = "Innervate"
+L["BOP_MODE_FULL_NAME"] = "Blessing of Protection"
+L["BOF_MODE_FULL_NAME"] = "Blessing of Freedom"
+
 L["TRANQSHOT_MODE_DETAILED_DESC"] = "This mode tracks raid bosses when they enter a Frenzy status and tell hunters to cast the Tranquilizing Shot ability."
 L["LOATHEB_MODE_DETAILED_DESC"] = "This mode tracks Loatheb's ability that prevents healers from casting healing spells for 60 seconds."
 L["DISTRACT_MODE_DETAILED_DESC"] = "This mode tracks whenever a rogue has cast the Distract ability."
@@ -117,6 +125,11 @@ L["BLOODLUST_MODE_DETAILED_DESC"] = "This mode tracks whenever a hunter has cast
 L["GROUNDING_MODE_DETAILED_DESC"] = "This mode tracks whenever a shaman has cast the Grounding Totem ability."
 L["BREZ_MODE_DETAILED_DESC"] = "This mode tracks whenever a druid resurrects someone with the Rebirth spell."
 L["INNERV_MODE_DETAILED_DESC"] = "This mode tracks whenever a druid regenerates mana to someone with the Innervate spell."
+L["BOP_MODE_DETAILED_DESC"] = "This mode tracks whenever a paladin protects someone from physical damage with a Blessing of Protection at the cost of making impossible to perform physical attacks.\n"..
+    "Usually, this effect also removes the target temporarily from the threat table."
+L["BOF_MODE_DETAILED_DESC"] = "This mode tracks whenever a paladin frees someone from movement-impairing effects, such as roots and slows, with a Blessing of Freedom.\n"..
+    "This effects removes current movement-impairing effects as well as preventing new ones for the next 10 seconds."
+
 L["MODE_BUTTON_DESC"] = "Show the button for activating the mode '%s'"
 L["MODE_LABEL"] = "Button Text"
 L["MODE_LABEL_DESC"] = "Text that appears in the button for activating the mode '%s'"
