@@ -1,6 +1,6 @@
 ## SilentRotate Changelog
 
-#### v0.9.1-beta (2021-xx-yy)
+#### v0.9.1-beta (2021-10-30)
 
 - Added Blessing of Protection mode
 - Added Blessing of Freedom mode
