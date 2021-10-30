@@ -117,17 +117,13 @@ function SilentRotate:trackHistoryBuff(hunter)
     if buffMode == 'not_a_buff' then
         -- Nothinig to track
         return
-    elseif buffMode == 'buff_lost' then
-        -- Track already ended: buff lost
-        local msg = string.format(self:getHistoryPattern('HISTORY_SPELLCAST_CANCEL'), hunter.buffName, targetName)
-        self:addHistoryMessage(msg, mode)
-        return
     elseif buffMode == 'buff_expired' then
         -- Track already ended: buff expired
         local msg = string.format(self:getHistoryPattern('HISTORY_SPELLCAST_EXPIRE'), hunter.buffName, targetName)
         self:addHistoryMessage(msg, mode)
         return
-    else -- buffMode == 'has_buff'
+    else -- buffMode == 'has_buff' or buffMode == 'buff_lost'
+        -- If the buff is (supposedly) already lost, wait for
         local refreshInterval = 1.5
         hunter.historyTrackerMode = mode.modeName
         hunter.historyTrackerTicker = C_Timer.NewTicker(refreshInterval, function()
