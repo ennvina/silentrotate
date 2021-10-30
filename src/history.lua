@@ -123,7 +123,8 @@ function SilentRotate:trackHistoryBuff(hunter)
         self:addHistoryMessage(msg, mode)
         return
     else -- buffMode == 'has_buff' or buffMode == 'buff_lost'
-        -- If the buff is (supposedly) already lost, wait for
+        -- If the buff is (supposedly) already lost, maybe it is due to client-server lag
+        -- So we wait for the next timer tick before deciding whether the buff is really lost
         local refreshInterval = 1.5
         hunter.historyTrackerMode = mode.modeName
         hunter.historyTrackerTicker = C_Timer.NewTicker(refreshInterval, function()
