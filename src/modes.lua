@@ -187,6 +187,7 @@ SilentRotate.modes = {
         -- buffCanReturn = nil,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
+        -- groupChangeFunc = nil,
         announceArg = 'destName',
         -- tooltip = nil,
         -- metadata = nil
@@ -216,6 +217,7 @@ SilentRotate.modes = {
         -- buffCanReturn = nil,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
+        -- groupChangeFunc = nil,
         announceArg = 'sourceName',
         -- tooltip = nil,
         -- metadata = nil
@@ -238,6 +240,7 @@ SilentRotate.modes = {
         -- buffCanReturn = nil,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
+        -- groupChangeFunc = nil,
         announceArg = 'destName',
         -- tooltip = nil,
         -- metadata = nil
@@ -260,6 +263,7 @@ SilentRotate.modes = {
         buffCanReturn = false,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
+        -- groupChangeFunc = nil,
         announceArg = 'destName',
         -- tooltip = nil,
         -- metadata = nil
@@ -285,6 +289,7 @@ SilentRotate.modes = {
         -- buffCanReturn = nil,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
+        -- groupChangeFunc = nil,
         announceArg = 'destName',
         -- tooltip = nil,
         -- metadata = nil
@@ -307,6 +312,7 @@ SilentRotate.modes = {
         buffCanReturn = false,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
+        -- groupChangeFunc = nil,
         announceArg = 'destName',
         -- tooltip = nil,
         -- metadata = nil
@@ -332,6 +338,7 @@ SilentRotate.modes = {
         buffCanReturn = false,
         customTargetName = function(self, hunter, targetName) return hunter.subgroup and string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup) end,
         -- customHistoryFunc = nil,
+        -- groupChangeFunc = nil,
         announceArg = 'sourceGroup',
         -- tooltip = nil,
         -- metadata = nil
@@ -369,6 +376,8 @@ SilentRotate.modes = {
                 end)
             elseif destGUID and self.metadata.summons[destGUID] then
                 if (event == "UNIT_DESTROYED") then
+                    -- The totem was destroyed
+                    -- This event should always be triggered when the totem dies, in practice it is not always the case
                     if self.metadata.summons[destGUID].summoned then
                         self.metadata.summons[destGUID].summoned = false
                         local historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_EXPIRE"), self.metadata.summons[destGUID].ownerName)
@@ -433,6 +442,15 @@ SilentRotate.modes = {
                         SilentRotate:addHistoryMessage(historyMessage, self)
                     end
                 end
+            elseif (event == "UNIT_DIED") and destGUID and self.metadata.summoners[destGUID] then
+                -- The author of a totem has died
+                local totemGUID = self.metadata.summoners[destGUID]
+                local totem = self.metadata.summons[totemGUID]
+                if totem and totem.summoned then
+                    totem.summoned = false
+                    local historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_ORPHAN"), totem.ownerName)
+                    SilentRotate:addHistoryMessage(historyMessage, self)
+                end
             end
         end,
         targetGUID = function(self, sourceGUID, destGUID) return sourceGUID end, -- Target is the caster itself
@@ -457,6 +475,14 @@ SilentRotate.modes = {
         end,
         customHistoryFunc = function(mode, hunter, sourceName, destName, spellName, failed)
             return string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_SUMMON"), sourceName, hunter.subgroup or 0)
+        end,
+        groupChangeFunc = function(mode, hunter, oldgroup, newgroup)
+            local totemGUID = self.metadata.summoners[hunter.GUID]
+            local totem = self.metadata.summons[totemGUID]
+            if totemGUID and totem.summoned then
+                local historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_CHANGE"), totem.ownerName, newgroup)
+                SilentRotate:addHistoryMessage(historyMessage, self)
+            end
         end,
         announceArg = 'sourceGroup',
         tooltip = function(self, hunter)
@@ -504,6 +530,7 @@ SilentRotate.modes = {
         -- buffCanReturn = nil,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
+        -- groupChangeFunc = nil,
         announceArg = 'destName',
         -- tooltip = nil,
         -- metadata = nil
@@ -525,6 +552,7 @@ SilentRotate.modes = {
         buffCanReturn = false,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
+        -- groupChangeFunc = nil,
         announceArg = 'destName',
         -- tooltip = nil,
         -- metadata = nil
@@ -546,6 +574,7 @@ SilentRotate.modes = {
         buffCanReturn = false,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
+        -- groupChangeFunc = nil,
         announceArg = 'destName',
         -- tooltip = nil,
         -- metadata = nil
@@ -567,6 +596,7 @@ SilentRotate.modes = {
         buffCanReturn = false,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
+        -- groupChangeFunc = nil,
         announceArg = 'destName',
         -- tooltip = nil,
         -- metadata = nil
