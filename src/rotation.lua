@@ -301,7 +301,17 @@ function SilentRotate:updateUnitStatus(name, classFilename, subgroup)
         end
 
         if (registered) then
+            local formerGroup = hunter.subgroup
             hunter.subgroup = subgroup
+
+            -- Inform the mode when one of its hunters switches to a new group
+            if formerGroup and subgroup and formerGroup ~= subgroup then
+                local mode = self:getMode() -- @todo get hunter's mode
+                if type(mode.groupChangeFunc) == 'function' then
+                    mode:groupChangeFunc(hunter, formerGroup, subgroup)
+                end
+            end
+
             SilentRotate:updateHunterStatus(hunter)
         end
 
