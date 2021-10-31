@@ -294,28 +294,23 @@ function SilentRotate:updateUnitStatus(name, classFilename, subgroup)
         local registered = SilentRotate:isHunterRegistered(GUID)
 
         if (not registered) then
-            if (not InCombatLockdown()) then
-                hunter = SilentRotate:registerHunter(name)
-                SilentRotate:registerUnitEvents(hunter)
-                registered = true
-            end
+            hunter = SilentRotate:registerHunter(name)
+            SilentRotate:registerUnitEvents(hunter)
         else
             hunter = SilentRotate:getHunter(GUID)
         end
 
-        if (registered) then
-            local formerGroup = hunter.subgroup
-            hunter.subgroup = subgroup
+        local formerGroup = hunter.subgroup
+        hunter.subgroup = subgroup
 
-            -- Inform the mode when one of its hunters switches to a new group
-            if formerGroup and subgroup and formerGroup ~= subgroup then
-                if type(mode.groupChangeFunc) == 'function' then
-                    mode:groupChangeFunc(hunter, formerGroup, subgroup)
-                end
+        -- Inform the mode when one of its hunters switches to a new group
+        if formerGroup and subgroup and formerGroup ~= subgroup then
+            if type(mode.groupChangeFunc) == 'function' then
+                mode:groupChangeFunc(hunter, formerGroup, subgroup)
             end
-
-            SilentRotate:updateHunterStatus(hunter)
         end
+
+        SilentRotate:updateHunterStatus(hunter)
 
     end
 

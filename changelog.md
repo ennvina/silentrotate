@@ -2,6 +2,7 @@
 
 #### v0.9.2-beta (2021-xx-yy)
 
+- Changing modes no longer requires to be out-of-combat
 - Grounding Totem History detects when the shaman dies
 - Grounding Totem History detects when the group of the shaman is changed
 
