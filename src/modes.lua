@@ -55,25 +55,31 @@ end
 -- Return true if the player is recommended for a specific mode
 -- If className is nil, the class is fetched from the unit
 -- If mode is nil, use the current mode instead
-function SilentRotate:isPlayerWanted(unit, className, modeName)
+function SilentRotate:isPlayerWanted(mode, unit, className)
     if className == nil then
+        -- The 'select' result must be in parentheses to prevent argument bleeding
         className = (select(2,UnitClass(unit)))
     end
 
-    local mode = self:getMode(modeName)
     if mode and mode.wanted then
         if type(mode.wanted) == 'string' then
+            -- Single string: check the class matches
             return className == mode.wanted
+
         elseif type(mode.wanted) == 'table' then
+            -- Table: check the class matches with at least one of them
             for _, c in pairs(mode.wanted) do
                 if className == c then
                     return true
                 end
             end
             return false
+
         elseif type(mode.wanted) == 'function' then
+            -- Function: invoke callback, alongside race info
             local raceName = select(2,UnitRace(unit))
             return mode.wanted(mode, className, raceName)
+
         end
     end
 
