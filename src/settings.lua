@@ -504,7 +504,7 @@ function SilentRotate:CreateConfig()
                 name = string.format(L["SUCCESS_MESSAGE_LABEL"], L[mode.modeNameUpper.."_MODE_FULL_NAME"]),
                 type = "input",
                 order = announceIndex,
-                width = "double",
+                width = "full",
                 hidden = not mode.project,
             }
             announceIndex = announceIndex+1
@@ -512,16 +512,26 @@ function SilentRotate:CreateConfig()
                 name = string.format(L["FAIL_MESSAGE_LABEL"], L[mode.modeNameUpper.."_MODE_FULL_NAME"]),
                 type = "input",
                 order = announceIndex,
-                width = "double",
+                width = "full",
                 hidden = not mode.project,
             }
             announceIndex = announceIndex+1
+            if (mode.alertWhenFail) then
+                options.args.announces.args["announce"..mode.modeNameFirstUpper.."ReactMessage"] = {
+                    name = string.format(L["REACT_MESSAGE_LABEL"], L[mode.modeNameUpper.."_MODE_FULL_NAME"]),
+                    type = "input",
+                    order = announceIndex,
+                    width = "full",
+                    hidden = not mode.project,
+                }
+                announceIndex = announceIndex+1
+            end
         else
             options.args.announces.args["announce"..mode.modeNameFirstUpper.."Message"] = {
                 name = string.format(L["NEUTRAL_MESSAGE_LABEL"], L[mode.modeNameUpper.."_MODE_FULL_NAME"]),
                 type = "input",
                 order = announceIndex,
-                width = "double",
+                width = "full",
                 hidden = not mode.project,
             }
             announceIndex = announceIndex+1
