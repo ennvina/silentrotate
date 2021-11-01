@@ -479,10 +479,10 @@ SilentRotate.modes = {
                 return nil
             end
         end,
-        customHistoryFunc = function(mode, hunter, sourceName, destName, spellName, failed)
+        customHistoryFunc = function(self, hunter, sourceName, destName, spellName, failed)
             return string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_SUMMON"), sourceName, hunter.subgroup or 0)
         end,
-        groupChangeFunc = function(mode, hunter, oldgroup, newgroup)
+        groupChangeFunc = function(self, hunter, oldgroup, newgroup)
             local totemGUID = self.metadata.summoners[hunter.GUID]
             local totem = self.metadata.summons[totemGUID]
             if totemGUID and totem.summoned then
