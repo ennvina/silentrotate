@@ -88,7 +88,7 @@ function SilentRotate:rotate(lastHunter, fail, rotateWithoutCooldown, endTimeOfC
             if (SilentRotate:isHunterTranqCooldownReady(nextHunter)) then
                 if (#SilentRotate.rotationTables.backup < 1) then
                     if (fail and nextHunter.name == playerName) then
-                        SilentRotate:throwTranqAlert()
+                        SilentRotate:alertReactNow(lastHunter.modeName)
                     end
                 end
             end
@@ -97,7 +97,7 @@ function SilentRotate:rotate(lastHunter, fail, rotateWithoutCooldown, endTimeOfC
 
     if (fail) then
         if (SilentRotate:getHunterRotationTable(SilentRotate:getHunter(playerName)) == SilentRotate.rotationTables.backup) then
-            SilentRotate:throwTranqAlert()
+            SilentRotate:alertReactNow(lastHunter.modeName)
         end
     end
 end
@@ -482,10 +482,14 @@ function SilentRotate:applyRotationConfiguration(rotationsTables)
 end
 
 -- Display an alert and play a sound when the player should immediatly tranq
-function SilentRotate:throwTranqAlert()
-    RaidNotice_AddMessage(RaidWarningFrame, L['TRANQ_NOW_LOCAL_ALERT_MESSAGE'], ChatTypeInfo["RAID_WARNING"])
+function SilentRotate:alertReactNow(modeName)
+    local mode = SilentRotate:getMode(modeName)
 
-    if (SilentRotate.db.profile.enableTranqNowSound) then
-        PlaySoundFile(SilentRotate.constants.sounds.alarms[SilentRotate.db.profile.tranqNowSound])
+    if mode and mode.canFail and mode.alertWhenFail then
+        RaidNotice_AddMessage(RaidWarningFrame, SilentRotate.db.profile["announce"..mode.modeNameFirstUpper.."ReactMessage"], ChatTypeInfo["RAID_WARNING"])
+
+        if SilentRotate.db.profile.enableTranqNowSound then
+            PlaySoundFile(SilentRotate.constants.sounds.alarms[SilentRotate.db.profile.tranqNowSound])
+        end
     end
 end
