@@ -255,15 +255,15 @@ function SilentRotate:purgeHunterList()
     local change = false
     local huntersToRemove = {}
 
+    local mode = SilentRotate:getMode() -- @todo parse all modes
+
     for key,hunter in pairs(SilentRotate.hunterTable) do
 
         if  (
                 -- Is unit in the party? "player" is always accepted
                 ( not UnitInParty(hunter.name) and not UnitIsUnit(hunter.name, "player") )
             or
-                -- Is the class required for the current mode?
-                -- The 'select' result must be in parentheses to prevent argument bleeding
-                not SilentRotate:isPlayerWanted(hunter.name, nil, nil)
+                not SilentRotate:isPlayerWanted(mode, hunter.name, nil)
             ) then
             table.insert(huntersToRemove, hunter)
         end
@@ -286,24 +286,31 @@ function SilentRotate:updateUnitStatus(name, classFilename, subgroup)
     local GUID = UnitGUID(name)
     local hunter
 
-    if SilentRotate:isPlayerWanted(name, (classFilename), nil) then
+    local mode = self:getMode() -- @todo Parse modes instead
+
+    -- Is the class required for the current mode?
+    if SilentRotate:isPlayerWanted(mode, name, classFilename, nil) then
 
         local registered = SilentRotate:isHunterRegistered(GUID)
 
         if (not registered) then
-            if (not InCombatLockdown()) then
-                hunter = SilentRotate:registerHunter(name)
-                SilentRotate:registerUnitEvents(hunter)
-                registered = true
-            end
+            hunter = SilentRotate:registerHunter(name)
+            SilentRotate:registerUnitEvents(hunter)
         else
             hunter = SilentRotate:getHunter(GUID)
         end
 
-        if (registered) then
-            hunter.subgroup = subgroup
-            SilentRotate:updateHunterStatus(hunter)
+        local formerGroup = hunter.subgroup
+        hunter.subgroup = subgroup
+
+        -- Inform the mode when one of its hunters switches to a new group
+        if formerGroup and subgroup and formerGroup ~= subgroup then
+            if type(mode.groupChangeFunc) == 'function' then
+                mode:groupChangeFunc(hunter, formerGroup, subgroup)
+            end
         end
+
+        SilentRotate:updateHunterStatus(hunter)
 
     end
 

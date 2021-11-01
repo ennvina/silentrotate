@@ -55,25 +55,31 @@ end
 -- Return true if the player is recommended for a specific mode
 -- If className is nil, the class is fetched from the unit
 -- If mode is nil, use the current mode instead
-function SilentRotate:isPlayerWanted(unit, className, modeName)
+function SilentRotate:isPlayerWanted(mode, unit, className)
     if className == nil then
+        -- The 'select' result must be in parentheses to prevent argument bleeding
         className = (select(2,UnitClass(unit)))
     end
 
-    local mode = self:getMode(modeName)
     if mode and mode.wanted then
         if type(mode.wanted) == 'string' then
+            -- Single string: check the class matches
             return className == mode.wanted
+
         elseif type(mode.wanted) == 'table' then
+            -- Table: check the class matches with at least one of them
             for _, c in pairs(mode.wanted) do
                 if className == c then
                     return true
                 end
             end
             return false
+
         elseif type(mode.wanted) == 'function' then
+            -- Function: invoke callback, alongside race info
             local raceName = select(2,UnitRace(unit))
             return mode.wanted(mode, className, raceName)
+
         end
     end
 
@@ -187,6 +193,7 @@ SilentRotate.modes = {
         -- buffCanReturn = nil,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
+        -- groupChangeFunc = nil,
         announceArg = 'destName',
         -- tooltip = nil,
         -- metadata = nil
@@ -216,6 +223,7 @@ SilentRotate.modes = {
         -- buffCanReturn = nil,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
+        -- groupChangeFunc = nil,
         announceArg = 'sourceName',
         -- tooltip = nil,
         -- metadata = nil
@@ -238,6 +246,7 @@ SilentRotate.modes = {
         -- buffCanReturn = nil,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
+        -- groupChangeFunc = nil,
         announceArg = 'destName',
         -- tooltip = nil,
         -- metadata = nil
@@ -260,6 +269,7 @@ SilentRotate.modes = {
         buffCanReturn = false,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
+        -- groupChangeFunc = nil,
         announceArg = 'destName',
         -- tooltip = nil,
         -- metadata = nil
@@ -285,6 +295,7 @@ SilentRotate.modes = {
         -- buffCanReturn = nil,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
+        -- groupChangeFunc = nil,
         announceArg = 'destName',
         -- tooltip = nil,
         -- metadata = nil
@@ -307,6 +318,7 @@ SilentRotate.modes = {
         buffCanReturn = false,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
+        -- groupChangeFunc = nil,
         announceArg = 'destName',
         -- tooltip = nil,
         -- metadata = nil
@@ -332,6 +344,7 @@ SilentRotate.modes = {
         buffCanReturn = false,
         customTargetName = function(self, hunter, targetName) return hunter.subgroup and string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup) end,
         -- customHistoryFunc = nil,
+        -- groupChangeFunc = nil,
         announceArg = 'sourceGroup',
         -- tooltip = nil,
         -- metadata = nil
@@ -369,6 +382,8 @@ SilentRotate.modes = {
                 end)
             elseif destGUID and self.metadata.summons[destGUID] then
                 if (event == "UNIT_DESTROYED") then
+                    -- The totem was destroyed
+                    -- This event should always be triggered when the totem dies, in practice it is not always the case
                     if self.metadata.summons[destGUID].summoned then
                         self.metadata.summons[destGUID].summoned = false
                         local historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_EXPIRE"), self.metadata.summons[destGUID].ownerName)
@@ -433,6 +448,15 @@ SilentRotate.modes = {
                         SilentRotate:addHistoryMessage(historyMessage, self)
                     end
                 end
+            elseif (event == "UNIT_DIED") and destGUID and self.metadata.summoners[destGUID] then
+                -- The author of a totem has died
+                local totemGUID = self.metadata.summoners[destGUID]
+                local totem = self.metadata.summons[totemGUID]
+                if totem and totem.summoned then
+                    totem.summoned = false
+                    local historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_ORPHAN"), totem.ownerName)
+                    SilentRotate:addHistoryMessage(historyMessage, self)
+                end
             end
         end,
         targetGUID = function(self, sourceGUID, destGUID) return sourceGUID end, -- Target is the caster itself
@@ -455,8 +479,16 @@ SilentRotate.modes = {
                 return nil
             end
         end,
-        customHistoryFunc = function(mode, hunter, sourceName, destName, spellName, failed)
+        customHistoryFunc = function(self, hunter, sourceName, destName, spellName, failed)
             return string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_SUMMON"), sourceName, hunter.subgroup or 0)
+        end,
+        groupChangeFunc = function(self, hunter, oldgroup, newgroup)
+            local totemGUID = self.metadata.summoners[hunter.GUID]
+            local totem = self.metadata.summons[totemGUID]
+            if totemGUID and totem.summoned then
+                local historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_CHANGE"), totem.ownerName, newgroup)
+                SilentRotate:addHistoryMessage(historyMessage, self)
+            end
         end,
         announceArg = 'sourceGroup',
         tooltip = function(self, hunter)
@@ -504,6 +536,7 @@ SilentRotate.modes = {
         -- buffCanReturn = nil,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
+        -- groupChangeFunc = nil,
         announceArg = 'destName',
         -- tooltip = nil,
         -- metadata = nil
@@ -525,6 +558,7 @@ SilentRotate.modes = {
         buffCanReturn = false,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
+        -- groupChangeFunc = nil,
         announceArg = 'destName',
         -- tooltip = nil,
         -- metadata = nil
@@ -546,6 +580,7 @@ SilentRotate.modes = {
         buffCanReturn = false,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
+        -- groupChangeFunc = nil,
         announceArg = 'destName',
         -- tooltip = nil,
         -- metadata = nil
@@ -567,6 +602,7 @@ SilentRotate.modes = {
         buffCanReturn = false,
         -- customTargetName = nil,
         -- customHistoryFunc = nil,
+        -- groupChangeFunc = nil,
         announceArg = 'destName',
         -- tooltip = nil,
         -- metadata = nil
