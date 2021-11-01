@@ -172,6 +172,7 @@ SilentRotate.modes = {
         cooldown = 20,
         -- effectDuration = nil,
         canFail = true,
+        alertWhenFail = true,
         spell = function(self, spellId, spellName)
             return spellName == GetSpellInfo(19801) -- 'Tranquilizing Shot'
                 or spellName == GetSpellInfo(14287) and SilentRotate.testMode -- 'Arcane Shot'
@@ -182,7 +183,7 @@ SilentRotate.modes = {
                 local historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_TRANQSHOT_FRENZY"), sourceName, spellName)
                 SilentRotate:addHistoryMessage(historyMessage, self)
                 if SilentRotate:isPlayerNextTranq() then
-                    SilentRotate:throwTranqAlert()
+                    SilentRotate:alertReactNow(self.modeName)
                 end
             elseif event == "UNIT_DIED" and SilentRotate:isTranqableBoss(destGUID) then
                 SilentRotate:resetRotation()
@@ -208,6 +209,7 @@ SilentRotate.modes = {
         cooldown = 60,
         -- effectDuration = nil,
         -- canFail = nil,
+        -- alertWhenFail = nil,
         -- spell = nil,
         auraTest = function(self, spellId, spellName)
             return SilentRotate.testMode and spellId == 11196 -- 11196 is the spell ID of "Recently Bandaged"
@@ -238,6 +240,7 @@ SilentRotate.modes = {
         cooldown = 30,
         effectDuration = 10,
         canFail = true,
+        alertWhenFail = true,
         spell = GetSpellInfo(1725),
         -- auraTest = nil,
         -- customCombatlogFunc = nil,
@@ -261,6 +264,7 @@ SilentRotate.modes = {
         cooldown = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 30 or 180,
         effectDuration = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 600 or 180,
         canFail = false,
+        -- alertWhenFail = nil,
         spell = GetSpellInfo(6346),
         -- auraTest = nil,
         -- customCombatlogFunc = nil,
@@ -284,6 +288,7 @@ SilentRotate.modes = {
         cooldown = 600,
         effectDuration = 6,
         canFail = true,
+        alertWhenFail = false,
         spell = {
             GetSpellInfo(1161), -- warrior's Challenging Shout
             GetSpellInfo(5209), -- druid's Challenging Roar
@@ -310,6 +315,7 @@ SilentRotate.modes = {
         cooldown = 120,
         effectDuration = 30,
         canFail = false,
+        -- alertWhenFail = nil,
         spell = GetSpellInfo(34477),
         -- auraTest = nil,
         -- customCombatlogFunc = nil,
@@ -333,6 +339,7 @@ SilentRotate.modes = {
         cooldown = 600,
         effectDuration = 40,
         canFail = false,
+        -- alertWhenFail = nil,
         spell = {
             GetSpellInfo(2825), -- Bloodlust
             GetSpellInfo(32182), -- Heroism
@@ -358,6 +365,7 @@ SilentRotate.modes = {
         cooldown = 15,
         effectDuration = 45,
         canFail = false,
+        -- alertWhenFail = nil,
         spell = GetSpellInfo(8177),
         -- auraTest = nil,
         customCombatlogFunc = function(self, event, sourceGUID, sourceName, sourceFlags, destGUID, destName, spellId, spellName)
@@ -528,6 +536,7 @@ SilentRotate.modes = {
         cooldown = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 1800 or 1200,
         -- effectDuration = nil,
         canFail = false,
+        -- alertWhenFail = nil,
         spell = GetSpellInfo(20484), -- Rebirth Rank 1
         -- auraTest = nil,
         -- customCombatlogFunc = nil,
@@ -550,6 +559,7 @@ SilentRotate.modes = {
         cooldown = 360,
         effectDuration = 20,
         canFail = false,
+        -- alertWhenFail = nil,
         spell = GetSpellInfo(29166),
         -- auraTest = nil,
         -- customCombatlogFunc = nil,
@@ -572,6 +582,7 @@ SilentRotate.modes = {
         cooldown = 300,
         effectDuration = 10,
         canFail = false,
+        -- alertWhenFail = nil,
         spell = GetSpellInfo(1022), -- Blessing of Protection rank 1
         -- auraTest = nil,
         -- customCombatlogFunc = nil,
@@ -594,6 +605,7 @@ SilentRotate.modes = {
         cooldown = 25,
         effectDuration = 10,
         canFail = false,
+        -- alertWhenFail = nil,
         spell = GetSpellInfo(1044), -- Blessing of Freedom
         -- auraTest = nil,
         -- customCombatlogFunc = nil,
