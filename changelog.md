@@ -2,6 +2,7 @@
 
 #### v0.9.2-beta (2021-xx-yy)
 
+- Added Soulstone mode
 - Changing modes no longer requires to be out-of-combat
 - Option to setup the local alert when the previous player failed
 - Grounding Totem History detects when the shaman dies

@@ -619,6 +619,29 @@ SilentRotate.modes = {
         -- tooltip = nil,
         -- metadata = nil
     },
+
+    soulstone = {
+        project = true,
+        default = false,
+        -- color = nil,
+        wanted = 'WARLOCK',
+        cooldown = 1800,
+        effectDuration = 1800,
+        canFail = false,
+        -- alertWhenFail = nil,
+        spell = GetSpellInfo(20707), -- Soulstone Resurrection rank 1
+        -- auraTest = nil,
+        -- customCombatlogFunc = nil,
+        targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
+        buffName = function(self, spellId, spellName) return spellName end,
+        buffCanReturn = false,
+        -- customTargetName = nil,
+        -- customHistoryFunc = nil,
+        -- groupChangeFunc = nil,
+        announceArg = 'destName',
+        -- tooltip = nil,
+        -- metadata = nil
+    },
 }
 
 -- Create a backward compatibility map between old mode names and new ones
