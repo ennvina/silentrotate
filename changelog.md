@@ -1,6 +1,6 @@
 ## SilentRotate Changelog
 
-#### v0.9.2-beta (2021-xx-yy)
+#### v0.9.2-beta (2021-11-07)
 
 - Added Soulstone mode
 - Changing modes no longer requires to be out-of-combat
