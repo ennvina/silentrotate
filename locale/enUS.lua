@@ -81,6 +81,7 @@ L["DEFAULT_BREZ_ANNOUNCE_MESSAGE"] = "Battle-rez cast on %s"
 L["DEFAULT_INNERV_ANNOUNCE_MESSAGE"] = "Innervate cast on %s"
 L["DEFAULT_BOP_ANNOUNCE_MESSAGE"] = "BoP cast on %s"
 L["DEFAULT_BOF_ANNOUNCE_MESSAGE"] = "Freedom cast on %s"
+L["DEFAULT_SOULSTONE_ANNOUNCE_MESSAGE"] = "Soulstone on %s"
 
 L["BROADCAST_MESSAGE_HEADER"] = "Rotation setup text broadcast"
 L["USE_MULTILINE_ROTATION_REPORT"] = "Use multiline for main rotation when reporting"
@@ -100,6 +101,7 @@ L["FILTER_SHOW_BREZ"] = "B-Rez"
 L["FILTER_SHOW_INNERV"] = "Innerv"
 L["FILTER_SHOW_BOP"] = "BoP"
 L["FILTER_SHOW_BOF"] = "Freedom"
+L["FILTER_SHOW_SOULSTONE"] = "Soul"
 L["NO_MODE_AVAILABLE"] = "<Choose modes in settings>"
 L["MODE_INVISIBLE"] = "This is the currently selected mode and it will stay that way even though the button is not visible.\nYou may want to click a visible button mode in order to select another mode."
 
@@ -115,6 +117,7 @@ L["BREZ_MODE_FULL_NAME"] = "Battle Rez"
 L["INNERV_MODE_FULL_NAME"] = "Innervate"
 L["BOP_MODE_FULL_NAME"] = "Blessing of Protection"
 L["BOF_MODE_FULL_NAME"] = "Blessing of Freedom"
+L["SOULSTONE_MODE_FULL_NAME"] = "Soulstone"
 
 L["TRANQSHOT_MODE_DETAILED_DESC"] = "This mode tracks raid bosses when they enter a Frenzy status and tells hunters to cast the Tranquilizing Shot ability."
 L["LOATHEB_MODE_DETAILED_DESC"] = "This mode tracks Loatheb's ability that prevents healers from casting healing spells for 60 seconds."
@@ -135,6 +138,7 @@ L["BOP_MODE_DETAILED_DESC"] = "This mode tracks whenever a paladin protects some
     "This effect also removes the target temporarily from the threat table."
 L["BOF_MODE_DETAILED_DESC"] = "This mode tracks whenever a paladin frees someone and prevents movement-impairing effects, such as roots and slows, with Blessing of Freedom.\n"..
     "This effects removes current movement-impairing effects as well as preventing new ones for the next 10 seconds."
+L["SOULSTONE_MODE_DETAILED_DESC"] = "This mode tracks whenever a warlock saves the soul of a player within a soulstone, allowing this player to resurrect immediately after dying, even in combat."
 
 L["MODE_BUTTON_DESC"] = "Show the button for activating the mode '%s'"
 L["MODE_LABEL"] = "Button Text"
