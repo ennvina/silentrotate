@@ -3,15 +3,18 @@
 <img src="https://cdn.discordapp.com/attachments/630388534087385099/785647216873701417/unknown.png" alt="Loatheb Mode" width="181" height="336" />
 &nbsp;
 <img src="https://cdn.discordapp.com/attachments/818969243050573835/901109415455899678/grounding-absorb.gif" alt="Grounding Totem" width="640" height="480" />
+&nbsp;
+<img src="https://cdn.discordapp.com/attachments/755861129523101777/904832857795625060/unknown.png" alt="History" width="381" height="104" />
+&nbsp;
 <p>While it is more efficient if all involved players can view the list by themselves, ultimately not all raid members need to install the addon, considering a raid leader/assistant is willing to tell the rotation e.g. with voice comm.</p>
 <p>This addon is heavily based on the work of Slivo for the <a href="https://www.curseforge.com/wow/addons/tranqrotate">TranqRotate addon</a>, which you might want to install if you are interested only in Hunter&rsquo;s Tranquilizing Shot rotation.</p>
 <h2>Preparation</h2>
 <ul>
-<li>Before the fight begins, choose the correct mode you want to setup (Tranq, Loatheb, Distract, FearWard, AoE Taunt, Misdirection, Bloodlust, Grounding Totem, Battle Rez, Innervate).</li>
-<li>The SilentRotate window displays the list of raid members who may be part of the rotation. Only relevant members are displayed for a given rotation, e.g. only hunters are displayed in Tranq mode.</li>
+<li>Before the fight begins, choose the correct mode you want to setup (Loatheb, Misdirection, Grounding Totem, etc.).</li>
+<li>The SilentRotate window displays the list of raid members who may be part of the rotation. Only relevant members are displayed for a given rotation, e.g. only hunters are displayed in Misdirection mode.</li>
 <li>Players in the list can be drag'n'dropped to change their order. Members pushed to the very bottom are <i>backup</i> players who do not enter the normal rotation.</li>
 <li>The list may be setup by another class. For example, a warrior raid leader may select the "Loatheb" mode and change the order of players, even though the warrior will not be in the list.</li>
-<li>The list is shared across all raid members who have installed the addon. Every player can choose its own mode, in which case the list is shared between players who have selected the same mode.</li>
+<li>The list is shared across all raid members who have installed the addon. Each player can choose its own mode, in which case the list is shared between players who have selected the same mode.</li>
 </ul>
 <h2>Combat</h2>
 <ul>
@@ -19,8 +22,13 @@
 <li>Once a player has cast a spell that triggers the rotation, a cooldown bar is shown in this player&rsquo;s bar and the next player in the rotation is highlighted.</li>
 <li>Disconnected players and dead players do not take part in the rotation anymore and appear as gray or red, respectively.</li>
 </ul>
+<h2>History</h2>
+<ul>
+<li>A History window keeps track of events that are relevant to a given mode.</li>
+<li>For example, in Grounding Totem mode, the History window displays when a totem is summoned, when it absorbs a spell, or when it has been replaced by another Wind totem.</li>
+</ul>
 <h2>Modes</h2>
-<p>There are up to 10 modes: Tranq, Loatheb, Distract, FearWard, AoE Taunt, Misdirection, Bloodlust, Grounding Totem, Battle Rez and Innervate.</p>
+<p>There are up to 13 modes: Tranq, Loatheb, Distract, FearWard, AoE Taunt, Misdirection, Bloodlust, Grounding Totem, Battle Rez, Innervate, BoP, Freedom and Soulstone.</p>
 <p>The mode is selected automatically upon login and can be changed by clicking on top of the SilentRotate window.</p>
 <p>Not all modes are visible because the number of buttons would make the UI too messy.</p>
 <p>These modes are visible by default in Classic Era:</p>
@@ -95,11 +103,26 @@
 <li>Displays Druids only</li>
 <li>Tracks when Innervate regenerates mana to someone</li>
 </ul>
+<h3>BoP</h3>
+<ul>
+<li>Displays Paladins only</li>
+<li>Tracks when Blessing of Protection is cast on someone</li>
+</ul>
+<h3>Freedom</h3>
+<ul>
+<li>Displays Paladins only</li>
+<li>Tracks when Blessing of Freedom is cast on someone</li>
+</ul>
+<h3>Soulstone</h3>
+<ul>
+<li>Displays Warlocks only</li>
+<li>Tracks when a player is under the effect of a soulstone</li>
+</ul>
 <h2>Known Limitations</h2>
 <ul>
 <li>Please keep in mind <b>the addon is still in beta</b>, thank you for your understanding :)</li>
 <li>Only one mode can be active at a time</li>
-<li>Switching back and forth between modes may not restore the correct order of raid members</li>
+<li>Switching back and forth between modes may not restore the correct order of raid members and may display the wrong targets</li>
 <li>Loatheb mode does not filter out non-healer specs, such as Feral Druids</li>
 <li>AoE Taunt mode does not filter out non-tank specs, such as Restoration Druids</li>
 <li>Group-based modes, such as Bloodlust, only track the buff from its initial caster, not every target in the group</li>
