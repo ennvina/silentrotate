@@ -3,6 +3,7 @@
 #### v0.9.3-beta (2021-xx-yy)
 
 - Added Ritual of Souls mode
+- Classic Era now completely ignores TBC modes, instead of just hiding them
 
 #### v0.9.2-beta (2021-11-07)
 

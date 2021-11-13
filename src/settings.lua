@@ -469,7 +469,6 @@ function SilentRotate:CreateConfig()
         options.args.modes.args[modeName.."ModeHeader"] = {
             type = "header",
             order = modeBaseIndex,
-            hidden = not mode.project,
         }
         options.args.modes.args[modeName.."ModeButton"] = {
             name = L[mode.modeNameUpper.."_MODE_FULL_NAME"],
@@ -478,7 +477,6 @@ function SilentRotate:CreateConfig()
             order = modeBaseIndex+1,
             width = "full",
             set = setForMode,
-            hidden = not mode.project,
         }
         options.args.modes.args[modeName.."ModeText"] = {
             name = L["MODE_LABEL"],
@@ -487,7 +485,7 @@ function SilentRotate:CreateConfig()
             order = modeBaseIndex+2,
             width = "half",
             set = setForMode,
-            hidden = function() return not mode.project or not SilentRotate.db.profile[modeName.."ModeButton"] end,
+            hidden = function() return not SilentRotate.db.profile[modeName.."ModeButton"] end,
         }
         options.args.modes.args[modeName.."ModeInvisible"] = {
             name = SilentRotate.colors.lightRed:WrapTextInColorCode(L["MODE_INVISIBLE"]),
@@ -495,7 +493,7 @@ function SilentRotate:CreateConfig()
             fontSize = "medium",
             width = "full",
             order = modeBaseIndex+3,
-            hidden = function() return not mode.project or SilentRotate.db.profile[modeName.."ModeButton"] or SilentRotate.db.profile.currentMode ~= modeName end,
+            hidden = function() return SilentRotate.db.profile[modeName.."ModeButton"] or SilentRotate.db.profile.currentMode ~= modeName end,
         }
         modeBaseIndex = modeBaseIndex+10
 
@@ -505,7 +503,6 @@ function SilentRotate:CreateConfig()
                 type = "input",
                 order = announceIndex,
                 width = "full",
-                hidden = not mode.project,
             }
             announceIndex = announceIndex+1
             options.args.announces.args["announce"..mode.modeNameFirstUpper.."FailMessage"] = {
@@ -513,7 +510,6 @@ function SilentRotate:CreateConfig()
                 type = "input",
                 order = announceIndex,
                 width = "full",
-                hidden = not mode.project,
             }
             announceIndex = announceIndex+1
             if (mode.alertWhenFail) then
@@ -522,7 +518,6 @@ function SilentRotate:CreateConfig()
                     type = "input",
                     order = announceIndex,
                     width = "full",
-                    hidden = not mode.project,
                 }
                 announceIndex = announceIndex+1
             end
@@ -532,7 +527,6 @@ function SilentRotate:CreateConfig()
                 type = "input",
                 order = announceIndex,
                 width = "full",
-                hidden = not mode.project,
             }
             announceIndex = announceIndex+1
         end

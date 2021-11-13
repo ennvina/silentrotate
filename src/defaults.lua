@@ -84,7 +84,7 @@ function SilentRotate:LoadDefaults()
 		end
 
 		-- Set config for default visible modes
-		local isModeButtonVisible = mode.project and mode.default
+		local isModeButtonVisible = mode.default
 		self.defaults.profile[modeName.."ModeButton"] = isModeButtonVisible
 
 		-- Set config for the mode text
