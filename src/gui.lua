@@ -29,7 +29,7 @@ end
 -- Show/Hide main window based on user settings
 function SilentRotate:updateDisplay()
     for _, mainFrame in pairs(SilentRotate.mainFrames) do
-        if (SilentRotate:isInPveRaid()) then
+        if SilentRotate:isActive() then
             mainFrame:Show()
         else
             if (SilentRotate.db.profile.hideNotInRaid) then

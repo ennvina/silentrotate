@@ -167,6 +167,7 @@ SilentRotate.modes = {}
 SilentRotate.modes.tranqShot = {
     oldModeName = 'hunterz',
     default = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC,
+    raidOnly = true,
     -- color = nil,
     wanted = 'HUNTER',
     cooldown = 20,
@@ -203,6 +204,7 @@ SilentRotate.modes.tranqShot = {
 SilentRotate.modes.loatheb = {
     oldModeName = 'healerz',
     default = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC,
+    raidOnly = true,
     color = 'ff3fe7cc', -- Green-ish gooey of Loatheb HS card
     wanted = {'PRIEST', 'PALADIN', 'SHAMAN', 'DRUID'},
     cooldown = 60,
@@ -233,6 +235,7 @@ SilentRotate.modes.loatheb = {
 SilentRotate.modes.distract = {
     oldModeName = 'roguez',
     default = false,
+    raidOnly = false,
     -- color = nil,
     wanted = 'ROGUE',
     cooldown = 30,
@@ -256,6 +259,7 @@ SilentRotate.modes.distract = {
 SilentRotate.modes.fearWard = {
     oldModeName = 'fearz',
     default = true,
+    raidOnly = false,
     color = select(4,GetClassColor('PRIEST')),
     wanted = function(self, className, raceName) return className == 'PRIEST' and (WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC or raceName == 'Dwarf') end,
     cooldown = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 30 or 180,
@@ -279,6 +283,7 @@ SilentRotate.modes.fearWard = {
 SilentRotate.modes.aoeTaunt = {
     oldModeName = 'tauntz',
     default = false,
+    raidOnly = false,
     color = select(4,GetClassColor('WARRIOR')),
     wanted = {'WARRIOR', 'DRUID'},
     cooldown = 600,
@@ -304,6 +309,7 @@ SilentRotate.modes.aoeTaunt = {
 
 SilentRotate.modes.grounding = {
     default = false,
+    raidOnly = false,
     -- color = nil,
     wanted = 'SHAMAN',
     cooldown = 15,
@@ -474,6 +480,7 @@ SilentRotate.modes.grounding = {
 
 SilentRotate.modes.brez = {
     default = false,
+    raidOnly = false,
     -- color = nil,
     wanted = 'DRUID',
     cooldown = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 1800 or 1200,
@@ -496,6 +503,7 @@ SilentRotate.modes.brez = {
 
 SilentRotate.modes.innerv = {
     default = false,
+    raidOnly = false,
     -- color = nil,
     wanted = 'DRUID',
     cooldown = 360,
@@ -518,6 +526,7 @@ SilentRotate.modes.innerv = {
 
 SilentRotate.modes.bop = {
     default = false,
+    raidOnly = false,
     -- color = nil,
     wanted = 'PALADIN',
     cooldown = 300,
@@ -540,6 +549,7 @@ SilentRotate.modes.bop = {
 
 SilentRotate.modes.bof = {
     default = false,
+    raidOnly = false,
     -- color = nil,
     wanted = 'PALADIN',
     cooldown = 25,
@@ -562,6 +572,7 @@ SilentRotate.modes.bof = {
 
 SilentRotate.modes.soulstone = {
     default = false,
+    raidOnly = false,
     -- color = nil,
     wanted = 'WARLOCK',
     cooldown = 1800,
@@ -588,6 +599,7 @@ if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then
 SilentRotate.modes.misdi = {
     oldModeName = 'misdiz',
     default = WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC,
+    raidOnly = false,
     -- color = nil,
     wanted = 'HUNTER',
     cooldown = 120,
@@ -611,6 +623,7 @@ SilentRotate.modes.misdi = {
 SilentRotate.modes.bloodlust = {
     oldModeName = 'shamanz',
     default = WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC,
+    raidOnly = false,
     -- color = nil,
     wanted = 'SHAMAN',
     cooldown = 600,
@@ -636,6 +649,7 @@ SilentRotate.modes.bloodlust = {
 
 SilentRotate.modes.soulwell = {
     default = false,
+    raidOnly = false,
     -- color = nil,
     wanted = 'WARLOCK',
     cooldown = 300,

@@ -31,7 +31,7 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
     -- Avoid parsing combat log when not able to use it
     if not self.raidInitialized then return end
     -- Avoid parsing combat log when outside instance if test mode isn't enabled
-    if not self.testMode and not IsInInstance() then return end
+    if not self:isActive() then return end
 
     -- All events have these
     local timestamp, event, _, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags = CombatLogGetCurrentEventInfo()
