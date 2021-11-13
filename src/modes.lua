@@ -642,6 +642,29 @@ SilentRotate.modes = {
         -- tooltip = nil,
         -- metadata = nil
     },
+
+    soulwell = {
+        project = WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC,
+        default = false,
+        -- color = nil,
+        wanted = 'WARLOCK',
+        cooldown = 300,
+        effectDuration = 180,
+        canFail = false,
+        -- alertWhenFail = nil,
+        spell = GetSpellInfo(29893), -- Ritual of Souls rank 1
+        -- auraTest = nil,
+        -- customCombatlogFunc = nil,
+        -- targetGUID = nil,
+        -- buffName = nil,
+        -- buffCanReturn = nil,
+        -- customTargetName = nil,
+        -- customHistoryFunc = nil,
+        -- groupChangeFunc = nil,
+        announceArg = 'destName',
+        -- tooltip = nil,
+        -- metadata = nil
+    },
 }
 
 -- Create a backward compatibility map between old mode names and new ones

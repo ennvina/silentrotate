@@ -1,5 +1,9 @@
 ## SilentRotate Changelog
 
+#### v0.9.3-beta (2021-xx-yy)
+
+- Added Ritual of Souls mode
+
 #### v0.9.2-beta (2021-11-07)
 
 - Added Soulstone mode
