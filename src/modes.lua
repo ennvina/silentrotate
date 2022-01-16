@@ -670,6 +670,29 @@ SilentRotate.modes.soulwell = {
     -- metadata = nil
 }
 
+SilentRotate.modes.scorpid = {
+    default = false,
+    raidOnly = false,
+    -- color = nil,
+    wanted = 'HUNTER',
+    cooldown = 20, -- Cooldown is not really 20 secs, but it helps visualizing the debuff duration
+    effectDuration = 20,
+    canFail = true,
+    alertWhenFail = true,
+    spell = GetSpellInfo(3043), -- Scorpid Sting
+    -- auraTest = nil,
+    -- customCombatlogFunc = nil,
+    targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
+    -- buffName = nil,
+    -- buffCanReturn = nil,
+    -- customTargetName = nil,
+    -- customHistoryFunc = nil,
+    -- groupChangeFunc = nil,
+    announceArg = 'destName',
+    -- tooltip = nil,
+    -- metadata = nil
+}
+
 end
 
 -- Create a backward compatibility map between old mode names and new ones

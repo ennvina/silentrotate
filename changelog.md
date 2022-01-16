@@ -1,5 +1,9 @@
 ## SilentRotate Changelog
 
+#### v0.9.4-beta (2022-xx-yy)
+
+- Added Scorpid Sting mode (TBC)
+
 #### v0.9.3-beta (2022-01-15)
 
 - Added Ritual of Souls mode (TBC)
