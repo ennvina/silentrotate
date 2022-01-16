@@ -319,7 +319,7 @@ end
 -- Iterate over all raid members to find hunters and update their status
 function SilentRotate:updateRaidStatus()
 
-    if (SilentRotate:isInPveRaid()) then
+    if SilentRotate:isActive() then
 
         local playerCount = GetNumGroupMembers()
 

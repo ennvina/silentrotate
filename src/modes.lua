@@ -162,487 +162,515 @@ function SilentRotate:getBroadcastHeaderText()
 end
 
 
-SilentRotate.modes = {
-    tranqShot = {
-        oldModeName = 'hunterz',
-        project = true,
-        default = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC,
-        -- color = nil,
-        wanted = 'HUNTER',
-        cooldown = 20,
-        -- effectDuration = nil,
-        canFail = true,
-        alertWhenFail = true,
-        spell = function(self, spellId, spellName)
-            return spellName == GetSpellInfo(19801) -- 'Tranquilizing Shot'
-                or spellName == GetSpellInfo(14287) and SilentRotate.testMode -- 'Arcane Shot'
-        end,
-        -- auraTest = nil,
-        customCombatlogFunc = function(self, event, sourceGUID, sourceName, sourceFlags, destGUID, destName, spellId, spellName)
-            if event == "SPELL_AURA_APPLIED" and SilentRotate:isBossFrenzy(spellName, sourceGUID) then
-                local historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_TRANQSHOT_FRENZY"), sourceName, spellName)
-                SilentRotate:addHistoryMessage(historyMessage, self)
-                if SilentRotate:isPlayerNextTranq() then
-                    SilentRotate:alertReactNow(self.modeName)
-                end
-            elseif event == "UNIT_DIED" and SilentRotate:isTranqableBoss(destGUID) then
-                SilentRotate:resetRotation()
+SilentRotate.modes = {}
+
+SilentRotate.modes.tranqShot = {
+    oldModeName = 'hunterz',
+    default = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC,
+    raidOnly = true,
+    -- color = nil,
+    wanted = 'HUNTER',
+    cooldown = 20,
+    -- effectDuration = nil,
+    canFail = true,
+    alertWhenFail = true,
+    spell = function(self, spellId, spellName)
+        return spellName == GetSpellInfo(19801) -- 'Tranquilizing Shot'
+            or spellName == GetSpellInfo(14287) and SilentRotate.testMode -- 'Arcane Shot'
+    end,
+    -- auraTest = nil,
+    customCombatlogFunc = function(self, event, sourceGUID, sourceName, sourceFlags, destGUID, destName, spellId, spellName)
+        if event == "SPELL_AURA_APPLIED" and SilentRotate:isBossFrenzy(spellName, sourceGUID) then
+            local historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_TRANQSHOT_FRENZY"), sourceName, spellName)
+            SilentRotate:addHistoryMessage(historyMessage, self)
+            if SilentRotate:isPlayerNextTranq() then
+                SilentRotate:alertReactNow(self.modeName)
             end
-        end,
-        targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
-        -- buffName = nil,
-        -- buffCanReturn = nil,
-        -- customTargetName = nil,
-        -- customHistoryFunc = nil,
-        -- groupChangeFunc = nil,
-        announceArg = 'destName',
-        -- tooltip = nil,
-        -- metadata = nil
+        elseif event == "UNIT_DIED" and SilentRotate:isTranqableBoss(destGUID) then
+            SilentRotate:resetRotation()
+        end
+    end,
+    targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
+    -- buffName = nil,
+    -- buffCanReturn = nil,
+    -- customTargetName = nil,
+    -- customHistoryFunc = nil,
+    -- groupChangeFunc = nil,
+    announceArg = 'destName',
+    -- tooltip = nil,
+    -- metadata = nil
+}
+
+SilentRotate.modes.loatheb = {
+    oldModeName = 'healerz',
+    default = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC,
+    raidOnly = true,
+    color = 'ff3fe7cc', -- Green-ish gooey of Loatheb HS card
+    wanted = {'PRIEST', 'PALADIN', 'SHAMAN', 'DRUID'},
+    cooldown = 60,
+    -- effectDuration = nil,
+    -- canFail = nil,
+    -- alertWhenFail = nil,
+    -- spell = nil,
+    auraTest = function(self, spellId, spellName)
+        return SilentRotate.testMode and spellId == 11196 -- 11196 is the spell ID of "Recently Bandaged"
+            or spellId == 29184 -- priest debuff
+            or spellId == 29195 -- druid debuff
+            or spellId == 29197 -- paladin debuff
+            or spellId == 29199 -- shaman debuff
+    end,
+    -- customCombatlogFunc = nil,
+    -- effectDuration = nil,
+    -- targetGUID = nil,
+    -- buffName = nil,
+    -- buffCanReturn = nil,
+    -- customTargetName = nil,
+    -- customHistoryFunc = nil,
+    -- groupChangeFunc = nil,
+    announceArg = 'sourceName',
+    -- tooltip = nil,
+    -- metadata = nil
+}
+
+SilentRotate.modes.distract = {
+    oldModeName = 'roguez',
+    default = false,
+    raidOnly = false,
+    -- color = nil,
+    wanted = 'ROGUE',
+    cooldown = 30,
+    effectDuration = 10,
+    canFail = true,
+    alertWhenFail = true,
+    spell = GetSpellInfo(1725),
+    -- auraTest = nil,
+    -- customCombatlogFunc = nil,
+    -- targetGUID = nil,
+    -- buffName = nil,
+    -- buffCanReturn = nil,
+    -- customTargetName = nil,
+    -- customHistoryFunc = nil,
+    -- groupChangeFunc = nil,
+    announceArg = 'destName',
+    -- tooltip = nil,
+    -- metadata = nil
+}
+
+SilentRotate.modes.fearWard = {
+    oldModeName = 'fearz',
+    default = true,
+    raidOnly = false,
+    color = select(4,GetClassColor('PRIEST')),
+    wanted = function(self, className, raceName) return className == 'PRIEST' and (WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC or raceName == 'Dwarf') end,
+    cooldown = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 30 or 180,
+    effectDuration = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 600 or 180,
+    canFail = false,
+    -- alertWhenFail = nil,
+    spell = GetSpellInfo(6346),
+    -- auraTest = nil,
+    -- customCombatlogFunc = nil,
+    targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
+    buffName = function(self, spellId, spellName) return spellName end,
+    buffCanReturn = false,
+    -- customTargetName = nil,
+    -- customHistoryFunc = nil,
+    -- groupChangeFunc = nil,
+    announceArg = 'destName',
+    -- tooltip = nil,
+    -- metadata = nil
+}
+
+SilentRotate.modes.aoeTaunt = {
+    oldModeName = 'tauntz',
+    default = false,
+    raidOnly = false,
+    color = select(4,GetClassColor('WARRIOR')),
+    wanted = {'WARRIOR', 'DRUID'},
+    cooldown = 600,
+    effectDuration = 6,
+    canFail = true,
+    alertWhenFail = false,
+    spell = {
+        GetSpellInfo(1161), -- warrior's Challenging Shout
+        GetSpellInfo(5209), -- druid's Challenging Roar
     },
+    -- auraTest = nil,
+    -- customCombatlogFunc = nil,
+    -- targetGUID = nil,
+    -- buffName = nil,
+    -- buffCanReturn = nil,
+    -- customTargetName = nil,
+    -- customHistoryFunc = nil,
+    -- groupChangeFunc = nil,
+    announceArg = 'destName',
+    -- tooltip = nil,
+    -- metadata = nil
+}
 
-    loatheb = {
-        oldModeName = 'healerz',
-        project = true,
-        default = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC,
-        color = 'ff3fe7cc', -- Green-ish gooey of Loatheb HS card
-        wanted = {'PRIEST', 'PALADIN', 'SHAMAN', 'DRUID'},
-        cooldown = 60,
-        -- effectDuration = nil,
-        -- canFail = nil,
-        -- alertWhenFail = nil,
-        -- spell = nil,
-        auraTest = function(self, spellId, spellName)
-            return SilentRotate.testMode and spellId == 11196 -- 11196 is the spell ID of "Recently Bandaged"
-                or spellId == 29184 -- priest debuff
-                or spellId == 29195 -- druid debuff
-                or spellId == 29197 -- paladin debuff
-                or spellId == 29199 -- shaman debuff
-        end,
-        -- customCombatlogFunc = nil,
-        -- effectDuration = nil,
-        -- targetGUID = nil,
-        -- buffName = nil,
-        -- buffCanReturn = nil,
-        -- customTargetName = nil,
-        -- customHistoryFunc = nil,
-        -- groupChangeFunc = nil,
-        announceArg = 'sourceName',
-        -- tooltip = nil,
-        -- metadata = nil
-    },
-
-    distract = {
-        oldModeName = 'roguez',
-        project = true,
-        default = false,
-        -- color = nil,
-        wanted = 'ROGUE',
-        cooldown = 30,
-        effectDuration = 10,
-        canFail = true,
-        alertWhenFail = true,
-        spell = GetSpellInfo(1725),
-        -- auraTest = nil,
-        -- customCombatlogFunc = nil,
-        -- targetGUID = nil,
-        -- buffName = nil,
-        -- buffCanReturn = nil,
-        -- customTargetName = nil,
-        -- customHistoryFunc = nil,
-        -- groupChangeFunc = nil,
-        announceArg = 'destName',
-        -- tooltip = nil,
-        -- metadata = nil
-    },
-
-    fearWard = {
-        oldModeName = 'fearz',
-        project = true,
-        default = true,
-        color = select(4,GetClassColor('PRIEST')),
-        wanted = function(self, className, raceName) return className == 'PRIEST' and (WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC or raceName == 'Dwarf') end,
-        cooldown = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 30 or 180,
-        effectDuration = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 600 or 180,
-        canFail = false,
-        -- alertWhenFail = nil,
-        spell = GetSpellInfo(6346),
-        -- auraTest = nil,
-        -- customCombatlogFunc = nil,
-        targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
-        buffName = function(self, spellId, spellName) return spellName end,
-        buffCanReturn = false,
-        -- customTargetName = nil,
-        -- customHistoryFunc = nil,
-        -- groupChangeFunc = nil,
-        announceArg = 'destName',
-        -- tooltip = nil,
-        -- metadata = nil
-    },
-
-    aoeTaunt = {
-        oldModeName = 'tauntz',
-        project = true,
-        default = false,
-        color = select(4,GetClassColor('WARRIOR')),
-        wanted = {'WARRIOR', 'DRUID'},
-        cooldown = 600,
-        effectDuration = 6,
-        canFail = true,
-        alertWhenFail = false,
-        spell = {
-            GetSpellInfo(1161), -- warrior's Challenging Shout
-            GetSpellInfo(5209), -- druid's Challenging Roar
-        },
-        -- auraTest = nil,
-        -- customCombatlogFunc = nil,
-        -- targetGUID = nil,
-        -- buffName = nil,
-        -- buffCanReturn = nil,
-        -- customTargetName = nil,
-        -- customHistoryFunc = nil,
-        -- groupChangeFunc = nil,
-        announceArg = 'destName',
-        -- tooltip = nil,
-        -- metadata = nil
-    },
-
-    misdi = {
-        oldModeName = 'misdiz',
-        project = WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC,
-        default = WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC,
-        -- color = nil,
-        wanted = 'HUNTER',
-        cooldown = 120,
-        effectDuration = 30,
-        canFail = false,
-        -- alertWhenFail = nil,
-        spell = GetSpellInfo(34477),
-        -- auraTest = nil,
-        -- customCombatlogFunc = nil,
-        targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
-        buffName = function(self, spellId, spellName) return spellName end,
-        buffCanReturn = false,
-        -- customTargetName = nil,
-        -- customHistoryFunc = nil,
-        -- groupChangeFunc = nil,
-        announceArg = 'destName',
-        -- tooltip = nil,
-        -- metadata = nil
-    },
-
-    bloodlust = {
-        oldModeName = 'shamanz',
-        project = WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC,
-        default = WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC,
-        -- color = nil,
-        wanted = 'SHAMAN',
-        cooldown = 600,
-        effectDuration = 40,
-        canFail = false,
-        -- alertWhenFail = nil,
-        spell = {
-            GetSpellInfo(2825), -- Bloodlust
-            GetSpellInfo(32182), -- Heroism
-        },
-        -- auraTest = nil,
-        -- customCombatlogFunc = nil,
-        targetGUID = function(self, sourceGUID, destGUID) return sourceGUID end, -- Target is the caster itself
-        buffName = function(self, spellId, spellName) return spellName end,
-        buffCanReturn = false,
-        customTargetName = function(self, hunter, targetName) return hunter.subgroup and string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup) end,
-        -- customHistoryFunc = nil,
-        -- groupChangeFunc = nil,
-        announceArg = 'sourceGroup',
-        -- tooltip = nil,
-        -- metadata = nil
-    },
-
-    grounding = {
-        project = true,
-        default = false,
-        -- color = nil,
-        wanted = 'SHAMAN',
-        cooldown = 15,
-        effectDuration = 45,
-        canFail = false,
-        -- alertWhenFail = nil,
-        spell = GetSpellInfo(8177),
-        -- auraTest = nil,
-        customCombatlogFunc = function(self, event, sourceGUID, sourceName, sourceFlags, destGUID, destName, spellId, spellName)
-            if (event == "SPELL_SUMMON") and sourceGUID and sourceName and spellName == self.spell then
-                self.metadata.summons[destGUID] = {
-                    ownerGUID = sourceGUID,
-                    ownerName = sourceName,
-                    summoned = true,
-                    killedAt = nil,
-                    killedBy = nil,
-                    killedWith = nil,
-                }
-                self.metadata.summoners[sourceGUID] = destGUID
-                -- Hack for tracking when the totem expires
-                -- Because the game client does not always fire the UNIT_DESTROYED event
-                -- Wait 2 seconds after the summon to leave some time in case of lag
-                C_Timer.After(self.effectDuration+2, function()
-                    if self.metadata.summoners[sourceGUID] == destGUID and self.metadata.summons[destGUID].summoned then
-                        -- Force-fire a false event
-                        self:customCombatlogFunc("UNIT_DESTROYED", nil, nil, nil, destGUID, destName)
-                    end
-                end)
-            elseif destGUID and self.metadata.summons[destGUID] then
-                if (event == "UNIT_DESTROYED") then
-                    -- The totem was destroyed
-                    -- This event should always be triggered when the totem dies, in practice it is not always the case
-                    if self.metadata.summons[destGUID].summoned then
-                        self.metadata.summons[destGUID].summoned = false
-                        local historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_EXPIRE"), self.metadata.summons[destGUID].ownerName)
-                        SilentRotate:addHistoryMessage(historyMessage, self)
-                    end
-                elseif sourceName and spellName then
-                    -- Check if the caster is attacking to the totem
-                    -- Because of limitations of the CombatLog, we cannot know for sure if the spell kills the totem
-                    -- But if we simplify with these conditions it should be okay:
-                    -- 1. all enemy units are supposed to be "friends" between each other
-                    -- 2. friendly fire does not happen on the totem
-                    -- 3. a mind-controlled caster or totem owner will not de-MC during the travel time of a spell
-                    local ownerName = self.metadata.summons[destGUID].ownerName
-                    local ownerHostile = not UnitIsPlayer(ownerName) or UnitIsPossessed(ownerName)
-                    local casterHostile = not UnitIsPlayer(sourceName) or UnitIsPossessed(sourceName)
-                    local wasSummoned = self.metadata.summons[destGUID].summoned
-                    if ownerHostile ~= casterHostile then
-                        -- In Classic Era, only damage can kill the totem
-                        self.metadata.summons[destGUID].summoned = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and event:sub(-7) ~= "_DAMAGE"
-                        self.metadata.summons[destGUID].killedAt = GetServerTime()
-                        self.metadata.summons[destGUID].killedBy = sourceName
-                        if event:sub(0,5) == "SPELL" then
-                            self.metadata.summons[destGUID].killedWith = spellName
-                        end
-                    end
-
-                    local totem = self.metadata.summons[destGUID]
-                    local isNowSummoned = totem.summoned
-                    if wasSummoned ~= isNowSummoned then
-                        local ownerGUID = totem.ownerGUID
-                        local hunter = SilentRotate:getHunter(ownerGUID)
-                        if hunter then
-                            local historyMessage
-                            if totem.killedWith then
-                                historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_ABSORB"), totem.ownerName, totem.killedWith, totem.killedBy)
-                            else
-                                historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_ABSORB_NOSPELL"), totem.ownerName, totem.killedBy)
-                            end
-                            SilentRotate:addHistoryMessage(historyMessage, self)
-                        end
+SilentRotate.modes.grounding = {
+    default = false,
+    raidOnly = false,
+    -- color = nil,
+    wanted = 'SHAMAN',
+    cooldown = 15,
+    effectDuration = 45,
+    canFail = false,
+    -- alertWhenFail = nil,
+    spell = GetSpellInfo(8177),
+    -- auraTest = nil,
+    customCombatlogFunc = function(self, event, sourceGUID, sourceName, sourceFlags, destGUID, destName, spellId, spellName)
+        if (event == "SPELL_SUMMON") and sourceGUID and sourceName and spellName == self.spell then
+            self.metadata.summons[destGUID] = {
+                ownerGUID = sourceGUID,
+                ownerName = sourceName,
+                summoned = true,
+                killedAt = nil,
+                killedBy = nil,
+                killedWith = nil,
+            }
+            self.metadata.summoners[sourceGUID] = destGUID
+            -- Hack for tracking when the totem expires
+            -- Because the game client does not always fire the UNIT_DESTROYED event
+            -- Wait 2 seconds after the summon to leave some time in case of lag
+            C_Timer.After(self.effectDuration+2, function()
+                if self.metadata.summoners[sourceGUID] == destGUID and self.metadata.summons[destGUID].summoned then
+                    -- Force-fire a false event
+                    self:customCombatlogFunc("UNIT_DESTROYED", nil, nil, nil, destGUID, destName)
+                end
+            end)
+        elseif destGUID and self.metadata.summons[destGUID] then
+            if (event == "UNIT_DESTROYED") then
+                -- The totem was destroyed
+                -- This event should always be triggered when the totem dies, in practice it is not always the case
+                if self.metadata.summons[destGUID].summoned then
+                    self.metadata.summons[destGUID].summoned = false
+                    local historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_EXPIRE"), self.metadata.summons[destGUID].ownerName)
+                    SilentRotate:addHistoryMessage(historyMessage, self)
+                end
+            elseif sourceName and spellName then
+                -- Check if the caster is attacking to the totem
+                -- Because of limitations of the CombatLog, we cannot know for sure if the spell kills the totem
+                -- But if we simplify with these conditions it should be okay:
+                -- 1. all enemy units are supposed to be "friends" between each other
+                -- 2. friendly fire does not happen on the totem
+                -- 3. a mind-controlled caster or totem owner will not de-MC during the travel time of a spell
+                local ownerName = self.metadata.summons[destGUID].ownerName
+                local ownerHostile = not UnitIsPlayer(ownerName) or UnitIsPossessed(ownerName)
+                local casterHostile = not UnitIsPlayer(sourceName) or UnitIsPossessed(sourceName)
+                local wasSummoned = self.metadata.summons[destGUID].summoned
+                if ownerHostile ~= casterHostile then
+                    -- In Classic Era, only damage can kill the totem
+                    self.metadata.summons[destGUID].summoned = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and event:sub(-7) ~= "_DAMAGE"
+                    self.metadata.summons[destGUID].killedAt = GetServerTime()
+                    self.metadata.summons[destGUID].killedBy = sourceName
+                    if event:sub(0,5) == "SPELL" then
+                        self.metadata.summons[destGUID].killedWith = spellName
                     end
                 end
-            elseif (event == "SPELL_CAST_SUCCESS") then
-                -- cancellersQuickSearch is built lazy
-                local cancellersQuickSearch = self.metadata.cancellersQuickSearch
-                if not cancellersQuickSearch then
-                    cancellersQuickSearch = {}
-                    for _, cancellerSpellName in pairs(self.metadata.cancellers) do
-                        if cancellerSpellName then -- Mus check existence because not all spells exist in all 'projects'
-                            cancellersQuickSearch[cancellerSpellName] = true
-                        end
-                    end
-                    self.metadata.cancellersQuickSearch = cancellersQuickSearch
-                end
 
-                if self.metadata.cancellersQuickSearch[spellName] then
-                    local totemGUID = self.metadata.summoners[sourceGUID]
-                    local totem = self.metadata.summons[totemGUID]
-                    if totem and totem.summoned then
-                        totem.summoned = false
-                        local historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_CANCEL"), totem.ownerName, spellName)
+                local totem = self.metadata.summons[destGUID]
+                local isNowSummoned = totem.summoned
+                if wasSummoned ~= isNowSummoned then
+                    local ownerGUID = totem.ownerGUID
+                    local hunter = SilentRotate:getHunter(ownerGUID)
+                    if hunter then
+                        local historyMessage
+                        if totem.killedWith then
+                            historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_ABSORB"), totem.ownerName, totem.killedWith, totem.killedBy)
+                        else
+                            historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_ABSORB_NOSPELL"), totem.ownerName, totem.killedBy)
+                        end
                         SilentRotate:addHistoryMessage(historyMessage, self)
                     end
                 end
-            elseif (event == "UNIT_DIED") and destGUID and self.metadata.summoners[destGUID] then
-                -- The author of a totem has died
-                local totemGUID = self.metadata.summoners[destGUID]
+            end
+        elseif (event == "SPELL_CAST_SUCCESS") then
+            -- cancellersQuickSearch is built lazy
+            local cancellersQuickSearch = self.metadata.cancellersQuickSearch
+            if not cancellersQuickSearch then
+                cancellersQuickSearch = {}
+                for _, cancellerSpellName in pairs(self.metadata.cancellers) do
+                    if cancellerSpellName then -- Mus check existence because not all spells exist in all 'projects'
+                        cancellersQuickSearch[cancellerSpellName] = true
+                    end
+                end
+                self.metadata.cancellersQuickSearch = cancellersQuickSearch
+            end
+
+            if self.metadata.cancellersQuickSearch[spellName] then
+                local totemGUID = self.metadata.summoners[sourceGUID]
                 local totem = self.metadata.summons[totemGUID]
                 if totem and totem.summoned then
                     totem.summoned = false
-                    local historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_ORPHAN"), totem.ownerName)
+                    local historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_CANCEL"), totem.ownerName, spellName)
                     SilentRotate:addHistoryMessage(historyMessage, self)
                 end
             end
-        end,
-        targetGUID = function(self, sourceGUID, destGUID) return sourceGUID end, -- Target is the caster itself
-        buffName = function(self, spellId, spellName) return self.metadata.groundingTotemEffectName end, -- Buff is the totem effect
-        buffCanReturn = true,
-        customTargetName = function(self, hunter, targetName)
-            local totemGUID = self.metadata.summoners[hunter.GUID]
+        elseif (event == "UNIT_DIED") and destGUID and self.metadata.summoners[destGUID] then
+            -- The author of a totem has died
+            local totemGUID = self.metadata.summoners[destGUID]
             local totem = self.metadata.summons[totemGUID]
-            if not totemGUID or totem.summoned then
-                -- Totem still active: display the group where it belongs
-                return hunter.subgroup and string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup)
-            elseif totem.killedWith then
-                -- Totem destroyed by spell: display the spell name only
-                return totem.killedWith
-            elseif totem.killedBy then
-                -- Totem destroyed not by a spell: display the culprit only
-                return totem.killedBy
-            else
-                -- Expired, display nothing
-                return nil
-            end
-        end,
-        customHistoryFunc = function(self, hunter, sourceName, destName, spellName, failed)
-            return string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_SUMMON"), sourceName, hunter.subgroup or 0)
-        end,
-        groupChangeFunc = function(self, hunter, oldgroup, newgroup)
-            local totemGUID = self.metadata.summoners[hunter.GUID]
-            local totem = self.metadata.summons[totemGUID]
-            if totemGUID and totem.summoned then
-                local historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_CHANGE"), totem.ownerName, newgroup)
+            if totem and totem.summoned then
+                totem.summoned = false
+                local historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_ORPHAN"), totem.ownerName)
                 SilentRotate:addHistoryMessage(historyMessage, self)
             end
-        end,
-        announceArg = 'sourceGroup',
-        tooltip = function(self, hunter)
-            local totemGUID = self.metadata.summoners[hunter.GUID]
-            local totem = self.metadata.summons[totemGUID]
-            if totem and not totem.summoned and totem.killedAt and totem.killedBy then
-                if totem.killedWith then
-                    return string.format("[%s] %s (%s)", date("%H:%M:%S", totem.killedAt), totem.killedWith, totem.killedBy)
-                else
-                    return string.format("[%s] %s", date("%H:%M:%S", totem.killedAt), totem.killedBy)
-                end
-            end
+        end
+    end,
+    targetGUID = function(self, sourceGUID, destGUID) return sourceGUID end, -- Target is the caster itself
+    buffName = function(self, spellId, spellName) return self.metadata.groundingTotemEffectName end, -- Buff is the totem effect
+    buffCanReturn = true,
+    customTargetName = function(self, hunter, targetName)
+        local totemGUID = self.metadata.summoners[hunter.GUID]
+        local totem = self.metadata.summons[totemGUID]
+        if not totemGUID or totem.summoned then
+            -- Totem still active: display the group where it belongs
+            return hunter.subgroup and string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup)
+        elseif totem.killedWith then
+            -- Totem destroyed by spell: display the spell name only
+            return totem.killedWith
+        elseif totem.killedBy then
+            -- Totem destroyed not by a spell: display the culprit only
+            return totem.killedBy
+        else
+            -- Expired, display nothing
             return nil
-        end,
-        metadata = {
-            groundingTotemEffectName = GetSpellInfo(8178), -- The buff is the name from spellId+1, not from spellId
-            cancellers = {
-                (GetSpellInfo(8835)), -- Grace of Air Totem rank 1
-                (GetSpellInfo(10595)), -- Nature Resistance Totem rank 1
-                (GetSpellInfo(6495)), -- Sentry Totem
-                (GetSpellInfo(25908)), -- Tranquil Air Totem
-                (GetSpellInfo(8512)), -- Windfury Totem rank 1
-                (GetSpellInfo(15107)), -- Wind Wall Totem rank 1
-                (GetSpellInfo(3738)), -- Wrath of Air Totem rank 1, introduced in Burning Crusade
-                (GetSpellInfo(36936)), -- Totemic Call, introduced in Burning Crusade
-            },
-            summons = {},
-            summoners = {}
+        end
+    end,
+    customHistoryFunc = function(self, hunter, sourceName, destName, spellName, failed)
+        return string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_SUMMON"), sourceName, hunter.subgroup or 0)
+    end,
+    groupChangeFunc = function(self, hunter, oldgroup, newgroup)
+        local totemGUID = self.metadata.summoners[hunter.GUID]
+        local totem = self.metadata.summons[totemGUID]
+        if totemGUID and totem.summoned then
+            local historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_GROUNDING_CHANGE"), totem.ownerName, newgroup)
+            SilentRotate:addHistoryMessage(historyMessage, self)
+        end
+    end,
+    announceArg = 'sourceGroup',
+    tooltip = function(self, hunter)
+        local totemGUID = self.metadata.summoners[hunter.GUID]
+        local totem = self.metadata.summons[totemGUID]
+        if totem and not totem.summoned and totem.killedAt and totem.killedBy then
+            if totem.killedWith then
+                return string.format("[%s] %s (%s)", date("%H:%M:%S", totem.killedAt), totem.killedWith, totem.killedBy)
+            else
+                return string.format("[%s] %s", date("%H:%M:%S", totem.killedAt), totem.killedBy)
+            end
+        end
+        return nil
+    end,
+    metadata = {
+        groundingTotemEffectName = GetSpellInfo(8178), -- The buff is the name from spellId+1, not from spellId
+        cancellers = {
+            (GetSpellInfo(8835)), -- Grace of Air Totem rank 1
+            (GetSpellInfo(10595)), -- Nature Resistance Totem rank 1
+            (GetSpellInfo(6495)), -- Sentry Totem
+            (GetSpellInfo(25908)), -- Tranquil Air Totem
+            (GetSpellInfo(8512)), -- Windfury Totem rank 1
+            (GetSpellInfo(15107)), -- Wind Wall Totem rank 1
+            (GetSpellInfo(3738)), -- Wrath of Air Totem rank 1, introduced in Burning Crusade
+            (GetSpellInfo(36936)), -- Totemic Call, introduced in Burning Crusade
         },
-    },
-
-    brez = {
-        project = true,
-        default = false,
-        -- color = nil,
-        wanted = 'DRUID',
-        cooldown = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 1800 or 1200,
-        -- effectDuration = nil,
-        canFail = false,
-        -- alertWhenFail = nil,
-        spell = GetSpellInfo(20484), -- Rebirth Rank 1
-        -- auraTest = nil,
-        -- customCombatlogFunc = nil,
-        targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
-        -- buffName = nil,
-        -- buffCanReturn = nil,
-        -- customTargetName = nil,
-        -- customHistoryFunc = nil,
-        -- groupChangeFunc = nil,
-        announceArg = 'destName',
-        -- tooltip = nil,
-        -- metadata = nil
-    },
-
-    innerv = {
-        project = true,
-        default = false,
-        -- color = nil,
-        wanted = 'DRUID',
-        cooldown = 360,
-        effectDuration = 20,
-        canFail = false,
-        -- alertWhenFail = nil,
-        spell = GetSpellInfo(29166),
-        -- auraTest = nil,
-        -- customCombatlogFunc = nil,
-        targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
-        buffName = function(self, spellId, spellName) return spellName end,
-        buffCanReturn = false,
-        -- customTargetName = nil,
-        -- customHistoryFunc = nil,
-        -- groupChangeFunc = nil,
-        announceArg = 'destName',
-        -- tooltip = nil,
-        -- metadata = nil
-    },
-
-    bop = {
-        project = true,
-        default = false,
-        -- color = nil,
-        wanted = 'PALADIN',
-        cooldown = 300,
-        effectDuration = 10,
-        canFail = false,
-        -- alertWhenFail = nil,
-        spell = GetSpellInfo(1022), -- Blessing of Protection rank 1
-        -- auraTest = nil,
-        -- customCombatlogFunc = nil,
-        targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
-        buffName = function(self, spellId, spellName) return spellName end,
-        buffCanReturn = false,
-        -- customTargetName = nil,
-        -- customHistoryFunc = nil,
-        -- groupChangeFunc = nil,
-        announceArg = 'destName',
-        -- tooltip = nil,
-        -- metadata = nil
-    },
-
-    bof = {
-        project = true,
-        default = false,
-        -- color = nil,
-        wanted = 'PALADIN',
-        cooldown = 25,
-        effectDuration = 10,
-        canFail = false,
-        -- alertWhenFail = nil,
-        spell = GetSpellInfo(1044), -- Blessing of Freedom
-        -- auraTest = nil,
-        -- customCombatlogFunc = nil,
-        targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
-        buffName = function(self, spellId, spellName) return spellName end,
-        buffCanReturn = false,
-        -- customTargetName = nil,
-        -- customHistoryFunc = nil,
-        -- groupChangeFunc = nil,
-        announceArg = 'destName',
-        -- tooltip = nil,
-        -- metadata = nil
-    },
-
-    soulstone = {
-        project = true,
-        default = false,
-        -- color = nil,
-        wanted = 'WARLOCK',
-        cooldown = 1800,
-        effectDuration = 1800,
-        canFail = false,
-        -- alertWhenFail = nil,
-        spell = GetSpellInfo(20707), -- Soulstone Resurrection rank 1
-        -- auraTest = nil,
-        -- customCombatlogFunc = nil,
-        targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
-        buffName = function(self, spellId, spellName) return spellName end,
-        buffCanReturn = false,
-        -- customTargetName = nil,
-        -- customHistoryFunc = nil,
-        -- groupChangeFunc = nil,
-        announceArg = 'destName',
-        -- tooltip = nil,
-        -- metadata = nil
+        summons = {},
+        summoners = {}
     },
 }
+
+SilentRotate.modes.brez = {
+    default = false,
+    raidOnly = false,
+    -- color = nil,
+    wanted = 'DRUID',
+    cooldown = (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) and 1800 or 1200,
+    -- effectDuration = nil,
+    canFail = false,
+    -- alertWhenFail = nil,
+    spell = GetSpellInfo(20484), -- Rebirth Rank 1
+    -- auraTest = nil,
+    -- customCombatlogFunc = nil,
+    targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
+    -- buffName = nil,
+    -- buffCanReturn = nil,
+    -- customTargetName = nil,
+    -- customHistoryFunc = nil,
+    -- groupChangeFunc = nil,
+    announceArg = 'destName',
+    -- tooltip = nil,
+    -- metadata = nil
+}
+
+SilentRotate.modes.innerv = {
+    default = false,
+    raidOnly = false,
+    -- color = nil,
+    wanted = 'DRUID',
+    cooldown = 360,
+    effectDuration = 20,
+    canFail = false,
+    -- alertWhenFail = nil,
+    spell = GetSpellInfo(29166),
+    -- auraTest = nil,
+    -- customCombatlogFunc = nil,
+    targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
+    buffName = function(self, spellId, spellName) return spellName end,
+    buffCanReturn = false,
+    -- customTargetName = nil,
+    -- customHistoryFunc = nil,
+    -- groupChangeFunc = nil,
+    announceArg = 'destName',
+    -- tooltip = nil,
+    -- metadata = nil
+}
+
+SilentRotate.modes.bop = {
+    default = false,
+    raidOnly = false,
+    -- color = nil,
+    wanted = 'PALADIN',
+    cooldown = 300,
+    effectDuration = 10,
+    canFail = false,
+    -- alertWhenFail = nil,
+    spell = GetSpellInfo(1022), -- Blessing of Protection rank 1
+    -- auraTest = nil,
+    -- customCombatlogFunc = nil,
+    targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
+    buffName = function(self, spellId, spellName) return spellName end,
+    buffCanReturn = false,
+    -- customTargetName = nil,
+    -- customHistoryFunc = nil,
+    -- groupChangeFunc = nil,
+    announceArg = 'destName',
+    -- tooltip = nil,
+    -- metadata = nil
+}
+
+SilentRotate.modes.bof = {
+    default = false,
+    raidOnly = false,
+    -- color = nil,
+    wanted = 'PALADIN',
+    cooldown = 25,
+    effectDuration = 10,
+    canFail = false,
+    -- alertWhenFail = nil,
+    spell = GetSpellInfo(1044), -- Blessing of Freedom
+    -- auraTest = nil,
+    -- customCombatlogFunc = nil,
+    targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
+    buffName = function(self, spellId, spellName) return spellName end,
+    buffCanReturn = false,
+    -- customTargetName = nil,
+    -- customHistoryFunc = nil,
+    -- groupChangeFunc = nil,
+    announceArg = 'destName',
+    -- tooltip = nil,
+    -- metadata = nil
+}
+
+SilentRotate.modes.soulstone = {
+    default = false,
+    raidOnly = false,
+    -- color = nil,
+    wanted = 'WARLOCK',
+    cooldown = 1800,
+    effectDuration = 1800,
+    canFail = false,
+    -- alertWhenFail = nil,
+    spell = GetSpellInfo(20707), -- Soulstone Resurrection rank 1
+    -- auraTest = nil,
+    -- customCombatlogFunc = nil,
+    targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
+    buffName = function(self, spellId, spellName) return spellName end,
+    buffCanReturn = false,
+    -- customTargetName = nil,
+    -- customHistoryFunc = nil,
+    -- groupChangeFunc = nil,
+    announceArg = 'destName',
+    -- tooltip = nil,
+    -- metadata = nil
+}
+
+-- Modes available for The Burning Crusade Classic
+if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then
+
+SilentRotate.modes.misdi = {
+    oldModeName = 'misdiz',
+    default = WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC,
+    raidOnly = false,
+    -- color = nil,
+    wanted = 'HUNTER',
+    cooldown = 120,
+    effectDuration = 30,
+    canFail = false,
+    -- alertWhenFail = nil,
+    spell = GetSpellInfo(34477),
+    -- auraTest = nil,
+    -- customCombatlogFunc = nil,
+    targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
+    buffName = function(self, spellId, spellName) return spellName end,
+    buffCanReturn = false,
+    -- customTargetName = nil,
+    -- customHistoryFunc = nil,
+    -- groupChangeFunc = nil,
+    announceArg = 'destName',
+    -- tooltip = nil,
+    -- metadata = nil
+}
+
+SilentRotate.modes.bloodlust = {
+    oldModeName = 'shamanz',
+    default = WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC,
+    raidOnly = false,
+    -- color = nil,
+    wanted = 'SHAMAN',
+    cooldown = 600,
+    effectDuration = 40,
+    canFail = false,
+    -- alertWhenFail = nil,
+    spell = {
+        GetSpellInfo(2825), -- Bloodlust
+        GetSpellInfo(32182), -- Heroism
+    },
+    -- auraTest = nil,
+    -- customCombatlogFunc = nil,
+    targetGUID = function(self, sourceGUID, destGUID) return sourceGUID end, -- Target is the caster itself
+    buffName = function(self, spellId, spellName) return spellName end,
+    buffCanReturn = false,
+    customTargetName = function(self, hunter, targetName) return hunter.subgroup and string.format(SilentRotate.db.profile.groupSuffix, hunter.subgroup) end,
+    -- customHistoryFunc = nil,
+    -- groupChangeFunc = nil,
+    announceArg = 'sourceGroup',
+    -- tooltip = nil,
+    -- metadata = nil
+}
+
+SilentRotate.modes.soulwell = {
+    default = false,
+    raidOnly = false,
+    -- color = nil,
+    wanted = 'WARLOCK',
+    cooldown = 300,
+    effectDuration = 180,
+    canFail = false,
+    -- alertWhenFail = nil,
+    spell = GetSpellInfo(29893), -- Ritual of Souls rank 1
+    -- auraTest = nil,
+    -- customCombatlogFunc = nil,
+    -- targetGUID = nil,
+    -- buffName = nil,
+    -- buffCanReturn = nil,
+    -- customTargetName = nil,
+    -- customHistoryFunc = nil,
+    -- groupChangeFunc = nil,
+    announceArg = 'destName',
+    -- tooltip = nil,
+    -- metadata = nil
+}
+
+end
 
 -- Create a backward compatibility map between old mode names and new ones
 -- And fill some attributes automatically

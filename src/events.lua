@@ -31,7 +31,7 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
     -- Avoid parsing combat log when not able to use it
     if not self.raidInitialized then return end
     -- Avoid parsing combat log when outside instance if test mode isn't enabled
-    if not self.testMode and not IsInInstance() then return end
+    if not self:isActive() then return end
 
     -- All events have these
     local timestamp, event, _, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags = CombatLogGetCurrentEventInfo()
@@ -149,10 +149,12 @@ end
 
 -- One of the auras of the unitID has changed (gained, faded)
 function SilentRotate:UNIT_AURA(unitID, isEcho)
+    if not self:isActive() then return end
+
     local mode = self:getMode()
 
     -- UNIT_AURA is used exclusively by aura-based modes
-    if type(mode.auraTest) ~= 'function' then return end
+    if not mode or type(mode.auraTest) ~= 'function' then return end
 
     -- Whether the unit really got the debuff or not, it's pointless if the unit is not tracked (e.g. not a healer)
     local hunter = self:getHunter(UnitGUID(unitID))

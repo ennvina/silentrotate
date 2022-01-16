@@ -76,9 +76,20 @@ function SilentRotate:isPlayerInBattleground()
     return UnitInBattleground('player') ~= nil
 end
 
--- Checks if a hunter is in a PvE raid
-function SilentRotate:isInPveRaid()
-    return SilentRotate.testMode or IsInRaid() and not SilentRotate:isPlayerInBattleground()
+-- Checks if the addon bearer is in a PvE raid or dungeon
+function SilentRotate:isActive()
+    if SilentRotate.testMode then
+        return true
+    elseif SilentRotate:isPlayerInBattleground() then
+        return false
+    elseif IsInRaid() then
+        return true
+    elseif IsInInstance() then
+        local mode = SilentRotate:getMode() -- @todo get all current active modes instead
+        return mode and type(mode.raidOnly) == 'boolean' and not mode.raidOnly
+    else
+        return false
+    end
 end
 
 function SilentRotate:getPlayerNameFont()
