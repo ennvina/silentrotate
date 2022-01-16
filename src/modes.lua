@@ -14,7 +14,13 @@ function SilentRotate:getMode(modeName)
     end
 
     -- return the mode object, or TranqShot as the default mode if no mode is set
-    return SilentRotate.modes[modeName or SilentRotate.modes.tranqShot.modeName]
+    if modeName then
+        local mode = SilentRotate.modes[modeName]
+        if mode then -- mode may be nil when downgrading the addon version
+            return mode
+        end
+    end
+    return SilentRotate.modes[SilentRotate.modes.tranqShot.modeName]
 end
 
 -- Activate the specific mode
