@@ -1,4 +1,5 @@
 local SilentRotate = select(2, ...)
+local L = LibStub("AceLocale-3.0"):GetLocale("SilentRotate")
 
 -- Enable/disable right click for all hunter frames
 function SilentRotate:enableRightClick(assignable)
@@ -134,7 +135,7 @@ function SilentRotate:populateMenu(hunter, frame, mode)
     end
 
     local menu = {
-        { text = string.format("Assign %s to:", hunter.name), isTitle = true }
+        { text = string.format(L["CONTEXT_ASSIGN_TITLE"], hunter.name), isTitle = true }
     }
 
     local assignmentFound = false
@@ -160,8 +161,8 @@ function SilentRotate:populateMenu(hunter, frame, mode)
         end
     end
 
-    -- Always start with "Nobody"
-    addMenuItem(menu, "<Nobody>", nil, nil)
+    -- Always start with "Nobody", put into "<>" in case a raid member is called "Nobody"
+    addMenuItem(menu, string.format("<%s>", L["CONTEXT_NOBODY"]), nil, nil)
 
     -- Add main candidates on top of the list (but after "Nobody")
     for _, candidate in ipairs(mainCandidates) do
@@ -176,7 +177,7 @@ function SilentRotate:populateMenu(hunter, frame, mode)
         end
         if #submenu > 0 then
             table.insert(menu, {
-                text = "Other players",
+                text = L["CONTEXT_OTHERS"],
                 hasArrow = true,
                 menuList = submenu
             })
@@ -195,7 +196,7 @@ function SilentRotate:populateMenu(hunter, frame, mode)
 
     -- Always end with "Cancel"
     table.insert(menu, {
-        text = "Cancel",
+        text = L["CONTEXT_CANCEL"],
         func = function() frame.context:Hide() end
     })
 

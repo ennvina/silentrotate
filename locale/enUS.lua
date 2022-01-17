@@ -227,6 +227,12 @@ L["TOOLTIP_COOLDOWN_REMAINING"] = "Cooldown remaining: %s"
 L["TOOLTIP_DURATION_SECONDS"] = "%s sec"
 L["TOOLTIP_DURATION_MINUTES"] = "%s min"
 
+    --- Context Menu
+L["CONTEXT_ASSIGN_TITLE"] = "Assign %s to:"
+L["CONTEXT_NOBODY"] = "Nobody"
+L["CONTEXT_CANCEL"] = "Cancel"
+L["CONTEXT_OTHERS"] = "Other players"
+
     --- Notifications
 L["UPDATE_AVAILABLE"] = "A new version is available, please update to get the latest features."
 L["BREAKING_UPDATE_AVAILABLE"] = "A new, CRITICAL update is available, you MUST update AS SOON AS possible! SilentRotate may not work correctly between you and up-to-date players."

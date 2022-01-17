@@ -220,6 +220,12 @@ L["TOOLTIP_COOLDOWN_REMAINING"] = "Temps de recharge : %s"
 L["TOOLTIP_DURATION_SECONDS"] = "%s sec"
 L["TOOLTIP_DURATION_MINUTES"] = "%s min"
 
+    --- Context Menu
+L["CONTEXT_ASSIGN_TITLE"] = "Assigner %s à :"
+L["CONTEXT_NOBODY"] = "Personne"
+L["CONTEXT_CANCEL"] = "Annuler"
+L["CONTEXT_OTHERS"] = "Autres joueurs"
+
     --- Notifications
 L["UPDATE_AVAILABLE"] = "Une nouvelle version est disponible, veuillez mettre à jour pour profiter des dernières fonctionnalités."
 L["BREAKING_UPDATE_AVAILABLE"] = "Une mise à jour IMPORTANTE est disponible, vous DEVEZ mettre à jour le plus rapidement possible ! Des conflits sont possibles entre vous et les joueurs qui ont installé la version à jour de SilentRotate."
