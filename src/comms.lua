@@ -24,6 +24,12 @@ function SilentRotate.OnCommReceived(prefix, data, channel, sender)
                 -- Received a message from another mode
                 -- This may also happen if the message comes from an old version of the addon but it causes many problems so it's best to ignore the message
                 -- In a future version, all modes will be working simultaneously, but that will be in a distant future (probably not before v1.0)
+
+                -- Special case for assignments: accept assignments from other modes because assignments can be set within another mode
+                if message.type == SilentRotate.constants.commsTypes.syncOrder and message.assignment then
+                    SilentRotate:applyAssignmentConfiguration(message.assignment, sender, message.mode)
+                end
+
                 return
             end
 
