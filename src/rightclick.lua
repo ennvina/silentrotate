@@ -56,14 +56,49 @@ function SilentRotate:populateMenu(hunter, frame, mode)
     local mainCandidates = {}
     local otherCandidates = {}
 
+    local isMain = function(classFilename, role, assignable)
+        if assignable == 'TANK' then
+            return role == 'maintank' or role == 'mainassist'
+        elseif assignable == 'MANA' then
+            return classFilename == 'MAGE'
+                or classFilename == 'PRIEST'
+                or classFilename == 'WARLOCK'
+                or classFilename == 'DRUID'
+                or classFilename == 'HUNTER'
+                or classFilename == 'SHAMAN'
+                or classFilename == 'PALADIN'
+        elseif assignable == 'REZ' then
+            return classFilename == 'PRIEST'
+                or classFilename == 'DRUID'
+                or classFilename == 'SHAMAN'
+                or classFilename == 'PALADIN'
+        else
+            return classFilename == assignable
+        end
+    end
+
     local addCandidate = function(name, classFilename, role)
-        -- @todo push to mainCandidates or otherCandidates
-        table.insert(mainCandidates, { name = name, classFilename = classFilename, role = role })
+        local pushToMain = false
+
+        if type(mode.assignable) == 'string' then
+            pushToMain = isMain(classFilename, role, mode.assignable)
+        elseif type(mode.assignable) == 'table' then
+            for _, value in pairs(mode.assignable) do
+                pushToMain = isMain(classFilename, role, value)
+                if pushToMain then break end
+            end
+        end
+
+        if pushToMain then
+            table.insert(mainCandidates,  { name = name, classFilename = classFilename, role = role })
+        else
+            table.insert(otherCandidates, { name = name, classFilename = classFilename, role = role })
+        end
     end
 
     local playerCount = GetNumGroupMembers()
     if playerCount > 0 then
-        for index = 1, playerCount, 1 do
+        for index = 1, playerCount do
             local name, rank, subgroup, level, class, classFilename, zone, online, isDead, role, isML = GetRaidRosterInfo(index)
             if name then
                 addCandidate(name, classFilename, role)
@@ -83,31 +118,53 @@ function SilentRotate:populateMenu(hunter, frame, mode)
     end
 
     local assignTo = function(hunter, target)
-        hunter.assignment = target
-        -- @todo update hunter frame to display the new target
-        -- @todo log assignment to the History window
-        -- @todo share assignment with other raid members
-        print(string.format("[%s] %s is assigned to %s", mode.modeNameFirstUpper, hunter.name, target or "<Nobody>"))
+        if hunter.assignment ~= target then
+            hunter.assignment = target
+            -- @todo update hunter frame to display the new target
+            -- @todo log assignment to the History window
+            -- @todo share assignment with other raid members
+            print(string.format("[%s] %s is assigned to %s", mode.modeNameFirstUpper, hunter.name, target or "<Nobody>"))
+        else
+            print(string.format("[%s] %s is re-assigned to the same %s", mode.modeNameFirstUpper, hunter.name, target or "<Nobody>"))
+        end
     end
 
     local menu = {
         { text = string.format("Assign %s to:", hunter.name), isTitle = true }
     }
 
+    local assignmentFound = false
     local addMenuItem = function(menu, text, classFilename, assignment)
+        local menuText = text
+        if classFilename then
+            menuText = WrapTextInColorCode(text, select(4,GetClassColor(classFilename)))
+        end
+
+        local isAssigned = hunter.assignment == assignment
+
         table.insert(menu, {
-            text = classFilename and WrapTextInColorCode(text, select(4,GetClassColor(classFilename))) or text,
-            checked = hunter.assignment == assignment,
-            func = function(item) assignTo(hunter, assignment) end
+            text = menuText,
+            checked = isAssigned,
+            func = function(item)
+                assignTo(hunter, assignment)
+                if frame.context then frame.context:Hide() end
+            end
         })
+
+        if isAssigned then
+            assignmentFound = true
+        end
     end
 
+    -- Always start with "Nobody"
     addMenuItem(menu, "<Nobody>", nil, nil)
 
-    -- @todo populate based on mode
+    -- Add main candidates on top of the list (but after "Nobody")
     for _, candidate in ipairs(mainCandidates) do
         addMenuItem(menu, candidate.name, candidate.classFilename, candidate.name)
     end
+
+    -- Then add other candidates, either as submenu (in raid) or main menu
     if IsInRaid() then
         local submenu = {}
         for _, candidate in ipairs(otherCandidates) do
@@ -126,6 +183,13 @@ function SilentRotate:populateMenu(hunter, frame, mode)
         end
     end
 
+    -- If there is an assignment but it was not found among raid or party members, show it anyway
+    -- It may happend if a raid member left the group
+    if hunter.assignment and not assignmentFound then
+        addMenuItem(menu, hunter.assignment, nil, hunter.assignment)
+    end
+
+    -- Always end with "Cancel"
     table.insert(menu, {
         text = "Cancel",
         func = function() frame.context:Hide() end
