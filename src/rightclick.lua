@@ -44,13 +44,43 @@ end
 
 -- Fill menu items, filtered by the value of mode.assignable:
 -- * either a class name ("HUNTER", etc.) to list a specific class only
--- * or "TANK" to select tanks, as designated by the raid roster info
+-- * or "TANK" to select tanks, as designated by raid roster info's main tank or main assist
 -- * or "MANA" to select mana users (independently of their spec)
 -- * or "REZ" to select classes who can resurrect
 -- * ...or an array of strings to select multiple classes or roles
 -- Either way, a submenu "Other players" will list remaining players
 -- The filter is disabled in dungeons because a 5-player list is short enough
+-- Besides, the raid roster info does not exist outside of raids
 function SilentRotate:populateMenu(hunter, frame, mode)
+
+    local mainCandidates = {}
+    local otherCandidates = {}
+
+    local addCandidate = function(name, classFilename, role)
+        -- @todo push to mainCandidates or otherCandidates
+        table.insert(mainCandidates, { name = name, classFilename = classFilename, role = role })
+    end
+
+    local playerCount = GetNumGroupMembers()
+    if playerCount > 0 then
+        for index = 1, playerCount, 1 do
+            local name, rank, subgroup, level, class, classFilename, zone, online, isDead, role, isML = GetRaidRosterInfo(index)
+            if name then
+                addCandidate(name, classFilename, role)
+            end
+        end
+    else
+        local name = UnitName("player")
+        local classFilename = select(2,UnitClass("player"))
+        addCandidate(name, classFilename, nil)
+        for i = 1, 4 do
+            local name = UnitName("party"..i)
+            if name then
+                classFilename = select(2,UnitClass("party"..i))
+                addCandidate(name, classFilename, nil)
+            end
+        end
+    end
 
     local assignTo = function(hunter, target)
         hunter.assignment = target
@@ -61,32 +91,45 @@ function SilentRotate:populateMenu(hunter, frame, mode)
     end
 
     local menu = {
-        { text = string.format("Assign %s to:", hunter.name), isTitle = true },
-        { text = "<Nobody>", checked = not hunter.assignment, func = function() assignTo(hunter, nil) end }
+        { text = string.format("Assign %s to:", hunter.name), isTitle = true }
     }
 
+    local addMenuItem = function(menu, text, classFilename, assignment)
+        table.insert(menu, {
+            text = classFilename and WrapTextInColorCode(text, select(4,GetClassColor(classFilename))) or text,
+            checked = hunter.assignment == assignment,
+            func = function(item) assignTo(hunter, assignment) end
+        })
+    end
+
+    addMenuItem(menu, "<Nobody>", nil, nil)
+
     -- @todo populate based on mode
-    table.insert(menu, {
-        text = WrapTextInColorCode("Option 1", select(4,GetClassColor("HUNTER"))),
-        checked = false,
-        func = function(item) print("You've chosen option 1"); end
-        })
-    table.insert(menu, {
-        text = "Option 2",
-        func = function() print("You've chosen option 2"); end
-        })
-    table.insert(menu, {
-        text = "More Options",
-        hasArrow = true,
-            menuList = {
-                { text = "Option 3", func = function() print("You've chosen option 3"); end }
-            } 
-        })
+    for _, candidate in ipairs(mainCandidates) do
+        addMenuItem(menu, candidate.name, candidate.classFilename, candidate.name)
+    end
+    if IsInRaid() then
+        local submenu = {}
+        for _, candidate in ipairs(otherCandidates) do
+            addMenuItem(submenu, candidate.name, candidate.classFilename, candidate.name)
+        end
+        if #submenu > 0 then
+            table.insert(menu, {
+                text = "Other players",
+                hasArrow = true,
+                menuList = submenu
+            })
+        end
+    else
+        for _, candidate in ipairs(otherCandidates) do
+            addMenuItem(menu, candidate.name, candidate.classFilename, candidate.name)
+        end
+    end
 
     table.insert(menu, {
         text = "Cancel",
         func = function() frame.context:Hide() end
-        })
+    })
 
     return menu
 end
