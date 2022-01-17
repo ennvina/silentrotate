@@ -93,12 +93,19 @@ function SilentRotate:assignPlayer(author, actor, target, modeName)
     end
     if mode.assignment[actor] ~= target then
         mode.assignment[actor] = target
+
+        -- Log to the History window
+        local historyMessage
+        if target then
+            historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_ASSIGN_PLAYER"), author, actor, target)
+        else
+            historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_ASSIGN_NOBODY"), author, actor)
+        end
+        SilentRotate:addHistoryMessage(historyMessage, mode)
+
         -- @todo update hunter frame to display the new target
-        -- @todo log assignment to the History window
         -- @todo share assignment with other raid members
-        print(string.format("[%s] %s assigned %s to focus on %s", mode.modeNameFirstUpper, author, actor, target or L["CONTEXT_NOBODY"]))
-    else
-        print(string.format("[%s] %s re-assigned %s to focus on %s", mode.modeNameFirstUpper, author, actor, target or L["CONTEXT_NOBODY"]))
+
     end
 end
 

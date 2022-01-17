@@ -204,6 +204,8 @@ L["HISTORY_GROUNDING_CANCEL"] = "Le totem de %s fut annulé prématurément à c
 L["HISTORY_GROUNDING_EXPIRE"] = "Le totem de %s expire."
 L["HISTORY_GROUNDING_ABSORB"] = "Le totem de %s absorbe %s de %s."
 L["HISTORY_GROUNDING_ABSORB_NOSPELL"] = "Le totem de %s absorbe une attaque de %s."
+L["HISTORY_ASSIGN_PLAYER"] = "%s a assigné %s à se focaliser sur %s."
+L["HISTORY_ASSIGN_NOBODY"] = "%s a désaffecté l'assignation de %s."
 
     --- Icons
 L["DISPLAY_BLIND_ICON"] = "Afficher une icône pour les joueurs qui n'ont pas installé SilentRotate"
