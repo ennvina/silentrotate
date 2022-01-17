@@ -681,7 +681,28 @@ SilentRotate.modes.scorpid = {
     alertWhenFail = true,
     spell = GetSpellInfo(3043), -- Scorpid Sting
     -- auraTest = nil,
-    -- customCombatlogFunc = nil,
+    customCombatlogFunc = function(self, event, sourceGUID, sourceName, sourceFlags, destGUID, destName, spellId, spellName)
+        if SilentRotate:isBossInList(destGUID, SilentRotate.constants.scorpidableBosses) then
+            if event == "SPELL_CAST_SUCCESS" and spellName == self.spell then
+                -- Schedule an alert for myself if I'm the next one in list
+                if SilentRotate:isPlayerNextTranq() then
+                    if self.metadata.timerAlertSoon then
+                        self.metadata.timerAlertSoon:Cancel()
+                    end
+                    self.metadata.timerAlertSoon = C_Timer.NewTimer(self.effectDuration-2, function()
+                        SilentRotate:alertReactNow(self.modeName)
+                    end)
+                end
+            elseif event == "UNIT_DIED" then
+                SilentRotate:resetRotation()
+                -- Cancel the scheduled alert, if any, when the boss dies
+                if self.metadata.timerAlertSoon then
+                    self.metadata.timerAlertSoon:Cancel()
+                    self.metadata.timerAlertSoon = nil
+                end
+            end
+        end
+    end,
     targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
     -- buffName = nil,
     -- buffCanReturn = nil,
@@ -690,7 +711,9 @@ SilentRotate.modes.scorpid = {
     -- groupChangeFunc = nil,
     announceArg = 'destName',
     -- tooltip = nil,
-    -- metadata = nil
+    metadata = {
+        timerAlertSoon = nil,
+    }
 }
 
 end

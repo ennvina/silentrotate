@@ -165,6 +165,21 @@ function SilentRotate:isTranqableBoss(guid)
     return false
 end
 
+-- Checks if a mob GUID is a boss from a specific list of IDs
+function SilentRotate:isBossInList(guid, bosses)
+    local type, mobId = SilentRotate:getIdFromGuid(guid)
+
+    if type == "Creature" then
+        for _, bossId in ipairs(bosses) do
+            if bossId == mobId then
+                return true
+            end
+        end
+    end
+
+    return false
+end
+
 -- Checks if the spell is a boss frenzy
 function SilentRotate:isFrenzy(spellName)
 
