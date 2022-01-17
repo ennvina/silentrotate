@@ -589,9 +589,14 @@ function SilentRotate:createHunterFrame(hunter, parentFrame, mainFrame)
     SilentRotate:createCooldownFrame(hunter)
     SilentRotate:createBlindIconFrame(hunter)
     SilentRotate:configureHunterFrameDrag(hunter, mainFrame)
+    SilentRotate:configureHunterFrameRightClick(hunter)
 
     if (SilentRotate.enableDrag) then
         SilentRotate:enableHunterFrameDragging(hunter, true)
+    end
+    local mode = SilentRotate:getMode() -- @todo get mode of hunter frame
+    if mode and mode.assignable then
+        SilentRotate:enableHunterFrameRightClick(hunter, true)
     end
 end
 

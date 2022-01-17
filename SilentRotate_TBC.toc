@@ -38,3 +38,4 @@ src\utils.lua
 src\modes.lua
 src\history.lua
 src\announce.lua
+src\rightclick.lua
