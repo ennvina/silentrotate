@@ -96,6 +96,7 @@ function SilentRotate:sendSyncOrder(whisper, name)
         ['mode'] = SilentRotate.db.profile.currentMode,
         ['version'] = SilentRotate.syncVersion,
         ['rotation'] = SilentRotate:getSimpleRotationTables(),
+        ['assignment'] = SilentRotate:getAssignmentTable(SilentRotate.db.profile.currentMode),
         ['addonVersion'] = SilentRotate.version,
     }
 
@@ -150,6 +151,7 @@ function SilentRotate:receiveSyncOrder(prefix, message, channel, sender)
 
         SilentRotate:printPrefixedMessage('Received new rotation configuration from ' .. sender)
         SilentRotate:applyRotationConfiguration(message.rotation)
+        SilentRotate:applyAssignmentConfiguration(message.assignment, sender, message.mode)
     end
 end
 

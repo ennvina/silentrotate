@@ -53,7 +53,7 @@ end
 function SilentRotate:doesPlayerFitAssignment(classFilename, role, assignmentType)
     if type(assignmentType) == 'table' then
         for _, subtype in ipairs(assignmentType) do
-            if SilentRotate:doesPlayerFitAssignment(classFilename, role, subtype) then
+            if self:doesPlayerFitAssignment(classFilename, role, subtype) then
                 return true
             end
         end
@@ -90,7 +90,7 @@ end
 -- @param time   When the assignment is done. If nil, GetTime() is used
 -- The time is used to know detect false positives when blaming wrong targets
 function SilentRotate:assignPlayer(author, actor, target, modeName, timestamp)
-    local mode = SilentRotate:getMode(modeName)
+    local mode = self:getMode(modeName)
     if not mode.assignment then
         mode.assignment = {}
         mode.assignedAt = {}
@@ -102,11 +102,11 @@ function SilentRotate:assignPlayer(author, actor, target, modeName, timestamp)
         -- Log to the History window
         local historyMessage
         if target then
-            historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_ASSIGN_PLAYER"), author, actor, target)
+            historyMessage = string.format(self:getHistoryPattern("HISTORY_ASSIGN_PLAYER"), author, actor, target)
         else
-            historyMessage = string.format(SilentRotate:getHistoryPattern("HISTORY_ASSIGN_NOBODY"), author, actor)
+            historyMessage = string.format(self:getHistoryPattern("HISTORY_ASSIGN_NOBODY"), author, actor)
         end
-        SilentRotate:addHistoryMessage(historyMessage, mode)
+        self:addHistoryMessage(historyMessage, mode)
 
         -- Update hunter frame to display the new target
         local hunter = self:getHunter(actor)
@@ -115,7 +115,59 @@ function SilentRotate:assignPlayer(author, actor, target, modeName, timestamp)
         -- @todo else report an error
         end
 
-        -- @todo share assignment with other raid members
+        -- Share assignment with other raid members
+        if author == UnitName("player") then
+            self:sendSyncOrder(false)
+        end
+    end
+end
+
+-- Get the map of actors and targets
+-- key=actor, value=target
+function SilentRotate:getAssignmentTable(modeName)
+    local mode = self:getMode(modeName)
+
+    if mode and mode.assignment then
+        -- In its current state, mode.assignment is exactly what we're looking for
+        return mode.assignment
+    end
+
+    return {}
+end
+
+-- Set the map of actors and targets
+-- This function is called typically when receiving a sync order from another player
+function SilentRotate:applyAssignmentConfiguration(assignment, sender, modeName)
+    if not assignment then
+        -- A nil assignment may happen especially if the sender has an old version
+        -- Please note that an empty table {} will not return now
+        -- An empty table is perfectly valid and will reset all assignments
+        return
+    end
+
+    if sender == UnitName("player") then
+        -- Prevent infinite loops
+        return
+    end
+
+    local mode = self:getMode(modeName)
+
+    -- First, unassign players who are not in the new list
+    if mode.assignment then
+        local actorsToReset = {}
+        for actor, target in pairs(mode.assignment) do
+            if target and not assignment[actor] then
+                table.insert(actorsToReset, actor)
+            end
+        end
+        for _, actor in ipairs(actorsToReset) do
+            self:assignPlayer(sender, actor, nil, modeName)
+        end
+    end
+
+    -- Then assign/re-assign players with the new ones
+    for actor, target in pairs(assignment) do
+        self:assignPlayer(sender, actor, target, modeName)
     end
 end
 
