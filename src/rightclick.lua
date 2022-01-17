@@ -160,7 +160,12 @@ function SilentRotate:populateMenu(hunter, frame, mode)
             menuText = WrapTextInColorCode(text, select(4,GetClassColor(classFilename)))
         end
 
-        local isAssigned = mode.assignment and mode.assignment[hunter.name] == assignment
+        local isAssigned
+        if mode.assignment then
+            isAssigned = mode.assignment[hunter.name] == assignment
+        else
+            isAssigned = assignment == nil
+        end
 
         table.insert(menu, {
             text = menuText,
