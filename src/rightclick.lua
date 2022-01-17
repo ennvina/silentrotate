@@ -46,8 +46,9 @@ end
 -- Fill menu items, filtered by the value of mode.assignable:
 -- * either a class name ("HUNTER", etc.) to list a specific class only
 -- * or "TANK" to select tanks, as designated by raid roster info's main tank or main assist
+-- * or "HEAL" to select classes that can heal (independently of their spec)
 -- * or "MANA" to select mana users (independently of their spec)
--- * or "REZ" to select classes who can resurrect
+-- * or "REZ" to select classes who can resurrect (including druids)
 -- * ...or an array of strings to select multiple classes or roles
 -- Either way, a submenu "Other players" will list remaining players
 -- The filter is disabled in dungeons because a 5-player list is short enough
@@ -68,7 +69,7 @@ function SilentRotate:populateMenu(hunter, frame, mode)
                 or classFilename == 'HUNTER'
                 or classFilename == 'SHAMAN'
                 or classFilename == 'PALADIN'
-        elseif assignable == 'REZ' then
+        elseif assignable == 'REZ' or assignable == 'HEAL' then
             return classFilename == 'PRIEST'
                 or classFilename == 'DRUID'
                 or classFilename == 'SHAMAN'

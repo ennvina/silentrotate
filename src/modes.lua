@@ -287,7 +287,7 @@ SilentRotate.modes.fearWard = {
     -- groupChangeFunc = nil,
     announceArg = 'destName',
     -- tooltip = nil,
-    assignable = 'TANK',
+    assignable = {'TANK', 'HEAL'},
     -- metadata = nil
 }
 
