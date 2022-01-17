@@ -60,7 +60,7 @@ function SilentRotate:populateMenu(hunter, frame, mode)
 
     local isMain = function(classFilename, role, assignable)
         if assignable == 'TANK' then
-            return role == 'maintank' or role == 'mainassist'
+            return role == 'MAINTANK' or role == 'MAINASSIST'
         elseif assignable == 'MANA' then
             return classFilename == 'MAGE'
                 or classFilename == 'PRIEST'
