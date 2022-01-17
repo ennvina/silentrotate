@@ -1,5 +1,10 @@
 ## SilentRotate Changelog
 
+#### v0.9.5-beta (2022-xx-yy)
+
+- Players can be assigned to other players
+- Right-click on a player's frame to select its assignment
+
 #### v0.9.3-beta (2022-01-15)
 
 - Added Ritual of Souls mode (TBC)
