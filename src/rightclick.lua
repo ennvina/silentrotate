@@ -43,61 +43,64 @@ function SilentRotate:configureHunterFrameRightClick(hunter)
     )
 end
 
--- Fill menu items, filtered by the value of mode.assignable:
+-- Check if a class/role fits a type of assignment
 -- * either a class name ("HUNTER", etc.) to list a specific class only
 -- * or "TANK" to select tanks, as designated by raid roster info's main tank or main assist
 -- * or "HEAL" to select classes that can heal (independently of their spec)
 -- * or "MANA" to select mana users (independently of their spec)
 -- * or "REZ" to select classes who can resurrect (including druids)
 -- * ...or an array of strings to select multiple classes or roles
--- Either way, a submenu "Other players" will list remaining players
--- The filter is disabled in dungeons because a 5-player list is short enough
--- Besides, the raid roster info does not exist outside of raids
+function SilentRotate:doesPlayerFitAssignment(classFilename, role, assignmentType)
+    if type(assignmentType) == 'table' then
+        for _, subtype in ipairs(assignmentType) do
+            if SilentRotate:doesPlayerFitAssignment(classFilename, role, subtype) then
+                return true
+            end
+        end
+        return false
+    end
+
+    if assignmentType == 'TANK' then
+        return role == 'MAINTANK' or role == 'MAINASSIST'
+    elseif assignmentType == 'MANA' then
+        return classFilename == 'MAGE'
+            or classFilename == 'PRIEST'
+            or classFilename == 'WARLOCK'
+            or classFilename == 'DRUID'
+            or classFilename == 'HUNTER'
+            or classFilename == 'SHAMAN'
+            or classFilename == 'PALADIN'
+    elseif assignmentType == 'REZ' or assignmentType == 'HEAL' then
+        return classFilename == 'PRIEST'
+            or classFilename == 'DRUID'
+            or classFilename == 'SHAMAN'
+            or classFilename == 'PALADIN'
+    elseif type(assignmentType) == 'string' then
+        return classFilename == assignmentType
+    end
+
+    return false
+end
+
+-- Fill menu items, filtered by the value of mode.assignable:
+-- - those who fit the class/role are "main players"
+-- - those who don't are listed in a submenu "Other players"
+-- The "Other players" is not a submenu in dungeons because a 5-player list is short enough
+-- But they still are listed after the main players (i.e. main players appear on top)
 function SilentRotate:populateMenu(hunter, frame, mode)
 
     local mainCandidates = {}
     local otherCandidates = {}
 
-    local isMain = function(classFilename, role, assignable)
-        if assignable == 'TANK' then
-            return role == 'MAINTANK' or role == 'MAINASSIST'
-        elseif assignable == 'MANA' then
-            return classFilename == 'MAGE'
-                or classFilename == 'PRIEST'
-                or classFilename == 'WARLOCK'
-                or classFilename == 'DRUID'
-                or classFilename == 'HUNTER'
-                or classFilename == 'SHAMAN'
-                or classFilename == 'PALADIN'
-        elseif assignable == 'REZ' or assignable == 'HEAL' then
-            return classFilename == 'PRIEST'
-                or classFilename == 'DRUID'
-                or classFilename == 'SHAMAN'
-                or classFilename == 'PALADIN'
-        else
-            return classFilename == assignable
-        end
-    end
-
     local addCandidate = function(name, classFilename, role)
-        local pushToMain = false
-
-        if type(mode.assignable) == 'string' then
-            pushToMain = isMain(classFilename, role, mode.assignable)
-        elseif type(mode.assignable) == 'table' then
-            for _, value in pairs(mode.assignable) do
-                pushToMain = isMain(classFilename, role, value)
-                if pushToMain then break end
-            end
-        end
-
-        if pushToMain then
+        if SilentRotate:doesPlayerFitAssignment(classFilename, role, mode.assignable) then
             table.insert(mainCandidates,  { name = name, classFilename = classFilename, role = role })
         else
             table.insert(otherCandidates, { name = name, classFilename = classFilename, role = role })
         end
     end
 
+    -- Parse player list and put them either to the "main" candidates or "other" candidates
     local playerCount = GetNumGroupMembers()
     if playerCount > 0 then
         for index = 1, playerCount do
@@ -119,6 +122,7 @@ function SilentRotate:populateMenu(hunter, frame, mode)
         end
     end
 
+    -- Callback invoked when the user clicks on a menu entry
     local assignTo = function(hunter, target, modeName)
         local mode = SilentRotate:getMode(modeName)
         if not mode.assignment then
@@ -129,9 +133,9 @@ function SilentRotate:populateMenu(hunter, frame, mode)
             -- @todo update hunter frame to display the new target
             -- @todo log assignment to the History window
             -- @todo share assignment with other raid members
-            print(string.format("[%s] %s is assigned to %s", mode.modeNameFirstUpper, hunter.name, target or "<Nobody>"))
+            print(string.format("[%s] %s is assigned to %s", mode.modeNameFirstUpper, hunter.name, target or L["CONTEXT_NOBODY"]))
         else
-            print(string.format("[%s] %s is re-assigned to the same %s", mode.modeNameFirstUpper, hunter.name, target or "<Nobody>"))
+            print(string.format("[%s] %s is re-assigned to the same %s", mode.modeNameFirstUpper, hunter.name, target or L["CONTEXT_NOBODY"]))
         end
     end
 
@@ -162,7 +166,7 @@ function SilentRotate:populateMenu(hunter, frame, mode)
         end
     end
 
-    -- Always start with "Nobody", put into "<>" in case a raid member is called "Nobody"
+    -- Always start with "Nobody", which is put into "<>" in case a raid member is actually called "Nobody"
     addMenuItem(menu, string.format("<%s>", L["CONTEXT_NOBODY"]), nil, nil)
 
     -- Add main candidates on top of the list (but after "Nobody")
