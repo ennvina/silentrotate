@@ -221,6 +221,9 @@ L["TOOLTIP_EFFECT_REMAINING"] = "Durée de l'effet : %s"
 L["TOOLTIP_COOLDOWN_REMAINING"] = "Temps de recharge : %s"
 L["TOOLTIP_DURATION_SECONDS"] = "%s sec"
 L["TOOLTIP_DURATION_MINUTES"] = "%s min"
+L["TOOLTIP_ASSIGNED_TO"] = "Assigné(e) à : %s"
+L["TOOLTIP_EFFECT_CURRENT"] = "Maintenant sur : %s"
+L["TOOLTIP_EFFECT_PAST"] = "Dernière cible : %s"
 
     --- Context Menu
 L["CONTEXT_ASSIGN_TITLE"] = "Assigner %s à :"

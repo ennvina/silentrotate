@@ -228,6 +228,9 @@ L["TOOLTIP_EFFECT_REMAINING"] = "Effect remaining: %s"
 L["TOOLTIP_COOLDOWN_REMAINING"] = "Cooldown remaining: %s"
 L["TOOLTIP_DURATION_SECONDS"] = "%s sec"
 L["TOOLTIP_DURATION_MINUTES"] = "%s min"
+L["TOOLTIP_ASSIGNED_TO"] = "Assigned to: %s"
+L["TOOLTIP_EFFECT_CURRENT"] = "Currently on: %s"
+L["TOOLTIP_EFFECT_PAST"] = "Last used on: %s"
 
     --- Context Menu
 L["CONTEXT_ASSIGN_TITLE"] = "Assign %s to:"
