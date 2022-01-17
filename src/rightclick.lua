@@ -86,13 +86,18 @@ end
 -- @param author The name of the player who initiates this assignment
 -- @param actor  The name of the player who gets assigned
 -- @param target The name of the player that the "actor" should focus on
-function SilentRotate:assignPlayer(author, actor, target, modeName)
+-- @param modeName The mode for this assignment
+-- @param time   When the assignment is done. If nil, GetTime() is used
+-- The time is used to know detect false positives when blaming wrong targets
+function SilentRotate:assignPlayer(author, actor, target, modeName, timestamp)
     local mode = SilentRotate:getMode(modeName)
     if not mode.assignment then
         mode.assignment = {}
+        mode.assignedAt = {}
     end
     if mode.assignment[actor] ~= target then
         mode.assignment[actor] = target
+        mode.assignedAt[actor] = timestamp or GetTime()
 
         -- Log to the History window
         local historyMessage
@@ -103,9 +108,14 @@ function SilentRotate:assignPlayer(author, actor, target, modeName)
         end
         SilentRotate:addHistoryMessage(historyMessage, mode)
 
-        -- @todo update hunter frame to display the new target
-        -- @todo share assignment with other raid members
+        -- Update hunter frame to display the new target
+        local hunter = self:getHunter(actor)
+        if hunter then
+            self:setHunterName(hunter)
+        -- @todo else report an error
+        end
 
+        -- @todo share assignment with other raid members
     end
 end
 

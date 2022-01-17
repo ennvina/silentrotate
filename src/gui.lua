@@ -211,11 +211,23 @@ function SilentRotate:setHunterName(hunter)
         end
     end
 
-    local targetName, buffMode
-    if SilentRotate.db.profile.appendTarget and hunter.targetGUID then
-        targetName, buffMode = self:getHunterTarget(hunter)
+    local targetName, buffMode, assignedName, assignedAt
+    if SilentRotate.db.profile.appendTarget then
+        if hunter.targetGUID then
+            targetName, buffMode = self:getHunterTarget(hunter)
+            if targetName == "" then targetName = nil end
+        end
+        assignedName, assignedAt = self:getHunterAssignment(hunter)
+        if assignedName == "" then assignedName = nil end
     end
-    local showTarget = targetName and targetName ~= "" and buffMode and (buffMode == 'not_a_buff' or buffMode == 'has_buff' or not SilentRotate.db.profile.appendTargetBuffOnly)
+    local showTarget
+    if assignedName then
+        showTarget = true
+    elseif not targetName then
+        showTarget = false
+    else
+        showTarget = buffMode and (buffMode == 'not_a_buff' or buffMode == 'has_buff' or not SilentRotate.db.profile.appendTargetBuffOnly)
+    end
     hunter.showingTarget = showTarget
 
     if (SilentRotate.db.profile.appendGroup and hunter.subgroup) then
@@ -228,13 +240,21 @@ function SilentRotate:setHunterName(hunter)
 
     if showTarget then
         local targetColorName
-        if      buffMode == 'buff_expired' then targetColorName = 'darkGray'
-        elseif  buffMode == 'buff_lost' then    targetColorName = 'lightRed'
-        elseif  buffMode == 'has_buff' then     targetColorName = 'white'
-        else                                    targetColorName = 'white'
+        local blameAssignment
+        if assignedName and targetName and (assignedName ~= targetName) then
+            blameAssignment = hunter.cooldownStarted and assignedAt and assignedAt < hunter.cooldownStarted
+        end
+        if     blameAssignment then                 targetColorName = 'flashyRed'
+        elseif assignedName and not targetName then targetColorName = 'white'
+        elseif buffMode == 'buff_expired' then      targetColorName = 'darkGray'
+        elseif buffMode == 'buff_lost' then         targetColorName = 'lightRed'
+        elseif buffMode == 'has_buff' then          targetColorName = 'white'
+        else                                        targetColorName = 'white'
         end
         local mode = self:getMode()
-        if type(mode.customTargetName) == 'function' then
+        if assignedName and not targetName then
+            targetName = assignedName
+        elseif type(mode.customTargetName) == 'function' then
             targetName = mode.customTargetName(mode, hunter, targetName)
         end
         if targetName then
@@ -277,6 +297,8 @@ function SilentRotate:startHunterCooldown(hunter, endTimeOfCooldown, endTimeOfEf
         end
     end
     hunter.endTimeOfEffect = endTimeOfEffect
+
+    hunter.cooldownStarted = GetTime()
 
     hunter.frame.cooldownFrame.statusBar:SetMinMaxValues(GetTime(), endTimeOfCooldown or GetTime())
     hunter.expirationTime = endTimeOfCooldown
