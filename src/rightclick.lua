@@ -117,9 +117,13 @@ function SilentRotate:populateMenu(hunter, frame, mode)
         end
     end
 
-    local assignTo = function(hunter, target)
-        if hunter.assignment ~= target then
-            hunter.assignment = target
+    local assignTo = function(hunter, target, modeName)
+        local mode = SilentRotate:getMode(modeName)
+        if not mode.assignment then
+            mode.assignment = {}
+        end
+        if mode.assignment[hunter.name] ~= target then
+            mode.assignment[hunter.name] = target
             -- @todo update hunter frame to display the new target
             -- @todo log assignment to the History window
             -- @todo share assignment with other raid members
@@ -140,13 +144,13 @@ function SilentRotate:populateMenu(hunter, frame, mode)
             menuText = WrapTextInColorCode(text, select(4,GetClassColor(classFilename)))
         end
 
-        local isAssigned = hunter.assignment == assignment
+        local isAssigned = mode.assignment and mode.assignment[hunter.name] == assignment
 
         table.insert(menu, {
             text = menuText,
             checked = isAssigned,
             func = function(item)
-                assignTo(hunter, assignment)
+                assignTo(hunter, assignment, mode.modeName)
                 if frame.context then frame.context:Hide() end
             end
         })
@@ -185,8 +189,8 @@ function SilentRotate:populateMenu(hunter, frame, mode)
 
     -- If there is an assignment but it was not found among raid or party members, show it anyway
     -- It may happend if a raid member left the group
-    if hunter.assignment and not assignmentFound then
-        addMenuItem(menu, hunter.assignment, nil, hunter.assignment)
+    if mode.assignment and mode.assignment[hunter.name] and not assignmentFound then
+        addMenuItem(menu, mode.assignment[hunter.name], nil, mode.assignment[hunter.name])
     end
 
     -- Always end with "Cancel"
