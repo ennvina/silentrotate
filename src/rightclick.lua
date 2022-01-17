@@ -82,6 +82,26 @@ function SilentRotate:doesPlayerFitAssignment(classFilename, role, assignmentTyp
     return false
 end
 
+-- Assign a player to another player for a specific mode
+-- @param author The name of the player who initiates this assignment
+-- @param actor  The name of the player who gets assigned
+-- @param target The name of the player that the "actor" should focus on
+function SilentRotate:assignPlayer(author, actor, target, modeName)
+    local mode = SilentRotate:getMode(modeName)
+    if not mode.assignment then
+        mode.assignment = {}
+    end
+    if mode.assignment[actor] ~= target then
+        mode.assignment[actor] = target
+        -- @todo update hunter frame to display the new target
+        -- @todo log assignment to the History window
+        -- @todo share assignment with other raid members
+        print(string.format("[%s] %s assigned %s to focus on %s", mode.modeNameFirstUpper, author, actor, target or L["CONTEXT_NOBODY"]))
+    else
+        print(string.format("[%s] %s re-assigned %s to focus on %s", mode.modeNameFirstUpper, author, actor, target or L["CONTEXT_NOBODY"]))
+    end
+end
+
 -- Fill menu items, filtered by the value of mode.assignable:
 -- - those who fit the class/role are "main players"
 -- - those who don't are listed in a submenu "Other players"
@@ -100,7 +120,7 @@ function SilentRotate:populateMenu(hunter, frame, mode)
         end
     end
 
-    -- Parse player list and put them either to the "main" candidates or "other" candidates
+    -- Parse player list and put them either to the list of "main" candidates or "other" candidates
     local playerCount = GetNumGroupMembers()
     if playerCount > 0 then
         for index = 1, playerCount do
@@ -122,23 +142,6 @@ function SilentRotate:populateMenu(hunter, frame, mode)
         end
     end
 
-    -- Callback invoked when the user clicks on a menu entry
-    local assignTo = function(hunter, target, modeName)
-        local mode = SilentRotate:getMode(modeName)
-        if not mode.assignment then
-            mode.assignment = {}
-        end
-        if mode.assignment[hunter.name] ~= target then
-            mode.assignment[hunter.name] = target
-            -- @todo update hunter frame to display the new target
-            -- @todo log assignment to the History window
-            -- @todo share assignment with other raid members
-            print(string.format("[%s] %s is assigned to %s", mode.modeNameFirstUpper, hunter.name, target or L["CONTEXT_NOBODY"]))
-        else
-            print(string.format("[%s] %s is re-assigned to the same %s", mode.modeNameFirstUpper, hunter.name, target or L["CONTEXT_NOBODY"]))
-        end
-    end
-
     local menu = {
         { text = string.format(L["CONTEXT_ASSIGN_TITLE"], hunter.name), isTitle = true }
     }
@@ -156,7 +159,7 @@ function SilentRotate:populateMenu(hunter, frame, mode)
             text = menuText,
             checked = isAssigned,
             func = function(item)
-                assignTo(hunter, assignment, mode.modeName)
+                SilentRotate:assignPlayer(UnitName("player"), hunter.name, assignment, mode.modeName)
                 if frame.context then frame.context:Hide() end
             end
         })
