@@ -57,7 +57,7 @@ function SilentRotate:configureHunterFrameDrag(hunter, mainFrame)
 
             local group, position = SilentRotate:getDropPosition(hunter.frame, mainFrame)
             SilentRotate:handleDrop(hunter, group, position)
-            SilentRotate:sendSyncOrder(false)
+            SilentRotate:sendSyncOrder()
         end
     )
 end

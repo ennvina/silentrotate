@@ -20,6 +20,12 @@ function SilentRotate.OnCommReceived(prefix, data, channel, sender)
         local success, message = AceSerializer:Deserialize(data)
 
         if (success) then
+            if message.type == SilentRotate.constants.commsTypes.syncOrder
+            or message.type == SilentRotate.constants.commsTypes.syncRequest then
+                -- Get addon version from messages who have this information
+                SilentRotate:updatePlayerAddonVersion(sender, message.addonVersion)
+            end
+
             if (message.mode ~= SilentRotate.db.profile.currentMode) then
                 -- Received a message from another mode
                 -- This may also happen if the message comes from an old version of the addon but it causes many problems so it's best to ignore the message
@@ -92,7 +98,7 @@ function SilentRotate:sendSyncTranq(hunter, fail, timestamp, targetGUID)
 end
 
 -- Broadcast current rotation configuration
-function SilentRotate:sendSyncOrder(whisper, name)
+function SilentRotate:sendSyncOrder(whisperName)
 
     SilentRotate.syncVersion = SilentRotate.syncVersion + 1
     SilentRotate.syncLastSender = UnitName("player")
@@ -106,10 +112,10 @@ function SilentRotate:sendSyncOrder(whisper, name)
         ['addonVersion'] = SilentRotate.version,
     }
 
-    if (whisper) then
-        SilentRotate:sendWhisperAddonMessage(message, name)
+    if whisperName and whisperName ~= '' then
+        SilentRotate:sendWhisperAddonMessage(message, whisperName)
     else
-        SilentRotate:sendRaidAddonMessage(message, name)
+        SilentRotate:sendRaidAddonMessage(message)
     end
 end
 
@@ -149,7 +155,6 @@ end
 function SilentRotate:receiveSyncOrder(prefix, message, channel, sender)
 
     SilentRotate:updateRaidStatus()
-    SilentRotate:updatePlayerAddonVersion(sender, message.addonVersion)
 
     if (SilentRotate:isVersionEligible(message.version, sender)) then
         SilentRotate.syncVersion = (message.version)
@@ -163,6 +168,5 @@ end
 
 -- Request to send current roration configuration received
 function SilentRotate:receiveSyncRequest(prefix, message, channel, sender)
-    SilentRotate:updatePlayerAddonVersion(sender, message.addonVersion)
-    SilentRotate:sendSyncOrder(true, sender)
+    SilentRotate:sendSyncOrder(sender)
 end

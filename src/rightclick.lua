@@ -117,7 +117,7 @@ function SilentRotate:assignPlayer(author, actor, target, modeName, timestamp)
 
         -- Share assignment with other raid members
         if author == UnitName("player") then
-            self:sendSyncOrder(false)
+            self:sendSyncOrder()
         end
     end
 end
