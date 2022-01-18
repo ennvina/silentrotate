@@ -4,6 +4,9 @@
 
 - Players can be assigned to other players
 - Right-click on a player's frame to select its assignment
+- The tooltip indicates the assignment
+- The tooltip also displays the name of the last target
+- The addon version should no longer fail to be shared between players
 
 #### v0.9.3-beta (2022-01-15)
 
