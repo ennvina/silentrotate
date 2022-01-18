@@ -246,13 +246,13 @@ function SilentRotate:setHunterName(hunter)
         end
         if     blameAssignment then                 targetColorName = 'flashyRed'
         elseif assignedName and not targetName then targetColorName = 'white'
-        elseif buffMode == 'buff_expired' then      targetColorName = 'darkGray'
+        elseif buffMode == 'buff_expired' then      targetColorName = assignedName and 'white' or 'darkGray'
         elseif buffMode == 'buff_lost' then         targetColorName = 'lightRed'
         elseif buffMode == 'has_buff' then          targetColorName = 'white'
         else                                        targetColorName = 'white'
         end
         local mode = self:getMode()
-        if assignedName and not targetName then
+        if assignedName and (not targetName or buffMode == 'buff_expired') then
             targetName = assignedName
         elseif type(mode.customTargetName) == 'function' then
             targetName = mode.customTargetName(mode, hunter, targetName)
