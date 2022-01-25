@@ -672,7 +672,7 @@ SilentRotate.modes.soulwell = {
 
 SilentRotate.modes.scorpid = {
     default = false,
-    raidOnly = false,
+    raidOnly = true,
     -- color = nil,
     wanted = 'HUNTER',
     cooldown = 20, -- Cooldown is not really 20 secs, but it helps visualizing the debuff duration
