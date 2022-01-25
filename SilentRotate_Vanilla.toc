@@ -1,8 +1,8 @@
-## Interface: 11307
-## Title: SilentRotate |cff88aaff0.9.3-beta|r
+## Interface: 11401
+## Title: SilentRotate |cff88aaff0.9.4-beta|r
 ## Notes: Track spell rotation in raid
 ## Author: Vinny
-## Version: 0.9.3-beta
+## Version: 0.9.4-beta
 ## SavedVariables: SilentRotateDb
 ## OptionalDeps: Ace3
 
