@@ -1,8 +1,9 @@
 ## SilentRotate Changelog
 
-#### v0.9.4-beta (2022-xx-yy)
+#### v0.9.4-beta (2022-01-25)
 
-- Added Scorpid Sting mode (TBC)
+- Added Scorpid Sting mode (TBC), currently enabled for:
+- Archimonde, Supremus, Teron, Gurtogg, Shahraz, Gathios and Illidan
 
 #### v0.9.3-beta (2022-01-15)
 
