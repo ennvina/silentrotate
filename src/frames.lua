@@ -31,7 +31,7 @@ function SilentRotate:createMainFrame()
         SilentRotate.mainFrames = { mainFrame }
     else
         table.insert(SilentRotate.mainFrames, mainFrame)
-        SilentRotate.db.profile.windows[windowIndex] = SilentRotate.db.profile.windows[1]
+        SilentRotate.db.profile.windows[mainFrame.windowIndex] = SilentRotate.db.profile.windows[1]
     end
 
     return mainFrame

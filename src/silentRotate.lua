@@ -42,7 +42,7 @@ function SilentRotate:ProfilesChanged()
 end
 
 -- Apply position, size, and visibility
-function applyWindowSettings(frame, windowConfig)
+local function applyWindowSettings(frame, windowConfig)
     frame:ClearAllPoints()
     if windowConfig.point then
         frame:SetPoint(windowConfig.point, UIParent, 'BOTTOMLEFT', windowConfig.x, windowConfig.y)
@@ -206,7 +206,7 @@ end
 function SilentRotate:printRotationSetup()
 
     if SilentRotate:isActive() then
-        SilentRotate:sendRotationMessage('--- ' .. SilentRotate.constants.printPrefix .. SilentRotate:getBroadcastHeaderText() .. ' ---', channel)
+        SilentRotate:sendRotationMessage('--- ' .. SilentRotate.constants.printPrefix .. SilentRotate:getBroadcastHeaderText() .. ' ---')
 
         if (SilentRotate.db.profile.useMultilineRotationReport) then
             SilentRotate:printMultilineRotation(SilentRotate.rotationTables.rotation)

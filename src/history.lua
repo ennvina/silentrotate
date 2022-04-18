@@ -39,7 +39,7 @@ end
 function SilentRotate:addHistoryDebuffMessage(hunter, unitName, spellName, mode)
     local msg
     if type(mode.customHistoryFunc) == 'function' then
-        msg = mode.customHistoryFunc(mode, hunter, nil, destName, spellName)
+        msg = mode.customHistoryFunc(mode, hunter, nil, unitName, spellName)
     else
         msg = string.format(self:getHistoryPattern("HISTORY_DEBUFF_RECEIVED"), unitName, spellName)
     end
