@@ -35,7 +35,7 @@ function SilentRotate:configureHunterFrameRightClick(hunter)
                     frame.context = nil
                 end
                 frame.context = CreateFrame("Frame", nil, frame, "UIDropDownMenuTemplate")
-                local mode = SilentRotate:getMode() -- @toto get hunter mode
+                local mode = SilentRotate:getMode() -- @todo get hunter mode
                 local menu = SilentRotate:populateMenu(frame.hunter, frame, mode)
                 EasyMenu(menu, frame.context, "cursor", 0 , 0, "MENU");
             end
@@ -89,6 +89,7 @@ end
 -- @param modeName The mode for this assignment
 -- @param time   When the assignment is done. If nil, GetTime() is used
 -- The time is used to know detect false positives when blaming wrong targets
+-- Otherwise if 1) player casts spell, 2) assignment changes, then we'd blame
 function SilentRotate:assignPlayer(author, actor, target, modeName, timestamp)
     local mode = self:getMode(modeName)
     if not mode.assignment then
@@ -173,8 +174,8 @@ end
 
 -- Fill menu items, filtered by the value of mode.assignable:
 -- - those who fit the class/role are "main players"
--- - those who don't are listed in a submenu "Other players"
--- The "Other players" is not a submenu in dungeons because a 5-player list is short enough
+-- - those who don't are listed in a submenu "other players"
+-- The "other players" is not a submenu in dungeons because a 5-player list is short enough
 -- But they still are listed after the main players (i.e. main players appear on top)
 function SilentRotate:populateMenu(hunter, frame, mode)
 
@@ -246,7 +247,7 @@ function SilentRotate:populateMenu(hunter, frame, mode)
     -- Always start with "Nobody", which is put into "<>" in case a raid member is actually called "Nobody"
     addMenuItem(menu, string.format("<%s>", L["CONTEXT_NOBODY"]), nil, nil)
 
-    -- Add main candidates on top of the list (but after "Nobody")
+    -- Add main candidates on top of the list (but after "<Nobody>")
     for _, candidate in ipairs(mainCandidates) do
         addMenuItem(menu, candidate.name, candidate.classFilename, candidate.name)
     end
@@ -257,7 +258,7 @@ function SilentRotate:populateMenu(hunter, frame, mode)
         for _, candidate in ipairs(otherCandidates) do
             addMenuItem(submenu, candidate.name, candidate.classFilename, candidate.name)
         end
-        if #submenu > 0 then
+        if #submenu > 0 then -- Don't create the submenu if it is empty
             table.insert(menu, {
                 text = L["CONTEXT_OTHERS"],
                 hasArrow = true,
@@ -277,6 +278,9 @@ function SilentRotate:populateMenu(hunter, frame, mode)
     end
 
     -- Always end with "Cancel"
+    -- We could display "<Cancel>" to distinguish with a player called "Cancel"
+    -- But everyone expects to see "Cancel" since the dawn of time, so we keep it
+    -- Also, the "other players" submenu acts as a separator, which makes it less ambiguous
     table.insert(menu, {
         text = L["CONTEXT_CANCEL"],
         func = function() frame.context:Hide() end
