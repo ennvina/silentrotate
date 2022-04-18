@@ -231,6 +231,10 @@ L["TOOLTIP_DURATION_MINUTES"] = "%s min"
 L["UPDATE_AVAILABLE"] = "Une nouvelle version est disponible, veuillez mettre à jour pour profiter des dernières fonctionnalités."
 L["BREAKING_UPDATE_AVAILABLE"] = "Une mise à jour IMPORTANTE est disponible, vous DEVEZ mettre à jour le plus rapidement possible ! Des conflits sont possibles entre vous et les joueurs qui ont installé la version à jour de SilentRotate."
 
+L["VERSION_CHECK"] = "## Vérification de version ##"
+L["VERSION_UNDETECTABLE"] = "Pas installé ou antérieur à 0.7.0"
+L["VERSION_YOU"] = "Vous"
+
     --- Profiles
 L["SETTING_PROFILES"] = "Profils"
 
