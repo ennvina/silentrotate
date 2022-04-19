@@ -121,12 +121,12 @@ function SilentRotate:assignPlayer(author, actor, target, modeName, timestamp)
             self:sendSyncOrder()
             self:addSecureDialog("assignmentDialog",
 
-                string.format( -- @todo translate
-                    "Your focus does not match your assignment.\n\nDo you want to set the focus to %s?",
+                string.format(
+                    L["DIALOG_ASSIGNMENT_QUESTION1"].."\n\n"..L["DIALOG_ASSIGNMENT_QUESTION2"],
                     target or L["CONTEXT_NOBODY"]
                 ),
 
-                "Change Focus", -- @todo translate
+                L["DIALOG_ASSIGNMENT_CHANGE_FOCUS"],
                 "focus",
                 "unit",
                 target,
