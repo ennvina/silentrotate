@@ -140,6 +140,8 @@ L["SOULWELL_MODE_DETAILED_DESC"] = "Ce mode détecte lorsqu'un démoniste lance 
 L["MODE_BUTTON_DESC"] = "Affiche le bouton pour activer le mode '%s'"
 L["MODE_LABEL"] = "Texte du bouton"
 L["MODE_LABEL_DESC"] = "Texte écrit dans le bouton pour activer le mode '%s'"
+L["MODE_TRACK_FOCUS"] = "Aligne le focus avec l'affectation"
+L["MODE_TRACK_FOCUS_DESC"] = "Détecte quand votre affectation change et propose d'aligner le focus avec la nouvelle affectation"
 
     --- Names
 L["SETTING_NAMES"] = "Noms"

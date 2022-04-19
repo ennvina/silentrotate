@@ -140,6 +140,8 @@ L["SOULWELL_MODE_DETAILED_DESC"] = "This mode tracks whenever a warlock casts Ri
 L["MODE_BUTTON_DESC"] = "显示用于激活'%s'模式的按钮。"
 L["MODE_LABEL"] = "按钮文本"
 L["MODE_LABEL_DESC"] = "在按钮上显示用于激活'%s'模式的文本。"
+L["MODE_TRACK_FOCUS"] = "Match Focus with Assignement"
+L["MODE_TRACK_FOCUS_DESC"] = "Detect when your assignment changes and suggest to match the focus with the new assignment"
 
     --- Names
 L["SETTING_NAMES"] = "名字"

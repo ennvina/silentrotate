@@ -487,12 +487,22 @@ function SilentRotate:CreateConfig()
             set = setForMode,
             hidden = function() return not SilentRotate.db.profile[modeName.."ModeButton"] end,
         }
+        if (mode.assignable) then
+            options.args.modes.args[modeName.."TrackFocus"] = {
+                name = L["MODE_TRACK_FOCUS"],
+                desc = L["MODE_TRACK_FOCUS_DESC"],
+                type = "toggle",
+                order = modeBaseIndex+3,
+                width = "full",
+                set = setForMode,
+            }
+        end
         options.args.modes.args[modeName.."ModeInvisible"] = {
             name = SilentRotate.colors.lightRed:WrapTextInColorCode(L["MODE_INVISIBLE"]),
             type = "description",
             fontSize = "medium",
             width = "full",
-            order = modeBaseIndex+3,
+            order = modeBaseIndex+4,
             hidden = function() return SilentRotate.db.profile[modeName.."ModeButton"] or SilentRotate.db.profile.currentMode ~= modeName end,
         }
         modeBaseIndex = modeBaseIndex+10

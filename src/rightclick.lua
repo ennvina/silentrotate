@@ -133,7 +133,7 @@ function SilentRotate:assignPlayer(author, actor, target, modeName, timestamp)
 
                 function()
                     -- Condition function, return true to open dialog box
-                    local optionSuggestsToMatchFocus = true -- @todo get it from options, maybe add "customOptions" in modes?
+                    local optionSuggestsToMatchFocus = SilentRotate.db.profile[modeName.."TrackFocus"]
                     local focusIsDifferentThanAssignment = UnitName("focus") ~= target
                     local hasSomeoneToFocus = target ~= nil -- Not interested in asking to "set focus to nobody"
                     return optionSuggestsToMatchFocus and focusIsDifferentThanAssignment and hasSomeoneToFocus
