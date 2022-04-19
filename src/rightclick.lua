@@ -119,6 +119,32 @@ function SilentRotate:assignPlayer(author, actor, target, modeName, timestamp)
         -- Share assignment with other raid members
         if author == UnitName("player") then
             self:sendSyncOrder()
+            self:addSecureDialog("assignmentDialog",
+
+                string.format( -- @todo translate
+                    "Your focus does not match your assignment.\n\nDo you want to set the focus to %s?",
+                    target or L["CONTEXT_NOBODY"]
+                ),
+
+                "Change Focus", -- @todo translate
+                "focus",
+                "unit",
+                target,
+
+                function()
+                    -- Condition function, return true to open dialog box
+                    local optionSuggestsToMatchFocus = true -- @todo get it from options, maybe add "customOptions" in modes?
+                    local focusIsDifferentThanAssignment = UnitName("focus") ~= target
+                    local hasSomeoneToFocus = target ~= nil -- Not interested in asking to "set focus to nobody"
+                    return optionSuggestsToMatchFocus and focusIsDifferentThanAssignment and hasSomeoneToFocus
+                end,
+
+                "PLAYER_FOCUS_CHANGED",
+                function()
+                    -- Event function, return true to close dialog box
+                    return UnitName("focus") == target
+                end
+            )
         end
     end
 end
