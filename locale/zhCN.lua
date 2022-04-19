@@ -231,6 +231,11 @@ L["CONTEXT_NOBODY"] = "Nobody"
 L["CONTEXT_CANCEL"] = "Cancel"
 L["CONTEXT_OTHERS"] = "Other players"
 
+    --- Dialog Box
+L["DIALOG_ASSIGNMENT_QUESTION1"] = "Your focus does not match your assignment."
+L["DIALOG_ASSIGNMENT_QUESTION2"] = "Do you want to set the focus to %s?"
+L["DIALOG_ASSIGNMENT_CHANGE_FOCUS"] = "Change Focus"
+
     --- Notifications
 L["UPDATE_AVAILABLE"] = "A new version is available, please update to get the latest features."
 L["BREAKING_UPDATE_AVAILABLE"] = "A new, CRITICAL update is available, you MUST update AS SOON AS possible! SilentRotate may not work correctly between you and up-to-date players."

@@ -204,8 +204,8 @@ L["HISTORY_GROUNDING_CANCEL"] = "Le totem de %s fut annulé prématurément à c
 L["HISTORY_GROUNDING_EXPIRE"] = "Le totem de %s expire."
 L["HISTORY_GROUNDING_ABSORB"] = "Le totem de %s absorbe %s de %s."
 L["HISTORY_GROUNDING_ABSORB_NOSPELL"] = "Le totem de %s absorbe une attaque de %s."
-L["HISTORY_ASSIGN_PLAYER"] = "%s a assigné %s à se focaliser sur %s."
-L["HISTORY_ASSIGN_NOBODY"] = "%s a désaffecté l'assignation de %s."
+L["HISTORY_ASSIGN_PLAYER"] = "%s a affecté %s à se focaliser sur %s."
+L["HISTORY_ASSIGN_NOBODY"] = "%s a retiré l'affectation de %s."
 
     --- Icons
 L["DISPLAY_BLIND_ICON"] = "Afficher une icône pour les joueurs qui n'ont pas installé SilentRotate"
@@ -221,15 +221,20 @@ L["TOOLTIP_EFFECT_REMAINING"] = "Durée de l'effet : %s"
 L["TOOLTIP_COOLDOWN_REMAINING"] = "Temps de recharge : %s"
 L["TOOLTIP_DURATION_SECONDS"] = "%s sec"
 L["TOOLTIP_DURATION_MINUTES"] = "%s min"
-L["TOOLTIP_ASSIGNED_TO"] = "Assigné(e) à : %s"
+L["TOOLTIP_ASSIGNED_TO"] = "Affecté(e) à : %s"
 L["TOOLTIP_EFFECT_CURRENT"] = "Maintenant sur : %s"
 L["TOOLTIP_EFFECT_PAST"] = "Dernière cible : %s"
 
     --- Context Menu
-L["CONTEXT_ASSIGN_TITLE"] = "Assigner %s à :"
+L["CONTEXT_ASSIGN_TITLE"] = "Affecter %s à :"
 L["CONTEXT_NOBODY"] = "Personne"
 L["CONTEXT_CANCEL"] = "Annuler"
 L["CONTEXT_OTHERS"] = "Autres joueurs"
+
+    --- Dialog Box
+L["DIALOG_ASSIGNMENT_QUESTION1"] = "Votre focus diffère de votre affectation."
+L["DIALOG_ASSIGNMENT_QUESTION2"] = "Voulez-vous définir le focus sur %s?"
+L["DIALOG_ASSIGNMENT_CHANGE_FOCUS"] = "Changer le focus"
 
     --- Notifications
 L["UPDATE_AVAILABLE"] = "Une nouvelle version est disponible, veuillez mettre à jour pour profiter des dernières fonctionnalités."
