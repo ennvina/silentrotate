@@ -39,3 +39,4 @@ src\modes.lua
 src\history.lua
 src\announce.lua
 src\rightclick.lua
+src\secure.lua
