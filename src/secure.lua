@@ -67,7 +67,15 @@ function SilentRotate:addSecureDialog(
 )
     self:addSecureFunction(function()
         if type(condition) == 'function' then
-            if not condition() then return end
+            if not condition() then
+                -- Hide the previous dialog box with the same name, if any
+                if type(self.secureDialogs) == 'table' and self.secureDialogs[widgetName] then
+                    self.secureDialogs[widgetName].closeFunc()
+                    self.secureDialogs[widgetName] = nil -- Useless in theory, because done by closeFunc()
+                end
+
+                return
+            end
         end
 
         local spacing = 24
