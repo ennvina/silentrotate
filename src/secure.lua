@@ -38,10 +38,27 @@ function SilentRotate:callAllSecureFunctions()
 end
 
 --[[
-    Add a secure function that creates a dialog box with two buttons
+    Add a secure function that creates a dialog box with one "question" and two buttons
+
     The question is displayed in the central part of the dialog box
-    The answer and secure params define the first button
+    The question usually ends with a question mark (?) but any text that invites the player to click is okay
+
+    The first button answer and secure params of the secure action button
+    A list of types and attribute names can be found here:
+    https://wowpedia.org/wiki/SecureActionButtonTemplate#Action_types
+
     The second button is always "Close"
+
+    Usually, the dialog box should be closed after clicking the first button
+    The trivial solution would be to set a "onClick" script to close it
+    But it's not really possible with secure action buttons
+    More exactly, if we set this script we override the secure action itself
+
+    One way to circumvent this limitation is to track an event with a callback
+    The callback inspects the current state of the game, and returns true when the secure action has finished
+    For example, if the secure type is "target":
+    - the tracked event name could be "PLAYER_TARGET_CHANGED"
+    - and the event callback could be function() return UnitName("target") == myNewFavoriteTarget end
 
     @param widgetName unique name of the widget, so that the same dialog does not stack twice
 
@@ -185,6 +202,8 @@ function SilentRotate:addSecureDialog(
         -- When everything is set, show the dialog box
         dialogFrame:Show()
 
+        -- @todo Add an "fade from white" animation to insist that the dialog box just appeared
+        -- It would be especially useful when there are multiple assignments in a row
     end,
     widgetName.."_function")
 end
