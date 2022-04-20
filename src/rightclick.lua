@@ -119,12 +119,25 @@ function SilentRotate:assignPlayer(author, actor, target, modeName, timestamp)
         -- Share assignment with other raid members
         if author == UnitName("player") then
             self:sendSyncOrder()
+
+            local questionTemplate = L["DIALOG_ASSIGNMENT_QUESTION1"].."\n\n"..L["DIALOG_ASSIGNMENT_QUESTION2"]
+            local questionArgument = target
+            if questionArgument then
+                -- Add class color
+                local _, _classFilename, _ = UnitClass(target)
+                if _classFilename then
+                    local _, _, _, _classColorHex = GetClassColor(_classFilename)
+                    questionArgument = WrapTextInColorCode(target, _classColorHex)
+                end
+            else
+                -- No target
+                -- In practice, this code should not be used because the secure condition will return false
+                questionArgument = L["CONTEXT_NOBODY"]
+            end
+
             self:addSecureDialog("assignmentDialog",
 
-                string.format(
-                    L["DIALOG_ASSIGNMENT_QUESTION1"].."\n\n"..L["DIALOG_ASSIGNMENT_QUESTION2"],
-                    target or L["CONTEXT_NOBODY"]
-                ),
+                string.format(questionTemplate, questionArgument),
 
                 L["DIALOG_ASSIGNMENT_CHANGE_FOCUS"],
                 "focus",
