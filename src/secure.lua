@@ -104,7 +104,7 @@ function SilentRotate:addSecureDialog(
         dialogFrame:Hide()
         dialogFrame:SetPoint("CENTER", UIParent, "CENTER", 0, UIParent:GetHeight()/4)
         dialogFrame:SetWidth(5*spacing + 2*buttonWidth)
-        dialogFrame:SetHeight(128)
+        dialogFrame:SetHeight(120)
         -- Add background
         local dialogBorder = CreateFrame("Frame", nil, dialogFrame, "DialogBorderOpaqueTemplate")
         dialogBorder:SetAllPoints(dialogFrame)
