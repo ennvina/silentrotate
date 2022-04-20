@@ -102,9 +102,9 @@ function SilentRotate:addSecureDialog(
         -- Main frame of the dialog
         local dialogFrame = CreateFrame("Frame", widgetName.."_dialogFrame", UIParent)
         dialogFrame:Hide()
+        dialogFrame:SetFrameStrata("DIALOG")
         dialogFrame:SetPoint("CENTER", UIParent, "CENTER", 0, UIParent:GetHeight()/4)
-        dialogFrame:SetWidth(5*spacing + 2*buttonWidth)
-        dialogFrame:SetHeight(120)
+        dialogFrame:SetSize(444, 120)
         -- Add background
         local dialogBorder = CreateFrame("Frame", nil, dialogFrame, "DialogBorderOpaqueTemplate")
         dialogBorder:SetAllPoints(dialogFrame)
@@ -128,7 +128,7 @@ function SilentRotate:addSecureDialog(
 
         -- First button
         local firstButton = CreateFrame("Button", widgetName.."_firstButton", dialogFrame, "SecureActionButtonTemplate")
-        firstButton:SetPoint("BOTTOMLEFT", spacing*2, spacing)
+        firstButton:SetPoint("BOTTOMRIGHT", dialogFrame, "BOTTOM", -spacing, spacing)
         firstButton:SetSize(buttonWidth, buttonHeight)
         firstButton:SetNormalFontObject(GameFontNormal)
         firstButton:SetHighlightFontObject(GameFontHighlight)
@@ -146,7 +146,7 @@ function SilentRotate:addSecureDialog(
 
         -- Second button
         local secondButton = CreateFrame("Button", widgetName.."_firstButton", dialogFrame)
-        secondButton:SetPoint("BOTTOMLEFT", spacing*2 + buttonWidth + spacing, spacing)
+        secondButton:SetPoint("BOTTOMLEFT", dialogFrame, "BOTTOM", spacing, spacing)
         secondButton:SetSize(buttonWidth, buttonHeight)
         secondButton:SetNormalFontObject(GameFontNormal)
         secondButton:SetHighlightFontObject(GameFontHighlight)
