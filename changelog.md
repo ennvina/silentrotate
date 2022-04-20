@@ -1,6 +1,8 @@
 ## SilentRotate Changelog
 
-#### v0.9.5-beta (2022-xx-yy)
+#### v1.0.0 (2022-xx-yy)
+
+After more tests, the addon is ready to leave its Beta phase
 
 - Players can be assigned to other players
 - Right-click on a player's frame to select its assignment
@@ -8,6 +10,7 @@
 - The tooltip also displays the name of the last target
 - New option for players who want to match their focus to their assignment
 - The addon version should no longer fail to be shared between players
+- Added TOC file to Retail, for testing purposes - use it at your own risk
 
 #### v0.9.3-beta (2022-01-15)
 
