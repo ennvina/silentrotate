@@ -159,6 +159,29 @@ function SilentRotate:addSecureDialog(
         secondButton:SetText(CLOSE)
         dialogFrame.secondButton = secondButton
 
+        -- Add a "fade from white" animation to insist that the dialog box just appeared
+        -- It is especially useful when there are multiple assignments in a row, telling the player:
+        -- "Hey, maybe you didn't see it because the dialog didn't change much, but there's something new to check"
+        local fadeDuration = 0.4
+        local fadeFromWhite = function(frame, inset)
+            local fadeFromWhiteFrame = frame:CreateTexture(nil, "OVERLAY")
+            fadeFromWhiteFrame:SetPoint("BOTTOMLEFT", inset, inset)
+            fadeFromWhiteFrame:SetPoint("TOPRIGHT", -inset, -inset)
+            fadeFromWhiteFrame:SetColorTexture(1,1,1)
+            fadeFromWhiteFrame:SetAlpha(0)
+            local fader = fadeFromWhiteFrame:CreateAnimationGroup()
+            local anim = fader:CreateAnimation("Alpha")
+            anim:SetDuration(fadeDuration)
+            anim:SetFromAlpha(0.8)
+            anim:SetToAlpha(0)
+            return fader
+        end
+        dialogFrame.faders = {
+            fadeFromWhite(dialogFrame, 11),
+            fadeFromWhite(firstButton, 3),
+            fadeFromWhite(secondButton, 3)
+        }
+
         local closeFunc = function()
             dialogFrame:Hide()
             if type(eventName) == 'string' then
@@ -199,11 +222,12 @@ function SilentRotate:addSecureDialog(
             )
         end
 
-        -- When everything is set, show the dialog box
+        -- When everything is set, show the dialog box and start the fade from white
         dialogFrame:Show()
+        for _, fader in ipairs(dialogFrame.faders) do
+            fader:Play()
+        end
 
-        -- @todo Add an "fade from white" animation to insist that the dialog box just appeared
-        -- It would be especially useful when there are multiple assignments in a row
     end,
     widgetName.."_function")
 end
