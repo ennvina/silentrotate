@@ -171,7 +171,6 @@ end
     @param eventName (optional) Name of an event to track
     @param eventFunc (optional) Callback to invoke for the tracked event; if it returns true, the dialog is closed
 ]]
-
 function SilentRotate:addSecureDialog(
     widgetName,
     question,
@@ -187,69 +186,78 @@ function SilentRotate:addSecureDialog(
                     if type(self.secureDialogs[widgetName].closeFunc) == 'function' then
                         self.secureDialogs[widgetName].closeFunc()
                     end
-                    self.secureDialogs[widgetName] = nil -- Useless in theory, because done by closeFunc()
                 end
 
                 return
             end
         end
 
-        local dialogFrame = self:createDialog(widgetName)
-        local centralText = dialogFrame.centralText
-        local firstButton = dialogFrame.firstButton
-        local secondButton = dialogFrame.secondButton
-        centralText:SetText(question)
-        firstButton:SetText(answer)
-        secondButton:SetText(CLOSE)
-        -- Set secure action
-        firstButton:SetAttribute("type", secureType)
-        firstButton:SetAttribute(secureAttr, secureValue)
-
-        local closeFunc = function()
+        local dialogFrame
+        if type(self.secureDialogs) == 'table' and self.secureDialogs[widgetName] then
+            -- Re-use the previous dialog if possible
+            dialogFrame = self.secureDialogs[widgetName]
             dialogFrame:Hide()
-            if type(eventName) == 'string' then
+        else
+            -- Otherwise create it
+            dialogFrame = self:createDialog(widgetName)
+            if type(self.secureDialogs) ~= 'table' then
+                self.secureDialogs = {}
+            end
+            self.secureDialogs[widgetName] = dialogFrame
+
+            local closeFunc = function()
+                dialogFrame:Hide()
+                if type(dialogFrame.unregisterFunc) == 'function' then
+                    dialogFrame.unregisterFunc()
+                end
+            end
+            dialogFrame.closeFunc = closeFunc
+
+            -- Close button simply closes dialog box
+            dialogFrame.secondButton:SetText(CLOSE)
+            dialogFrame.secondButton:SetScript("OnClick", closeFunc)
+        end
+
+        -- If an event must be tracked, un-track previous event, if any, then track the new one
+        if type(dialogFrame.unregisterFunc) == 'function' then
+            -- Un-track previous event, if any
+            dialogFrame.unregisterFunc()
+        end
+        if type(eventName) ~= 'string' and type(eventFunc) ~= 'function' then
+            -- @todo use default event handlers for well-known secure types e.g., "target" or "focus"
+            -- eventName, eventFunc = self:getEventHandlerForSecure(secureType, secureAttr, secureValue)
+        end
+        if type(eventName) == 'string' and type(eventFunc) == 'function' then
+            local unregisterFunc = function()
                 dialogFrame:UnregisterEvent(eventName)
                 dialogFrame:SetScript("OnEvent", nil)
             end
-            if self.secureDialogs[widgetName] == dialogFrame then
-                self.secureDialogs[widgetName] = nil
-            end
-        end
-        dialogFrame.closeFunc = closeFunc
+            dialogFrame.unregisterFunc = unregisterFunc
 
-        -- Store the dialog frame, and destroy any previous dialog with the same name but keep its position
-        if type(self.secureDialogs) == 'table' then
-            if self.secureDialogs[widgetName] then
-                dialogFrame:SetPoint(
-                    "BOTTOMLEFT",
-                    self.secureDialogs[widgetName]:GetLeft(),
-                    self.secureDialogs[widgetName]:GetTop()-self.secureDialogs[widgetName]:GetHeight()
-                )
-                self.secureDialogs[widgetName].closeFunc()
-                self.secureDialogs[widgetName] = nil -- Useless in theory, because done by closeFunc()
-            end
-        else
-            self.secureDialogs = {}
-        end
-        self.secureDialogs[widgetName] = dialogFrame
-
-        -- Close button simply closes dialog box
-        secondButton:SetScript("OnClick", closeFunc)
-
-        -- If an event must be tracked, track it
-        -- @todo use default event handlers for well-known secure types e.g., "target" or "focus"
-        if type(eventName) == 'string' and type(eventFunc) == 'function' then
             dialogFrame:RegisterEvent(eventName)
             dialogFrame:SetScript(
                 "OnEvent",
                 function(self, event, ...)
                     if eventFunc(...) then
-                        dialogFrame:UnregisterEvent(eventName)
-                        closeFunc()
+                        if type(dialogFrame.closeFunc) == 'function' then
+                            dialogFrame.closeFunc()
+                        else
+                            dialogFrame:Hide()
+                            dialogFrame:UnregisterEvent(eventName)
+                            dialogFrame:SetScript("OnEvent", nil)
+                        end
                     end
                 end
             )
         end
+
+        local centralText = dialogFrame.centralText
+        local firstButton = dialogFrame.firstButton
+        centralText:SetText(question)
+        firstButton:SetText(answer)
+        -- Set secure action
+        firstButton:SetAttribute("type", secureType)
+        firstButton:SetAttribute(secureAttr, secureValue) -- @todo use key/value map instead
 
         -- When everything is set, show the dialog box and start the fade from white
         dialogFrame:Show()
