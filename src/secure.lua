@@ -194,9 +194,14 @@ function SilentRotate:addSecureDialog(
         end
         dialogFrame.closeFunc = closeFunc
 
-        -- Store the dialog frame, and destroy any previous dialog with the same name
+        -- Store the dialog frame, and destroy any previous dialog with the same name but keep its position
         if type(self.secureDialogs) == 'table' then
             if self.secureDialogs[widgetName] then
+                dialogFrame:SetPoint(
+                    "BOTTOMLEFT",
+                    self.secureDialogs[widgetName]:GetLeft(),
+                    self.secureDialogs[widgetName]:GetTop()-self.secureDialogs[widgetName]:GetHeight()
+                )
                 self.secureDialogs[widgetName].closeFunc()
                 self.secureDialogs[widgetName] = nil -- Useless in theory, because done by closeFunc()
             end
