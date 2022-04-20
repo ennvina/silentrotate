@@ -141,8 +141,7 @@ function SilentRotate:assignPlayer(author, actor, target, modeName, timestamp)
 
                 L["DIALOG_ASSIGNMENT_CHANGE_FOCUS"],
                 "focus",
-                "unit",
-                target,
+                { unit = target },
 
                 function()
                     -- Condition function, return true to open dialog box

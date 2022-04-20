@@ -163,8 +163,7 @@ end
 
     @param answer Text of the first button; should be as concise as possible
     @param secureType Type of the secure button e.g., "target" or "macro"
-    @param secureAttr Attribute name of the action e.g., "unit" or "macrotext"
-    @param secureValue Value of the secure attribute e.g., "targettarget" or "/dismount"
+    @param secureAttr Key/value map of attribute names and values of the action e.g., { macrotext = "/dismount" }
 
     @param condition (optional) Test function that opens the dialog box or not; by default the dialog is always open
 
@@ -174,7 +173,7 @@ end
 function SilentRotate:addSecureDialog(
     widgetName,
     question,
-    answer, secureType, secureAttr, secureValue,
+    answer, secureType, secureAttr,
     condition,
     eventName, eventFunc
 )
@@ -225,7 +224,7 @@ function SilentRotate:addSecureDialog(
         end
         if type(eventName) ~= 'string' and type(eventFunc) ~= 'function' then
             -- @todo use default event handlers for well-known secure types e.g., "target" or "focus"
-            -- eventName, eventFunc = self:getEventHandlerForSecure(secureType, secureAttr, secureValue)
+            -- eventName, eventFunc = self:getEventHandlerForSecure(secureType, secureAttr)
         end
         if type(eventName) == 'string' and type(eventFunc) == 'function' then
             local unregisterFunc = function()
@@ -257,7 +256,9 @@ function SilentRotate:addSecureDialog(
         firstButton:SetText(answer)
         -- Set secure action
         firstButton:SetAttribute("type", secureType)
-        firstButton:SetAttribute(secureAttr, secureValue) -- @todo use key/value map instead
+        for secureKey, secureValue in pairs(secureAttr) do
+            firstButton:SetAttribute(secureKey, secureValue)
+        end
 
         -- When everything is set, show the dialog box and start the fade from white
         dialogFrame:Show()
