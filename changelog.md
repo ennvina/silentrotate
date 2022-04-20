@@ -6,6 +6,7 @@
 - Right-click on a player's frame to select its assignment
 - The tooltip indicates the assignment
 - The tooltip also displays the name of the last target
+- New option for players who want to match their focus to their assignment
 - The addon version should no longer fail to be shared between players
 
 #### v0.9.3-beta (2022-01-15)
