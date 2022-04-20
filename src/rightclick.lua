@@ -119,7 +119,10 @@ function SilentRotate:assignPlayer(author, actor, target, modeName, timestamp)
         -- Share assignment with other raid members
         if author == UnitName("player") then
             self:sendSyncOrder()
+        end
 
+        -- Suggest the player to align focus to assignment
+        if actor == UnitName("player") then
             local questionTemplate = L["DIALOG_ASSIGNMENT_QUESTION1"].."\n\n"..L["DIALOG_ASSIGNMENT_QUESTION2"]
             local questionArgument = target
             if questionArgument then
