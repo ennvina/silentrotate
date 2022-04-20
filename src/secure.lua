@@ -37,6 +37,103 @@ function SilentRotate:callAllSecureFunctions()
     end
 end
 
+
+--[[
+    Create generic dialog box with two buttons
+    The first button is a secure action button
+    This means creation must be in secured env
+
+    @return dialog with the sub-objects:
+    .centralText FontString in the center
+    .firstButton Button compatible with secure
+    .secondButton Button (nothing special)
+    .faders list of fade-from-white animations
+]]
+function SilentRotate:createDialog(widgetName)
+    local spacing = 24
+    local buttonWidth = 128
+    local buttonHeight = 21
+
+    -- Main frame of the dialog
+    local dialogFrame = CreateFrame("Frame", widgetName.."_dialogFrame", UIParent)
+    dialogFrame:Hide()
+    dialogFrame:SetFrameStrata("DIALOG")
+    dialogFrame:SetPoint("CENTER", UIParent, "CENTER", 0, UIParent:GetHeight()/4)
+    dialogFrame:SetSize(444, 120)
+    -- Add background
+    local dialogBorder = CreateFrame("Frame", nil, dialogFrame, "DialogBorderOpaqueTemplate")
+    dialogBorder:SetAllPoints(dialogFrame)
+    dialogFrame.dialogBorder = dialogBorder
+    dialogFrame:SetFixedFrameStrata(true)
+    dialogFrame:SetFixedFrameLevel(true)
+    -- Make the dialog movable on left click, clamped to screen
+    dialogFrame:EnableMouse(true)
+    dialogFrame:SetMovable(true)
+    dialogFrame:SetClampedToScreen(true)
+    dialogFrame:RegisterForDrag("LeftButton")
+    dialogFrame:SetScript("OnDragStart", function() dialogFrame:StartMoving() end)
+    dialogFrame:SetScript("OnDragStop",  function() dialogFrame:StopMovingOrSizing() end)
+
+    -- Central text
+    local centralText = dialogFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+    centralText:SetSize(290, 0)
+    centralText:SetPoint("TOP", 0, -spacing)
+    dialogFrame.centralText = centralText
+
+    -- First button
+    local firstButton = CreateFrame("Button", widgetName.."_firstButton", dialogFrame, "SecureActionButtonTemplate")
+    firstButton:SetPoint("BOTTOMRIGHT", dialogFrame, "BOTTOM", -spacing, spacing)
+    firstButton:SetSize(buttonWidth, buttonHeight)
+    firstButton:SetNormalFontObject(GameFontNormal)
+    firstButton:SetHighlightFontObject(GameFontHighlight)
+    firstButton:SetNormalTexture(130763) -- "Interface\\Buttons\\UI-DialogBox-Button-Up"
+    firstButton:GetNormalTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
+    firstButton:SetPushedTexture(130761) -- "Interface\\Buttons\\UI-DialogBox-Button-Down"
+    firstButton:GetPushedTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
+    firstButton:SetHighlightTexture(130762) -- "Interface\\Buttons\\UI-DialogBox-Button-Highlight"
+    firstButton:GetHighlightTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
+    dialogFrame.firstButton = firstButton
+
+    -- Second button
+    local secondButton = CreateFrame("Button", widgetName.."_firstButton", dialogFrame)
+    secondButton:SetPoint("BOTTOMLEFT", dialogFrame, "BOTTOM", spacing, spacing)
+    secondButton:SetSize(buttonWidth, buttonHeight)
+    secondButton:SetNormalFontObject(GameFontNormal)
+    secondButton:SetHighlightFontObject(GameFontHighlight)
+    secondButton:SetNormalTexture(130763) -- "Interface\\Buttons\\UI-DialogBox-Button-Up"
+    secondButton:GetNormalTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
+    secondButton:SetPushedTexture(130761) -- "Interface\\Buttons\\UI-DialogBox-Button-Down"
+    secondButton:GetPushedTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
+    secondButton:SetHighlightTexture(130762) -- "Interface\\Buttons\\UI-DialogBox-Button-Highlight"
+    secondButton:GetHighlightTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
+    dialogFrame.secondButton = secondButton
+
+    -- Add a "fade from white" animation to insist that the dialog box just appeared
+    -- It is especially useful when there are multiple assignments in a row, telling the player:
+    -- "Hey, maybe you didn't see it because the dialog didn't change much, but there's something new to check"
+    local fadeDuration = 0.4
+    local fadeFromWhite = function(frame, inset)
+        local fadeFromWhiteFrame = frame:CreateTexture(nil, "OVERLAY")
+        fadeFromWhiteFrame:SetPoint("BOTTOMLEFT", inset, inset)
+        fadeFromWhiteFrame:SetPoint("TOPRIGHT", -inset, -inset)
+        fadeFromWhiteFrame:SetColorTexture(1,1,1)
+        fadeFromWhiteFrame:SetAlpha(0)
+        local fader = fadeFromWhiteFrame:CreateAnimationGroup()
+        local anim = fader:CreateAnimation("Alpha")
+        anim:SetDuration(fadeDuration)
+        anim:SetFromAlpha(0.8)
+        anim:SetToAlpha(0)
+        return fader
+    end
+    dialogFrame.faders = {
+        fadeFromWhite(dialogFrame, 11),
+        fadeFromWhite(firstButton, 3),
+        fadeFromWhite(secondButton, 3)
+    }
+
+    return dialogFrame
+end
+
 --[[
     Add a secure function that creates a dialog box with one "question" and two buttons
 
@@ -87,7 +184,9 @@ function SilentRotate:addSecureDialog(
             if not condition() then
                 -- Hide the previous dialog box with the same name, if any
                 if type(self.secureDialogs) == 'table' and self.secureDialogs[widgetName] then
-                    self.secureDialogs[widgetName].closeFunc()
+                    if type(self.secureDialogs[widgetName].closeFunc) == 'function' then
+                        self.secureDialogs[widgetName].closeFunc()
+                    end
                     self.secureDialogs[widgetName] = nil -- Useless in theory, because done by closeFunc()
                 end
 
@@ -95,92 +194,16 @@ function SilentRotate:addSecureDialog(
             end
         end
 
-        local spacing = 24
-        local buttonWidth = 128
-        local buttonHeight = 21
-
-        -- Main frame of the dialog
-        local dialogFrame = CreateFrame("Frame", widgetName.."_dialogFrame", UIParent)
-        dialogFrame:Hide()
-        dialogFrame:SetFrameStrata("DIALOG")
-        dialogFrame:SetPoint("CENTER", UIParent, "CENTER", 0, UIParent:GetHeight()/4)
-        dialogFrame:SetSize(444, 120)
-        -- Add background
-        local dialogBorder = CreateFrame("Frame", nil, dialogFrame, "DialogBorderOpaqueTemplate")
-        dialogBorder:SetAllPoints(dialogFrame)
-        dialogFrame.dialogBorder = dialogBorder
-        dialogFrame:SetFixedFrameStrata(true)
-        dialogFrame:SetFixedFrameLevel(true)
-        -- Make the dialog movable on left click, clamped to screen
-        dialogFrame:EnableMouse(true)
-        dialogFrame:SetMovable(true)
-        dialogFrame:SetClampedToScreen(true)
-        dialogFrame:RegisterForDrag("LeftButton")
-        dialogFrame:SetScript("OnDragStart", function() dialogFrame:StartMoving() end)
-        dialogFrame:SetScript("OnDragStop",  function() dialogFrame:StopMovingOrSizing() end)
-
-        -- Central text
-        local centralText = dialogFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        centralText:SetSize(290, 0)
-        centralText:SetPoint("TOP", 0, -spacing)
+        local dialogFrame = self:createDialog(widgetName)
+        local centralText = dialogFrame.centralText
+        local firstButton = dialogFrame.firstButton
+        local secondButton = dialogFrame.secondButton
         centralText:SetText(question)
-        dialogFrame.centralText = centralText
-
-        -- First button
-        local firstButton = CreateFrame("Button", widgetName.."_firstButton", dialogFrame, "SecureActionButtonTemplate")
-        firstButton:SetPoint("BOTTOMRIGHT", dialogFrame, "BOTTOM", -spacing, spacing)
-        firstButton:SetSize(buttonWidth, buttonHeight)
-        firstButton:SetNormalFontObject(GameFontNormal)
-        firstButton:SetHighlightFontObject(GameFontHighlight)
-        firstButton:SetNormalTexture(130763) -- "Interface\\Buttons\\UI-DialogBox-Button-Up"
-        firstButton:GetNormalTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
-        firstButton:SetPushedTexture(130761) -- "Interface\\Buttons\\UI-DialogBox-Button-Down"
-        firstButton:GetPushedTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
-        firstButton:SetHighlightTexture(130762) -- "Interface\\Buttons\\UI-DialogBox-Button-Highlight"
-        firstButton:GetHighlightTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
         firstButton:SetText(answer)
+        secondButton:SetText(CLOSE)
         -- Set secure action
         firstButton:SetAttribute("type", secureType)
         firstButton:SetAttribute(secureAttr, secureValue)
-        dialogFrame.firstButton = firstButton
-
-        -- Second button
-        local secondButton = CreateFrame("Button", widgetName.."_firstButton", dialogFrame)
-        secondButton:SetPoint("BOTTOMLEFT", dialogFrame, "BOTTOM", spacing, spacing)
-        secondButton:SetSize(buttonWidth, buttonHeight)
-        secondButton:SetNormalFontObject(GameFontNormal)
-        secondButton:SetHighlightFontObject(GameFontHighlight)
-        secondButton:SetNormalTexture(130763) -- "Interface\\Buttons\\UI-DialogBox-Button-Up"
-        secondButton:GetNormalTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
-        secondButton:SetPushedTexture(130761) -- "Interface\\Buttons\\UI-DialogBox-Button-Down"
-        secondButton:GetPushedTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
-        secondButton:SetHighlightTexture(130762) -- "Interface\\Buttons\\UI-DialogBox-Button-Highlight"
-        secondButton:GetHighlightTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
-        secondButton:SetText(CLOSE)
-        dialogFrame.secondButton = secondButton
-
-        -- Add a "fade from white" animation to insist that the dialog box just appeared
-        -- It is especially useful when there are multiple assignments in a row, telling the player:
-        -- "Hey, maybe you didn't see it because the dialog didn't change much, but there's something new to check"
-        local fadeDuration = 0.4
-        local fadeFromWhite = function(frame, inset)
-            local fadeFromWhiteFrame = frame:CreateTexture(nil, "OVERLAY")
-            fadeFromWhiteFrame:SetPoint("BOTTOMLEFT", inset, inset)
-            fadeFromWhiteFrame:SetPoint("TOPRIGHT", -inset, -inset)
-            fadeFromWhiteFrame:SetColorTexture(1,1,1)
-            fadeFromWhiteFrame:SetAlpha(0)
-            local fader = fadeFromWhiteFrame:CreateAnimationGroup()
-            local anim = fader:CreateAnimation("Alpha")
-            anim:SetDuration(fadeDuration)
-            anim:SetFromAlpha(0.8)
-            anim:SetToAlpha(0)
-            return fader
-        end
-        dialogFrame.faders = {
-            fadeFromWhite(dialogFrame, 11),
-            fadeFromWhite(firstButton, 3),
-            fadeFromWhite(secondButton, 3)
-        }
 
         local closeFunc = function()
             dialogFrame:Hide()
@@ -214,6 +237,7 @@ function SilentRotate:addSecureDialog(
         secondButton:SetScript("OnClick", closeFunc)
 
         -- If an event must be tracked, track it
+        -- @todo use default event handlers for well-known secure types e.g., "target" or "focus"
         if type(eventName) == 'string' and type(eventFunc) == 'function' then
             dialogFrame:RegisterEvent(eventName)
             dialogFrame:SetScript(
