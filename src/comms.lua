@@ -20,10 +20,22 @@ function SilentRotate.OnCommReceived(prefix, data, channel, sender)
         local success, message = AceSerializer:Deserialize(data)
 
         if (success) then
+            if message.type == SilentRotate.constants.commsTypes.syncOrder
+            or message.type == SilentRotate.constants.commsTypes.syncRequest then
+                -- Get addon version from messages who have this information
+                SilentRotate:updatePlayerAddonVersion(sender, message.addonVersion)
+            end
+
             if (message.mode ~= SilentRotate.db.profile.currentMode) then
                 -- Received a message from another mode
                 -- This may also happen if the message comes from an old version of the addon but it causes many problems so it's best to ignore the message
                 -- In a future version, all modes will be working simultaneously, but that will be in a distant future (probably not before v1.0)
+
+                -- Special case for assignments: accept assignments from other modes because assignments can be set within another mode
+                if message.type == SilentRotate.constants.commsTypes.syncOrder and message.assignment then
+                    SilentRotate:applyAssignmentConfiguration(message.assignment, sender, message.mode)
+                end
+
                 return
             end
 
@@ -86,7 +98,7 @@ function SilentRotate:sendSyncTranq(hunter, fail, timestamp, targetGUID)
 end
 
 -- Broadcast current rotation configuration
-function SilentRotate:sendSyncOrder(whisper, name)
+function SilentRotate:sendSyncOrder(whisperName)
 
     SilentRotate.syncVersion = SilentRotate.syncVersion + 1
     SilentRotate.syncLastSender = UnitName("player")
@@ -96,13 +108,14 @@ function SilentRotate:sendSyncOrder(whisper, name)
         ['mode'] = SilentRotate.db.profile.currentMode,
         ['version'] = SilentRotate.syncVersion,
         ['rotation'] = SilentRotate:getSimpleRotationTables(),
+        ['assignment'] = SilentRotate:getAssignmentTable(SilentRotate.db.profile.currentMode),
         ['addonVersion'] = SilentRotate.version,
     }
 
-    if (whisper) then
-        SilentRotate:sendWhisperAddonMessage(message, name)
+    if whisperName and whisperName ~= '' then
+        SilentRotate:sendWhisperAddonMessage(message, whisperName)
     else
-        SilentRotate:sendRaidAddonMessage(message, name)
+        SilentRotate:sendRaidAddonMessage(message)
     end
 end
 
@@ -142,7 +155,6 @@ end
 function SilentRotate:receiveSyncOrder(prefix, message, channel, sender)
 
     SilentRotate:updateRaidStatus()
-    SilentRotate:updatePlayerAddonVersion(sender, message.addonVersion)
 
     if (SilentRotate:isVersionEligible(message.version, sender)) then
         SilentRotate.syncVersion = (message.version)
@@ -150,11 +162,11 @@ function SilentRotate:receiveSyncOrder(prefix, message, channel, sender)
 
         SilentRotate:printPrefixedMessage('Received new rotation configuration from ' .. sender)
         SilentRotate:applyRotationConfiguration(message.rotation)
+        SilentRotate:applyAssignmentConfiguration(message.assignment, sender, message.mode)
     end
 end
 
 -- Request to send current roration configuration received
 function SilentRotate:receiveSyncRequest(prefix, message, channel, sender)
-    SilentRotate:updatePlayerAddonVersion(sender, message.addonVersion)
-    SilentRotate:sendSyncOrder(true, sender)
+    SilentRotate:sendSyncOrder(sender)
 end

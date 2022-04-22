@@ -1,8 +1,8 @@
 ## Interface: 11401
-## Title: SilentRotate |cff88aaff0.9.4-beta|r
+## Title: SilentRotate |cff88aaff1.0.0|r
 ## Notes: Track spell rotation in raid
 ## Author: Vinny
-## Version: 0.9.4-beta
+## Version: 1.0.0
 ## SavedVariables: SilentRotateDb
 ## OptionalDeps: Ace3
 
@@ -38,3 +38,5 @@ src\utils.lua
 src\modes.lua
 src\history.lua
 src\announce.lua
+src\rightclick.lua
+src\secure.lua

@@ -147,6 +147,8 @@ L["SCORPID_MODE_DETAILED_DESC"] = "This mode tracks when hunters use the Scorpid
 L["MODE_BUTTON_DESC"] = "Show the button for activating the mode '%s'"
 L["MODE_LABEL"] = "Button Text"
 L["MODE_LABEL_DESC"] = "Text that appears in the button for activating the mode '%s'"
+L["MODE_TRACK_FOCUS"] = "Match Focus with Assignement"
+L["MODE_TRACK_FOCUS_DESC"] = "Detect when your assignment changes and suggest to match the focus with the new assignment"
 
     --- Names
 L["SETTING_NAMES"] = "Names"
@@ -211,6 +213,8 @@ L["HISTORY_GROUNDING_CANCEL"] = "Totem of %s has been cancelled early because of
 L["HISTORY_GROUNDING_EXPIRE"] = "Totem of %s expires."
 L["HISTORY_GROUNDING_ABSORB"] = "Totem of %s absorbs %s from %s."
 L["HISTORY_GROUNDING_ABSORB_NOSPELL"] = "Totem of %s absorbs attack from %s."
+L["HISTORY_ASSIGN_PLAYER"] = "%s assigned %s to focus on %s."
+L["HISTORY_ASSIGN_NOBODY"] = "%s un-assigned %s."
 
     --- Icons
 L["DISPLAY_BLIND_ICON"] = "Show an icon for players without SilentRotate"
@@ -226,6 +230,20 @@ L["TOOLTIP_EFFECT_REMAINING"] = "Effect remaining: %s"
 L["TOOLTIP_COOLDOWN_REMAINING"] = "Cooldown remaining: %s"
 L["TOOLTIP_DURATION_SECONDS"] = "%s sec"
 L["TOOLTIP_DURATION_MINUTES"] = "%s min"
+L["TOOLTIP_ASSIGNED_TO"] = "Assigned to: %s"
+L["TOOLTIP_EFFECT_CURRENT"] = "Currently on: %s"
+L["TOOLTIP_EFFECT_PAST"] = "Last used on: %s"
+
+    --- Context Menu
+L["CONTEXT_ASSIGN_TITLE"] = "Assign %s to:"
+L["CONTEXT_NOBODY"] = "Nobody"
+L["CONTEXT_CANCEL"] = "Cancel"
+L["CONTEXT_OTHERS"] = "Other players"
+
+    --- Dialog Box
+L["DIALOG_ASSIGNMENT_QUESTION1"] = "Your focus does not match your assignment."
+L["DIALOG_ASSIGNMENT_QUESTION2"] = "Do you want to set the focus to %s?"
+L["DIALOG_ASSIGNMENT_CHANGE_FOCUS"] = "Change Focus"
 
     --- Notifications
 L["UPDATE_AVAILABLE"] = "A new version is available, please update to get the latest features."

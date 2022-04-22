@@ -5,6 +5,7 @@ SilentRotate.colors = {
 
     ['lightRed']    = CreateColor(1.0, 0.4, 0.4),
     ['red']         = CreateColor(0.7, 0.3, 0.3),
+    ['flashyRed']   = CreateColor(1, 0, 0),
 
     ['green']       = CreateColor(0.67, 0.83, 0.45),
     ['darkGreen']   = CreateColor(0.1, 0.4, 0.1),

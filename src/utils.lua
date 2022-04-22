@@ -71,6 +71,23 @@ function SilentRotate:getHunterTarget(hunter)
     return targetName, buffMode
 end
 
+-- Get the current assignment of the hunter and when it was assigned
+-- Returns nil if no assignment is done
+-- May return the name of a player not in the raid group if the assignment left the raid
+function SilentRotate:getHunterAssignment(hunter)
+    local mode = SilentRotate:getMode() -- @todo get mode from hunter
+
+    local assignment, timestamp
+    if mode.assignment then
+        assignment = mode.assignment[hunter.name]
+    end
+    if mode.assignedAt then
+        timestamp = mode.assignedAt[hunter.name]
+    end
+
+    return assignment, timestamp
+end
+
 -- Checks if a hunter is in a battleground
 function SilentRotate:isPlayerInBattleground()
     return UnitInBattleground('player') ~= nil

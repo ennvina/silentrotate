@@ -136,6 +136,7 @@ end
 -- Player left combat
 function SilentRotate:PLAYER_REGEN_ENABLED()
     self:updateRaidStatus()
+    self:callAllSecureFunctions()
 end
 
 -- Player changed its main target

@@ -14,7 +14,13 @@ function SilentRotate:getMode(modeName)
     end
 
     -- return the mode object, or TranqShot as the default mode if no mode is set
-    return SilentRotate.modes[modeName or SilentRotate.modes.tranqShot.modeName]
+    if modeName then
+        local mode = SilentRotate.modes[modeName]
+        if mode then -- mode may be nil when downgrading the addon version
+            return mode
+        end
+    end
+    return SilentRotate.modes[SilentRotate.modes.tranqShot.modeName]
 end
 
 -- Activate the specific mode
@@ -33,6 +39,7 @@ function SilentRotate:activateMode(modeName, mainFrame)
         SilentRotate.db.profile.currentMode = modeName
         newFrame.texture:SetColorTexture(SilentRotate.colors.blue:GetRGB())
         SilentRotate:updateRaidStatus()
+        SilentRotate:enableRightClick(SilentRotate.modes[modeName] and SilentRotate.modes[modeName].assignable)
         local AceConfigDialog = LibStub("AceConfigDialog-3.0")
         AceConfigDialog:ConfigTableChanged("", Addon)
     end
@@ -198,6 +205,7 @@ SilentRotate.modes.tranqShot = {
     -- groupChangeFunc = nil,
     announceArg = 'destName',
     -- tooltip = nil,
+    -- assignable = nil,
     -- metadata = nil
 }
 
@@ -229,6 +237,7 @@ SilentRotate.modes.loatheb = {
     -- groupChangeFunc = nil,
     announceArg = 'sourceName',
     -- tooltip = nil,
+    -- assignable = nil,
     -- metadata = nil
 }
 
@@ -253,6 +262,7 @@ SilentRotate.modes.distract = {
     -- groupChangeFunc = nil,
     announceArg = 'destName',
     -- tooltip = nil,
+    -- assignable = nil,
     -- metadata = nil
 }
 
@@ -277,6 +287,7 @@ SilentRotate.modes.fearWard = {
     -- groupChangeFunc = nil,
     announceArg = 'destName',
     -- tooltip = nil,
+    assignable = {'TANK', 'HEAL'},
     -- metadata = nil
 }
 
@@ -304,6 +315,7 @@ SilentRotate.modes.aoeTaunt = {
     -- groupChangeFunc = nil,
     announceArg = 'destName',
     -- tooltip = nil,
+    -- assignable = nil,
     -- metadata = nil
 }
 
@@ -461,6 +473,7 @@ SilentRotate.modes.grounding = {
         end
         return nil
     end,
+    -- assignable = nil,
     metadata = {
         groundingTotemEffectName = GetSpellInfo(8178), -- The buff is the name from spellId+1, not from spellId
         cancellers = {
@@ -498,6 +511,7 @@ SilentRotate.modes.brez = {
     -- groupChangeFunc = nil,
     announceArg = 'destName',
     -- tooltip = nil,
+    -- assignable = nil,
     -- metadata = nil
 }
 
@@ -521,6 +535,7 @@ SilentRotate.modes.innerv = {
     -- groupChangeFunc = nil,
     announceArg = 'destName',
     -- tooltip = nil,
+    assignable = 'MANA',
     -- metadata = nil
 }
 
@@ -544,6 +559,7 @@ SilentRotate.modes.bop = {
     -- groupChangeFunc = nil,
     announceArg = 'destName',
     -- tooltip = nil,
+    -- assignable = nil,
     -- metadata = nil
 }
 
@@ -567,6 +583,7 @@ SilentRotate.modes.bof = {
     -- groupChangeFunc = nil,
     announceArg = 'destName',
     -- tooltip = nil,
+    -- assignable = nil,
     -- metadata = nil
 }
 
@@ -590,6 +607,7 @@ SilentRotate.modes.soulstone = {
     -- groupChangeFunc = nil,
     announceArg = 'destName',
     -- tooltip = nil,
+    assignable = { 'TANK', 'REZ' },
     -- metadata = nil
 }
 
@@ -617,6 +635,7 @@ SilentRotate.modes.misdi = {
     -- groupChangeFunc = nil,
     announceArg = 'destName',
     -- tooltip = nil,
+    assignable = 'TANK',
     -- metadata = nil
 }
 
@@ -644,6 +663,7 @@ SilentRotate.modes.bloodlust = {
     -- groupChangeFunc = nil,
     announceArg = 'sourceGroup',
     -- tooltip = nil,
+    -- assignable = nil,
     -- metadata = nil
 }
 
@@ -667,6 +687,7 @@ SilentRotate.modes.soulwell = {
     -- groupChangeFunc = nil,
     announceArg = 'destName',
     -- tooltip = nil,
+    -- assignable = nil,
     -- metadata = nil
 }
 

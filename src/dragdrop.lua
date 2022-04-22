@@ -9,7 +9,8 @@ end
 
 -- Enable or disable drag & drop for the hunter frame
 function SilentRotate:enableHunterFrameDragging(hunter, movable)
-    hunter.frame:EnableMouse(movable)
+    hunter.movable = movable
+    hunter.frame:EnableMouse(hunter.movable or hunter.assignable)
     hunter.frame:SetMovable(movable)
 end
 
@@ -56,7 +57,7 @@ function SilentRotate:configureHunterFrameDrag(hunter, mainFrame)
 
             local group, position = SilentRotate:getDropPosition(hunter.frame, mainFrame)
             SilentRotate:handleDrop(hunter, group, position)
-            SilentRotate:sendSyncOrder(false)
+            SilentRotate:sendSyncOrder()
         end
     )
 end
