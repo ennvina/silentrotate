@@ -37,16 +37,40 @@ function SilentRotate:callAllSecureFunctions()
     end
 end
 
+--[[
+    Create a generic clickable button with usual font and texture
+    If isSecure is true, the button inherits "SecureActionButtonTemplate"
+    Secure action buttons must be created in a secure environment e.g., behind a addSecureFunction call
+
+    The button has no initial position, no initial size and no initial text
+]]
+function SilentRotate:createDialogButton(widgetName, parent, isSecure)
+    local button = CreateFrame("Button", widgetName, parent, isSecure and "SecureActionButtonTemplate" or nil)
+
+    button:SetNormalFontObject(GameFontNormal)
+    button:SetHighlightFontObject(GameFontHighlight)
+    button:SetNormalTexture(130763) -- "Interface\\Buttons\\UI-DialogBox-Button-Up"
+    button:GetNormalTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
+    button:SetPushedTexture(130761) -- "Interface\\Buttons\\UI-DialogBox-Button-Down"
+    button:GetPushedTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
+    button:SetHighlightTexture(130762) -- "Interface\\Buttons\\UI-DialogBox-Button-Highlight"
+    button:GetHighlightTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
+
+    return button
+end
 
 --[[
     Create generic dialog box with two buttons
     The first button is a secure action button
-    This means creation must be in secured env
+    This means creation must be in secure env
 
-    @return dialog with the sub-objects:
+    The dialog is hidden by default
+    The dialog is positioned above screen center, exactly 3/4 height
+
+    @return Frame object with sub-objects:
     .centralText FontString in the center
     .firstButton Button compatible with secure
-    .secondButton Button (nothing special)
+    .secondButton Button, nothing special
     .faders list of fade-from-white animations
 ]]
 function SilentRotate:createDialog(widgetName)
@@ -58,10 +82,10 @@ function SilentRotate:createDialog(widgetName)
     local dialogFrame = CreateFrame("Frame", widgetName.."_dialogFrame", UIParent)
     dialogFrame:Hide()
     dialogFrame:SetFrameStrata("DIALOG")
-    dialogFrame:SetPoint("CENTER", UIParent, "CENTER", 0, UIParent:GetHeight()/4)
+    dialogFrame:SetPoint("CENTER", UIParent, "CENTER", 0, UIParent:GetHeight()/4) -- Slightly above screen center
     dialogFrame:SetSize(444, 120)
     -- Add background
-    local dialogBorder = CreateFrame("Frame", nil, dialogFrame, "DialogBorderOpaqueTemplate")
+    local dialogBorder = CreateFrame("Frame", widgetName.."_border", dialogFrame, "DialogBorderOpaqueTemplate")
     dialogBorder:SetAllPoints(dialogFrame)
     dialogFrame.dialogBorder = dialogBorder
     dialogFrame:SetFixedFrameStrata(true)
@@ -81,36 +105,20 @@ function SilentRotate:createDialog(widgetName)
     dialogFrame.centralText = centralText
 
     -- First button
-    local firstButton = CreateFrame("Button", widgetName.."_firstButton", dialogFrame, "SecureActionButtonTemplate")
+    local firstButton = self:createDialogButton(widgetName.."_firstButton", dialogFrame, true --[[ isSecure ]])
     firstButton:SetPoint("BOTTOMRIGHT", dialogFrame, "BOTTOM", -spacing, spacing)
     firstButton:SetSize(buttonWidth, buttonHeight)
-    firstButton:SetNormalFontObject(GameFontNormal)
-    firstButton:SetHighlightFontObject(GameFontHighlight)
-    firstButton:SetNormalTexture(130763) -- "Interface\\Buttons\\UI-DialogBox-Button-Up"
-    firstButton:GetNormalTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
-    firstButton:SetPushedTexture(130761) -- "Interface\\Buttons\\UI-DialogBox-Button-Down"
-    firstButton:GetPushedTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
-    firstButton:SetHighlightTexture(130762) -- "Interface\\Buttons\\UI-DialogBox-Button-Highlight"
-    firstButton:GetHighlightTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
     dialogFrame.firstButton = firstButton
 
     -- Second button
-    local secondButton = CreateFrame("Button", widgetName.."_firstButton", dialogFrame)
+    local secondButton = self:createDialogButton(widgetName.."_secondButton", dialogFrame)
     secondButton:SetPoint("BOTTOMLEFT", dialogFrame, "BOTTOM", spacing, spacing)
     secondButton:SetSize(buttonWidth, buttonHeight)
-    secondButton:SetNormalFontObject(GameFontNormal)
-    secondButton:SetHighlightFontObject(GameFontHighlight)
-    secondButton:SetNormalTexture(130763) -- "Interface\\Buttons\\UI-DialogBox-Button-Up"
-    secondButton:GetNormalTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
-    secondButton:SetPushedTexture(130761) -- "Interface\\Buttons\\UI-DialogBox-Button-Down"
-    secondButton:GetPushedTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
-    secondButton:SetHighlightTexture(130762) -- "Interface\\Buttons\\UI-DialogBox-Button-Highlight"
-    secondButton:GetHighlightTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
     dialogFrame.secondButton = secondButton
 
     -- Add a "fade from white" animation to insist that the dialog box just appeared
-    -- It is especially useful when there are multiple assignments in a row, telling the player:
-    -- "Hey, maybe you didn't see it because the dialog didn't change much, but there's something new to check"
+    -- It is useful when the dialog box is re-used with a different text/button, telling the player that:
+    -- "Hey, maybe you didn't notice because the dialog didn't change much, but there's something new to check"
     local fadeDuration = 0.4
     local fadeFromWhite = function(frame, inset)
         local fadeFromWhiteFrame = frame:CreateTexture(nil, "OVERLAY")
@@ -140,16 +148,16 @@ end
     The question is displayed in the central part of the dialog box
     The question usually ends with a question mark (?) but any text that invites the player to click is okay
 
-    The first button answer and secure params of the secure action button
-    A list of types and attribute names can be found here:
+    The first button uses answer and secure params for the secure action button
+    A list of supported secure types and attribute names can be found here:
     https://wowpedia.org/wiki/SecureActionButtonTemplate#Action_types
 
     The second button is always "Close"
 
     Usually, the dialog box should be closed after clicking the first button
-    The trivial solution would be to set a "onClick" script to close it
+    The trivial solution would be to set a "OnClick" script to close it
     But it's not really possible with secure action buttons
-    More exactly, if we set this script we override the secure action itself
+    More exactly, if we set the OnClick script we override the secure action itself
 
     One way to circumvent this limitation is to track an event with a callback
     The callback inspects the current state of the game, and returns true when the secure action has finished
@@ -157,7 +165,12 @@ end
     - the tracked event name could be "PLAYER_TARGET_CHANGED"
     - and the event callback could be function() return UnitName("target") == myNewFavoriteTarget end
 
-    @param widgetName unique name of the widget, so that the same dialog does not stack twice
+    Another advantage to this approach, is that the dialog closes if the player performs the action by other means
+    This way, players are not annoyed by a "please do X to put you in state Y" if state Y is already achieved
+    For example, the dialog may suggest to target a tank, but the player targets the tank with a macro instead of the dialog
+    By registering to "PLAYER_TARGET_CHANGED", the dialog box will close itself as soon as the tank is targeted
+
+    @param widgetName Unique name of the widget, so that the dialog may be re-used, or at least does not stack twice
 
     @param question Text which invites the user to click the first button
 
