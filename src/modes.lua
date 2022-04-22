@@ -29,12 +29,12 @@ function SilentRotate:activateMode(modeName, mainFrame)
     local paramMode = self:getMode(modeName)
     if currentMode.modeName == paramMode.modeName then return end
 
-    oldFrame = mainFrame.modeFrames[currentMode.modeName]
+    local oldFrame = mainFrame.modeFrames[currentMode.modeName]
     if oldFrame then
         oldFrame.texture:SetColorTexture(SilentRotate.colors.darkBlue:GetRGB())
     end
 
-    newFrame = mainFrame.modeFrames[modeName]
+    local newFrame = mainFrame.modeFrames[modeName]
     if newFrame then
         SilentRotate.db.profile.currentMode = modeName
         newFrame.texture:SetColorTexture(SilentRotate.colors.blue:GetRGB())
@@ -689,6 +689,52 @@ SilentRotate.modes.soulwell = {
     -- tooltip = nil,
     -- assignable = nil,
     -- metadata = nil
+}
+
+SilentRotate.modes.scorpid = {
+    default = false,
+    raidOnly = true,
+    -- color = nil,
+    wanted = 'HUNTER',
+    cooldown = 20, -- Cooldown is not really 20 secs, but it helps visualizing the debuff duration
+    effectDuration = 20,
+    canFail = true,
+    alertWhenFail = true,
+    spell = GetSpellInfo(3043), -- Scorpid Sting
+    -- auraTest = nil,
+    customCombatlogFunc = function(self, event, sourceGUID, sourceName, sourceFlags, destGUID, destName, spellId, spellName)
+        if SilentRotate:isBossInList(destGUID, SilentRotate.constants.scorpidableBosses) then
+            if event == "SPELL_CAST_SUCCESS" and spellName == self.spell then
+                -- Schedule an alert for myself if I'm the next one in list
+                if SilentRotate:isPlayerNextTranq() then
+                    if self.metadata.timerAlertSoon then
+                        self.metadata.timerAlertSoon:Cancel()
+                    end
+                    self.metadata.timerAlertSoon = C_Timer.NewTimer(self.effectDuration-2, function()
+                        SilentRotate:alertReactNow(self.modeName)
+                    end)
+                end
+            elseif event == "UNIT_DIED" then
+                SilentRotate:resetRotation()
+                -- Cancel the scheduled alert, if any, when the boss dies
+                if self.metadata.timerAlertSoon then
+                    self.metadata.timerAlertSoon:Cancel()
+                    self.metadata.timerAlertSoon = nil
+                end
+            end
+        end
+    end,
+    targetGUID = function(self, sourceGUID, destGUID) return destGUID end,
+    -- buffName = nil,
+    -- buffCanReturn = nil,
+    -- customTargetName = nil,
+    -- customHistoryFunc = nil,
+    -- groupChangeFunc = nil,
+    announceArg = 'destName',
+    -- tooltip = nil,
+    metadata = {
+        timerAlertSoon = nil,
+    }
 }
 
 end

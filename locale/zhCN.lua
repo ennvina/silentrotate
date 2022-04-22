@@ -83,6 +83,9 @@ L["DEFAULT_BOP_ANNOUNCE_MESSAGE"] = "BoP cast on %s"
 L["DEFAULT_BOF_ANNOUNCE_MESSAGE"] = "Freedom cast on %s"
 L["DEFAULT_SOULSTONE_ANNOUNCE_MESSAGE"] = "Soulstone on %s"
 L["DEFAULT_SOULWELL_ANNOUNCE_MESSAGE"] = "Soulwell created"
+L["DEFAULT_SCORPID_SUCCESS_ANNOUNCE_MESSAGE"] = "Scorpid done on %s"
+L["DEFAULT_SCORPID_FAIL_ANNOUNCE_MESSAGE"] = "!!! SCORPID FAILED ON %s !!!"
+L["DEFAULT_SCORPID_REACTNOW_LOCAL_MESSAGE"] = "USE SCORPID NOW !"
 
 L["BROADCAST_MESSAGE_HEADER"] = "循环顺序广播频道选择"
 L["USE_MULTILINE_ROTATION_REPORT"] = "连续多行发送宁神通告"
@@ -104,6 +107,7 @@ L["FILTER_SHOW_BOP"] = "BoP"
 L["FILTER_SHOW_BOF"] = "Freedom"
 L["FILTER_SHOW_SOULSTONE"] = "Soul"
 L["FILTER_SHOW_SOULWELL"] = "Well"
+L["FILTER_SHOW_SCORPID"] = "Scorpid"
 L["NO_MODE_AVAILABLE"] = "<在设置中选择模式>"
 L["MODE_INVISIBLE"] = "这是当前选择的模式，即使按钮不可见，插件也会保持该模式。\n你可能需要单击一个可见按钮才能选择其他模式。"
 
@@ -121,6 +125,7 @@ L["BOP_MODE_FULL_NAME"] = "Blessing of Protection"
 L["BOF_MODE_FULL_NAME"] = "Blessing of Freedom"
 L["SOULSTONE_MODE_FULL_NAME"] = "Soulstone"
 L["SOULWELL_MODE_FULL_NAME"] = "Soulwell"
+L["SCORPID_MODE_FULL_NAME"] = "Scorpid Sting"
 
 L["TRANQSHOT_MODE_DETAILED_DESC"] = "此模式会监控团队副本中BOSS的狂暴状态，并通知猎人使用[宁神射击]技能。"
 L["LOATHEB_MODE_DETAILED_DESC"] = "此模式会监控洛欧塞布BOSS给治疗职业施放了一个60秒内无法使用治疗技能的[堕落心灵]debuff。"
@@ -136,6 +141,8 @@ L["BOP_MODE_DETAILED_DESC"] = "This mode tracks whenever a paladin protects some
 L["BOF_MODE_DETAILED_DESC"] = "This mode tracks whenever a paladin frees someone and prevents movement-impairing effects with Blessing of Freedom."
 L["SOULSTONE_MODE_DETAILED_DESC"] = "This mode tracks whenever a warlock saves the soul of a player within a soulstone, allowing this player to resurrect immediately after dying, even in combat."
 L["SOULWELL_MODE_DETAILED_DESC"] = "This mode tracks whenever a warlock casts Ritual of Souls to create a Soulwell, which can be clicked by any player in the party or raid to create a healthstone."
+L["SCORPID_MODE_DETAILED_DESC"] = "This mode tracks when hunters use the Scorpid Sting ability.\n"..
+    "Since the ability does have really have a cooldown, a fake cooldown is displayed for the duration of the debuff."
 
 L["MODE_BUTTON_DESC"] = "显示用于激活'%s'模式的按钮。"
 L["MODE_LABEL"] = "按钮文本"
@@ -241,6 +248,10 @@ L["DIALOG_ASSIGNMENT_CHANGE_FOCUS"] = "Change Focus"
     --- Notifications
 L["UPDATE_AVAILABLE"] = "A new version is available, please update to get the latest features."
 L["BREAKING_UPDATE_AVAILABLE"] = "A new, CRITICAL update is available, you MUST update AS SOON AS possible! SilentRotate may not work correctly between you and up-to-date players."
+
+L["VERSION_CHECK"] = "## Version check ##"
+L["VERSION_UNDETECTABLE"] = "Not installed or older than 0.7.0"
+L["VERSION_YOU"] = "You"
 
     --- Profiles
 L["SETTING_PROFILES"] = "配置文件"

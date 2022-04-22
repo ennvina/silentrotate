@@ -1,4 +1,5 @@
 local Addon = select(1, ...)
+local SilentRotate = select(2, ...)
 
 local AceConfigRegistry = LibStub("AceConfigRegistry-3.0")
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")

@@ -42,7 +42,7 @@ function SilentRotate:ProfilesChanged()
 end
 
 -- Apply position, size, and visibility
-function applyWindowSettings(frame, windowConfig)
+local function applyWindowSettings(frame, windowConfig)
     frame:ClearAllPoints()
     if windowConfig.point then
         frame:SetPoint(windowConfig.point, UIParent, 'BOTTOMLEFT', windowConfig.x, windowConfig.y)
@@ -206,7 +206,7 @@ end
 function SilentRotate:printRotationSetup()
 
     if SilentRotate:isActive() then
-        SilentRotate:sendRotationMessage('--- ' .. SilentRotate.constants.printPrefix .. SilentRotate:getBroadcastHeaderText() .. ' ---', channel)
+        SilentRotate:sendRotationMessage('--- ' .. SilentRotate.constants.printPrefix .. SilentRotate:getBroadcastHeaderText() .. ' ---')
 
         if (SilentRotate.db.profile.useMultilineRotationReport) then
             SilentRotate:printMultilineRotation(SilentRotate.rotationTables.rotation)
@@ -297,14 +297,14 @@ function SilentRotate:toggleArcaneShotTesting(disable)
     SilentRotate:updateRaidStatus()
 end
 
-function SilentRotate:updatePlayerAddonVersion(player, version)
+function SilentRotate:updatePlayerAddonVersion(playerName, version)
 
-    local hunter = SilentRotate:getHunter(player)
+    SilentRotate.addonVersions[playerName] = version
+
+    local hunter = SilentRotate:getHunter(playerName)
     if (hunter) then
         hunter.addonVersion = version
         SilentRotate:updateBlindIcon(hunter)
-    else
-        SilentRotate.addonVersions[player] = version
     end
 
     local updateRequired, breakingUpdate = SilentRotate:isUpdateRequired(version)
@@ -314,24 +314,28 @@ function SilentRotate:updatePlayerAddonVersion(player, version)
 end
 
 function SilentRotate:checkVersions()
-    SilentRotate:printPrefixedMessage("## Version check ##")
-    SilentRotate:printPrefixedMessage("You - " .. SilentRotate.version)
+    SilentRotate:printPrefixedMessage(L["VERSION_CHECK"])
+    SilentRotate:printPrefixedMessage(L["VERSION_YOU"] .. " - " .. SilentRotate.version)
 
-    for key, hunter in pairs(SilentRotate.hunterTable) do
-        if (hunter.name ~= UnitName("player")) then
-            SilentRotate:printPrefixedMessage(hunter.name .. " - " .. SilentRotate:formatAddonVersion(hunter.addonVersion))
+    local dumpedPlayers = { [UnitName("player")] = true }
+    local dumpPlayer = function(name, version)
+        if dumpedPlayers[name] == nil then
+            SilentRotate:printPrefixedMessage(name .. " - " .. SilentRotate:formatAddonVersion(version))
+            dumpedPlayers[name] = true
         end
     end
-    for key, player in pairs(SilentRotate.addonVersions) do
-        if (player ~= UnitName("player")) then
-            SilentRotate:printPrefixedMessage(hunter.name .. " - " .. SilentRotate:formatAddonVersion(hunter.addonVersion))
-        end
+
+    for _, hunter in pairs(SilentRotate.hunterTable) do
+        dumpPlayer(hunter.name, hunter.addonVersion)
+    end
+    for playerName, version in pairs(SilentRotate.addonVersions) do
+        dumpPlayer(playerName, version)
     end
 end
 
 function SilentRotate:formatAddonVersion(version)
     if (version == nil) then
-        return "Not installed or older than 0.7.0"
+        return L["VERSION_UNDETECTABLE"]
     else
         return version
     end

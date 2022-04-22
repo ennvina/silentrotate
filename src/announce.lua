@@ -17,7 +17,7 @@ function SilentRotate:sendSpellAnnounceMessage(mode, spellName, fail, hunter, de
     end
 
     local announceKey = "announce"..mode.modeNameFirstUpper
-    if failed then
+    if fail then
         announceKey = announceKey.."FailMessage"
     elseif mode.canFail then
         announceKey = announceKey.."SuccessMessage"

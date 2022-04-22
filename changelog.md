@@ -12,6 +12,11 @@ After more tests, the addon is ready to leave its Beta phase
 - The addon version should no longer fail to be shared between players
 - Added TOC file to Retail, for testing purposes - use it at your own risk
 
+#### v0.9.4-beta (2022-01-25)
+
+- Added Scorpid Sting mode (TBC), currently enabled for:
+- Archimonde, Supremus, Teron, Gurtogg, Shahraz, Gathios and Illidan
+
 #### v0.9.3-beta (2022-01-15)
 
 - Added Ritual of Souls mode (TBC)

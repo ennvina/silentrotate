@@ -78,11 +78,11 @@ function SilentRotate:COMBAT_LOG_EVENT_UNFILTERED()
         amount, powerType, extraAmount = select(suffixOffset, CombatLogGetCurrentEventInfo())
     elseif event:sub(-10) == "_INTERRUPT"
         or event:sub(-14) == "_DISPEL_FAILED" then
-        extraSpellId, extraSpellName, extraSchool = select(suffixOffset, CombatLogGetCurrentEventInfo())
+        extraSpellID, extraSpellName, extraSchool = select(suffixOffset, CombatLogGetCurrentEventInfo())
     elseif event:sub(-7) == "_DISPEL"
         or event:sub(-7) == "_STOLEN"
         or event:sub(-18) == "_AURA_BROKEN_SPELL" then
-        extraSpellId, extraSpellName, extraSchool, auraType = select(suffixOffset, CombatLogGetCurrentEventInfo())
+        extraSpellID, extraSpellName, extraSchool, auraType = select(suffixOffset, CombatLogGetCurrentEventInfo())
     elseif event:sub(-14) == "_EXTRA_ATTACKS" then
         amount = select(suffixOffset, CombatLogGetCurrentEventInfo())
     elseif event:sub(-13) == "_AURA_APPLIED"

@@ -86,4 +86,15 @@ SilentRotate.constants = {
         [15509] = 19451, -- Huhuran (AQ40)
         [15932] = 19451, -- Gluth (Naxx)
     },
+
+    ['scorpidableBosses'] = {
+        -- 17842, -- Azgalor (Hyjal)
+        17968, -- Archimonde (Hyjal)
+        22898, -- Supremus (BT)
+        22871, -- Teron Gorefiend (BT)
+        22948, -- Gurtogg Bloodboil (BT)
+        22947, -- Mother Shahraz (BT)
+        22949, -- Gathios The Shatterer (BT)
+        22917, -- Illidan Stormrage (BT)
+    },
 }

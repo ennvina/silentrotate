@@ -1,4 +1,4 @@
-## Interface: 11307
+## Interface: 11401
 ## Title: SilentRotate |cff88aaff1.0.0|r
 ## Notes: Track spell rotation in raid
 ## Author: Vinny

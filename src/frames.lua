@@ -31,7 +31,7 @@ function SilentRotate:createMainFrame()
         SilentRotate.mainFrames = { mainFrame }
     else
         table.insert(SilentRotate.mainFrames, mainFrame)
-        SilentRotate.db.profile.windows[windowIndex] = SilentRotate.db.profile.windows[1]
+        SilentRotate.db.profile.windows[mainFrame.windowIndex] = SilentRotate.db.profile.windows[1]
     end
 
     return mainFrame
@@ -392,7 +392,7 @@ function SilentRotate:createModeFrame(baseFrame)
     baseFrame.modeFrame = modeFrame
     baseFrame.modeFrames = {}
     local commonModeWidth = SilentRotate.db.profile.windows[1].width/3
-    modeIndex = 0
+    local modeIndex = 0
     for modeName, mode in pairs(SilentRotate.modes) do
         SilentRotate:createSingleModeFrame(baseFrame, modeName, L["FILTER_SHOW_"..mode.modeNameUpper], modeIndex*commonModeWidth, (modeIndex+1)*commonModeWidth, SilentRotate.db.profile.currentMode == modeName)
         modeIndex = modeIndex+1
@@ -517,7 +517,7 @@ end
 function SilentRotate:createBackgroundFrame(baseFrame, offsetY, height, noAnchorBottom, frameName)
     if not frameName then frameName = 'backgroundFrame' end
 
-    backgroundFrame = CreateFrame("Frame", frameName, baseFrame)
+    local backgroundFrame = CreateFrame("Frame", frameName, baseFrame)
     backgroundFrame:SetPoint('LEFT')
     backgroundFrame:SetPoint('RIGHT')
     backgroundFrame:SetPoint('TOP', 0, -offsetY)

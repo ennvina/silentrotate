@@ -83,6 +83,9 @@ L["DEFAULT_BOP_ANNOUNCE_MESSAGE"] = "BoP sur %s"
 L["DEFAULT_BOF_ANNOUNCE_MESSAGE"] = "Béné lib sur %s"
 L["DEFAULT_SOULSTONE_ANNOUNCE_MESSAGE"] = "Pierre d'âme sur %s"
 L["DEFAULT_SOULWELL_ANNOUNCE_MESSAGE"] = "Puits d'âme posé"
+L["DEFAULT_SCORPID_SUCCESS_ANNOUNCE_MESSAGE"] = "Scorpide fait sur %s"
+L["DEFAULT_SCORPID_FAIL_ANNOUNCE_MESSAGE"] = "!!! SCORPIDE RATÉ SUR %s !!!"
+L["DEFAULT_SCORPID_REACTNOW_LOCAL_MESSAGE"] = "SCORPIDE MAINTENANT !"
 
 L["BROADCAST_MESSAGE_HEADER"] = "Rapport de la configuration de la rotation"
 L["USE_MULTILINE_ROTATION_REPORT"] = "Utiliser plusieurs lignes pour la rotation principale"
@@ -104,6 +107,7 @@ L["FILTER_SHOW_BOP"] = "Béné prot"
 L["FILTER_SHOW_BOF"] = "Béné lib"
 L["FILTER_SHOW_SOULSTONE"] = "PdA"
 L["FILTER_SHOW_SOULWELL"] = "Puits"
+L["FILTER_SHOW_SCORPID"] = "Scorpide"
 L["NO_MODE_AVAILABLE"] = "<Choisissez le mode dans la config>"
 L["MODE_INVISIBLE"] = "C'est le mode actuellement sélectionné et il le restera bien que le bouton ne soit plus visible.\nVous souhaitez peut-être cliquer sur un bouton de mode visible afin de sélectionner un autre mode."
 
@@ -121,6 +125,7 @@ L["BOP_MODE_FULL_NAME"] = "Bénédiction de protection"
 L["BOF_MODE_FULL_NAME"] = "Bénédiction de liberté"
 L["SOULSTONE_MODE_FULL_NAME"] = "Pierre d'âme"
 L["SOULWELL_MODE_FULL_NAME"] = "Puits d'âme"
+L["SCORPID_MODE_FULL_NAME"] = "Piqûre de scorpide"
 
 L["TRANQSHOT_MODE_DETAILED_DESC"] = "Ce mode détecte quand un boss de raid devient Enragé et prévient les chasseur de lancer la technique Tir tranquilisant."
 L["LOATHEB_MODE_DETAILED_DESC"] = "Ce mode détecte la technique de Loatheb qui empêche les soigneurs de lancer des sorts de soin pendant 60 secondes."
@@ -136,6 +141,8 @@ L["BOP_MODE_DETAILED_DESC"] = "Ce mode détecte lorsqu'un paladin protège un jo
 L["BOF_MODE_DETAILED_DESC"] = "Ce mode détecte lorsqu'un paladin libère un joueur et le prévient des effets affectant le mouvement grâce à Bénédiction de liberté."
 L["SOULSTONE_MODE_DETAILED_DESC"] = "Ce mode détecte lorsqu'un démoniste conserve l'âme d'un joueur dans une pierre d'âme, permettant au joueur cible de ressusciter après sa mort, même en combat."
 L["SOULWELL_MODE_DETAILED_DESC"] = "Ce mode détecte lorsqu'un démoniste lance un Rituel des âmes pour créer un Puits d'âme qui peut être cliqué par les membres du groupe ou du raid pour créer une pierre de soins."
+L["SCORPID_MODE_DETAILED_DESC"] = "Ce mode détecte lorsqu'un chasseur lance la technique Piqûre de scorpide.\n"..
+    "Puisque la technique n'a pas de temps de recharge, un faux temps de recharge est affiché pendant la durée du débuff."
 
 L["MODE_BUTTON_DESC"] = "Affiche le bouton pour activer le mode '%s'"
 L["MODE_LABEL"] = "Texte du bouton"
@@ -241,6 +248,10 @@ L["DIALOG_ASSIGNMENT_CHANGE_FOCUS"] = "Changer le focus"
     --- Notifications
 L["UPDATE_AVAILABLE"] = "Une nouvelle version est disponible, veuillez mettre à jour pour profiter des dernières fonctionnalités."
 L["BREAKING_UPDATE_AVAILABLE"] = "Une mise à jour IMPORTANTE est disponible, vous DEVEZ mettre à jour le plus rapidement possible ! Des conflits sont possibles entre vous et les joueurs qui ont installé la version à jour de SilentRotate."
+
+L["VERSION_CHECK"] = "## Vérification de version ##"
+L["VERSION_UNDETECTABLE"] = "Pas installé ou antérieur à 0.7.0"
+L["VERSION_YOU"] = "Vous"
 
     --- Profiles
 L["SETTING_PROFILES"] = "Profils"
