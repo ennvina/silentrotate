@@ -138,13 +138,14 @@ function SilentRotate:assignPlayer(author, actor, target, modeName, timestamp)
                 questionArgument = L["CONTEXT_NOBODY"]
             end
 
-            self:addSecureDialog("assignmentDialog",
+            self:addSecureDialog(
+                "assignmentDialog", -- Unique widget name
 
-                string.format(questionTemplate, questionArgument),
+                string.format(questionTemplate, questionArgument), -- Question to ask the player
 
-                L["DIALOG_ASSIGNMENT_CHANGE_FOCUS"],
-                "focus",
-                { unit = target },
+                L["DIALOG_ASSIGNMENT_CHANGE_FOCUS"], -- Button text
+                "focus", -- Secure action
+                { unit = target }, -- Secure attributes
 
                 function()
                     -- Condition function, return true to open dialog box
@@ -154,7 +155,7 @@ function SilentRotate:assignPlayer(author, actor, target, modeName, timestamp)
                     return optionSuggestsToMatchFocus and focusIsDifferentThanAssignment and hasSomeoneToFocus
                 end,
 
-                "PLAYER_FOCUS_CHANGED",
+                "PLAYER_FOCUS_CHANGED", -- Event name to track if the player clicked the secure action button
                 function()
                     -- Event function, return true to close dialog box
                     return UnitName("focus") == target
