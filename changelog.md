@@ -1,6 +1,6 @@
 ## SilentRotate Changelog
 
-#### v1.0.0 (2022-xx-yy)
+#### v1.0.0 (2022-04-23)
 
 After more tests, the addon is ready to leave its Beta phase
 
