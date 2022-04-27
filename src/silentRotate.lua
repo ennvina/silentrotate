@@ -345,10 +345,14 @@ end
 -- @return major, minor, fix, isStable
 function SilentRotate:parseVersionString(versionString)
 
-    local version, type = strsplit("-", versionString)
-    local major, minor, fix = strsplit( ".", version)
+    if versionString == nil then
+        return 0, 0, 0, false
+    end
 
-    return tonumber(major), tonumber(minor), tonumber(fix), type == nil
+    local version, versionType = strsplit("-", versionString)
+    local major, minor, fix = strsplit(".", version)
+
+    return tonumber(major), tonumber(minor), tonumber(fix), versionType == nil
 end
 
 -- Check if the given version would require updating

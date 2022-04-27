@@ -1,5 +1,9 @@
 ## SilentRotate Changelog
 
+#### v1.0.1 (2022-xx-yy)
+
+- Older versions should no longer cause a lua error to newer versions
+
 #### v1.0.0 (2022-04-23)
 
 After more tests, the addon is ready to leave its Beta phase
