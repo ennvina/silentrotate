@@ -1,6 +1,6 @@
 ## SilentRotate Changelog
 
-#### v1.0.1 (2022-xx-yy)
+#### v1.0.1 (2022-05-11)
 
 - Older versions should no longer cause a lua error to newer versions
 
