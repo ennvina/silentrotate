@@ -319,6 +319,33 @@ SilentRotate.modes.aoeTaunt = {
     -- metadata = nil
 }
 
+SilentRotate.modes.soloTaunt = {
+    default = false,
+    raidOnly = false,
+    color = select(4,GetClassColor('WARRIOR')),
+    wanted = {'WARRIOR', 'DRUID'},
+    cooldown = 10,
+    effectDuration = 3,
+    canFail = true,
+    alertWhenFail = true,
+    spell = {
+        GetSpellInfo(355), -- warrior's Taunt
+        GetSpellInfo(6795), -- druid's Growl
+    },
+    -- auraTest = nil,
+    -- customCombatlogFunc = nil,
+    -- targetGUID = nil,
+    -- buffName = nil,
+    -- buffCanReturn = nil,
+    -- customTargetName = nil,
+    -- customHistoryFunc = nil,
+    -- groupChangeFunc = nil,
+    announceArg = 'destName',
+    -- tooltip = nil,
+    -- assignable = nil,
+    -- metadata = nil
+}
+
 SilentRotate.modes.grounding = {
     default = false,
     raidOnly = false,
