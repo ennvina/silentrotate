@@ -77,7 +77,7 @@ function SilentRotate:createTitleFrame(baseFrame, subtitle)
     titleFrame.texture:SetAllPoints()
 
     titleFrame.text = titleFrame:CreateFontString(nil, "ARTWORK")
-    titleFrame.text:SetFont("Fonts\\ARIALN.ttf", 12)
+    titleFrame.text:SetFont("Fonts\\ARIALN.ttf", 12, "")
     titleFrame.text:SetShadowColor(0,0,0,0.5)
     titleFrame.text:SetShadowOffset(1,-1)
     titleFrame.text:SetPoint("LEFT",5,0)
@@ -365,7 +365,7 @@ function SilentRotate:createTextFrame(baseFrame)
 
     local fontFace = constants.fontFace
     local fontSize = constants.fontSize
-    textFrame:SetFont(fontFace, fontSize)
+    textFrame:SetFont(fontFace, fontSize, "")
     textFrame:SetTextColor(1,1,1,1)
     textFrame:SetShadowColor(0,0,0,1)
     textFrame:SetShadowOffset(1,-1)
@@ -422,7 +422,7 @@ function SilentRotate:createSingleModeFrame(baseFrame, modeName, text, minX, max
 
     -- Set Text
     modeFrame.text = modeFrame:CreateFontString(nil, "ARTWORK")
-    modeFrame.text:SetFont("Fonts\\ARIALN.ttf", fontSize)
+    modeFrame.text:SetFont("Fonts\\ARIALN.ttf", fontSize, "")
     modeFrame.text:SetShadowColor(0,0,0,0.5)
     modeFrame.text:SetShadowOffset(1,-1)
     modeFrame.text:SetPoint('TOPLEFT',1,-1)
@@ -470,7 +470,7 @@ function SilentRotate:applyModeFrameSettings(mainFrame, width)
             modeFrameText = mainFrame.modeFrame:CreateFontString(nil, "ARTWORK")
             modeFrameText:SetPoint("LEFT",2,0)
             modeFrameText:SetTextColor(1,1,1,1)
-            modeFrameText:SetFont("Fonts\\ARIALN.ttf", 11)
+            modeFrameText:SetFont("Fonts\\ARIALN.ttf", 11, "")
             modeFrameText:SetShadowColor(0,0,0,0.5)
             modeFrameText:SetShadowOffset(1,-1)
             mainFrame.modeFrame.text = modeFrameText

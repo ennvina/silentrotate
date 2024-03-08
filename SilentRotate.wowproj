@@ -1,0 +1,324 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Deploy" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Default</Configuration>
+    <Name>SilentRotate</Name>
+    <ProjectGuid>{917c46cb-9c7b-4aa5-823b-9e5a8cf616eb}</ProjectGuid>
+    <AssemblyName>silentrotate</AssemblyName>
+    <RootNamespace>silentrotate</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Default' ">
+    <OutputPath>.</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include=".vscode\settings.json" />
+    <Content Include="changelog.md" />
+    <Content Include="libs\AceComm-3.0\AceComm-3.0.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceComm-3.0\AceComm-3.0.xml">
+      <SubType>Frame</SubType>
+    </Content>
+    <Content Include="libs\AceComm-3.0\ChatThrottleLib.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceConfig-3.0\AceConfig-3.0.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceConfig-3.0\AceConfig-3.0.xml">
+      <SubType>Frame</SubType>
+    </Content>
+    <Content Include="libs\AceConfig-3.0\AceConfigCmd-3.0\AceConfigCmd-3.0.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceConfig-3.0\AceConfigCmd-3.0\AceConfigCmd-3.0.xml">
+      <SubType>Frame</SubType>
+    </Content>
+    <Content Include="libs\AceConfig-3.0\AceConfigDialog-3.0\AceConfigDialog-3.0.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceConfig-3.0\AceConfigDialog-3.0\AceConfigDialog-3.0.xml">
+      <SubType>Frame</SubType>
+    </Content>
+    <Content Include="libs\AceConfig-3.0\AceConfigRegistry-3.0\AceConfigRegistry-3.0.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceConfig-3.0\AceConfigRegistry-3.0\AceConfigRegistry-3.0.xml">
+      <SubType>Frame</SubType>
+    </Content>
+    <Content Include="libs\AceDB-3.0\AceDB-3.0.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceDB-3.0\AceDB-3.0.xml">
+      <SubType>Frame</SubType>
+    </Content>
+    <Content Include="libs\AceDBOptions-3.0\AceDBOptions-3.0.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceDBOptions-3.0\AceDBOptions-3.0.xml">
+      <SubType>Frame</SubType>
+    </Content>
+    <Content Include="libs\AceGUI-3.0\AceGUI-3.0.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceGUI-3.0\AceGUI-3.0.xml">
+      <SubType>Frame</SubType>
+    </Content>
+    <Content Include="libs\AceGUI-3.0\widgets\AceGUIContainer-BlizOptionsGroup.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceGUI-3.0\widgets\AceGUIContainer-DropDownGroup.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceGUI-3.0\widgets\AceGUIContainer-Frame.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceGUI-3.0\widgets\AceGUIContainer-InlineGroup.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceGUI-3.0\widgets\AceGUIContainer-ScrollFrame.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceGUI-3.0\widgets\AceGUIContainer-SimpleGroup.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceGUI-3.0\widgets\AceGUIContainer-TabGroup.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceGUI-3.0\widgets\AceGUIContainer-TreeGroup.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceGUI-3.0\widgets\AceGUIContainer-Window.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceGUI-3.0\widgets\AceGUIWidget-Button.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceGUI-3.0\widgets\AceGUIWidget-CheckBox.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceGUI-3.0\widgets\AceGUIWidget-ColorPicker.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceGUI-3.0\widgets\AceGUIWidget-DropDown-Items.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceGUI-3.0\widgets\AceGUIWidget-DropDown.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceGUI-3.0\widgets\AceGUIWidget-EditBox.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceGUI-3.0\widgets\AceGUIWidget-Heading.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceGUI-3.0\widgets\AceGUIWidget-Icon.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceGUI-3.0\widgets\AceGUIWidget-InteractiveLabel.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceGUI-3.0\widgets\AceGUIWidget-Keybinding.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceGUI-3.0\widgets\AceGUIWidget-Label.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceGUI-3.0\widgets\AceGUIWidget-MultiLineEditBox.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceGUI-3.0\widgets\AceGUIWidget-Slider.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceLocale-3.0\AceLocale-3.0.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceLocale-3.0\AceLocale-3.0.xml">
+      <SubType>Frame</SubType>
+    </Content>
+    <Content Include="libs\AceSerializer-3.0\AceSerializer-3.0.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\AceSerializer-3.0\AceSerializer-3.0.xml">
+      <SubType>Frame</SubType>
+    </Content>
+    <Content Include="libs\CallbackHandler-1.0\CallbackHandler-1.0.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\CallbackHandler-1.0\CallbackHandler-1.0.xml">
+      <SubType>Frame</SubType>
+    </Content>
+    <Content Include="libs\LibSharedMedia-3.0\CallbackHandler-1.0\CallbackHandler-1.0.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\LibSharedMedia-3.0\CHANGES.txt" />
+    <Content Include="libs\LibSharedMedia-3.0\lib.xml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\LibSharedMedia-3.0\LibSharedMedia-3.0.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\LibSharedMedia-3.0\LibSharedMedia-3.0.toc">
+      <SubType>TableOfContents</SubType>
+    </Content>
+    <Content Include="libs\LibSharedMedia-3.0\LibSharedMedia-3.0\lib.xml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\LibSharedMedia-3.0\LibSharedMedia-3.0\LibSharedMedia-3.0.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\LibSharedMedia-3.0\LibSharedMedia-3.0_TBC.toc">
+      <SubType>TableOfContents</SubType>
+    </Content>
+    <Content Include="libs\LibSharedMedia-3.0\LibSharedMedia-3.0_Vanilla.toc">
+      <SubType>TableOfContents</SubType>
+    </Content>
+    <Content Include="libs\LibSharedMedia-3.0\LibSharedMedia-3.0_Wrath.toc">
+      <SubType>TableOfContents</SubType>
+    </Content>
+    <Content Include="libs\LibSharedMedia-3.0\LibStub\LibStub.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="libs\LibStub\LibStub.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="LICENSE" />
+    <Content Include="locale\enUS.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="locale\frFR.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="locale\ruRU.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="locale\zhCN.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="locale\zhTW.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="README.md" />
+    <Content Include="SilentRotate.toc">
+      <SubType>TableOfContents</SubType>
+    </Content>
+    <Content Include="SilentRotate_Vanilla.toc">
+      <SubType>TableOfContents</SubType>
+    </Content>
+    <Content Include="SilentRotate_Wrath.toc">
+      <SubType>TableOfContents</SubType>
+    </Content>
+    <Content Include="sounds\alarm.ogg" />
+    <Content Include="sounds\alarm2.ogg" />
+    <Content Include="sounds\alarm3.ogg" />
+    <Content Include="sounds\alarm4.ogg" />
+    <Content Include="sounds\Alien_AlarmDrum-KevanGC-893953959.ogg" />
+    <Content Include="sounds\ding.ogg" />
+    <Content Include="src\announce.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\comms.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\constants.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\defaults.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\dragdrop.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\events.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\frames.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\gui.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\history.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\modes.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\pixel.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\rightclick.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\rotation.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\secure.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\settings.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\silentRotate.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\utils.lua">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="textures\blind_256px.tga" />
+    <Content Include="textures\blind_32px.tga" />
+    <Content Include="textures\steel.tga" />
+    <Content Include="_assets\blind.xcf" />
+    <Content Include="_assets\blind_16px_white_body_black_thin_outline.png" />
+    <Content Include="_assets\blind_16px_white_body_black_thin_outline.tga" />
+    <Content Include="_assets\blind_24px_black.png" />
+    <Content Include="_assets\blind_24px_white.png" />
+    <Content Include="_assets\blind_24px_white_body_black_thin_outline.png" />
+    <Content Include="_assets\blind_24px_white_dropshadow.png" />
+    <Content Include="_assets\blind_32px_black.png" />
+    <Content Include="_assets\blind_32px_white.png" />
+    <Content Include="_assets\blind_32px_white_body_black_thin_outline.png" />
+    <Content Include="_assets\blind_32px_white_body_black_thin_outline.tga" />
+    <Content Include="_assets\blind_32px_white_dropshadow.png" />
+    <Content Include="_curse\Loatheb400.png" />
+    <Content Include="_curse\Loatheb400.xcf" />
+    <Content Include="_curse\release_notes.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include=".vscode\" />
+    <Folder Include="libs\" />
+    <Folder Include="libs\AceComm-3.0\" />
+    <Folder Include="libs\AceConfig-3.0\" />
+    <Folder Include="libs\AceConfig-3.0\AceConfigCmd-3.0\" />
+    <Folder Include="libs\AceConfig-3.0\AceConfigDialog-3.0\" />
+    <Folder Include="libs\AceConfig-3.0\AceConfigRegistry-3.0\" />
+    <Folder Include="libs\AceDB-3.0\" />
+    <Folder Include="libs\AceDBOptions-3.0\" />
+    <Folder Include="libs\AceGUI-3.0\" />
+    <Folder Include="libs\AceGUI-3.0\widgets\" />
+    <Folder Include="libs\AceLocale-3.0\" />
+    <Folder Include="libs\AceSerializer-3.0\" />
+    <Folder Include="libs\CallbackHandler-1.0\" />
+    <Folder Include="libs\LibSharedMedia-3.0\" />
+    <Folder Include="libs\LibSharedMedia-3.0\CallbackHandler-1.0\" />
+    <Folder Include="libs\LibSharedMedia-3.0\LibSharedMedia-3.0\" />
+    <Folder Include="libs\LibSharedMedia-3.0\LibStub\" />
+    <Folder Include="libs\LibStub\" />
+    <Folder Include="locale\" />
+    <Folder Include="sounds\" />
+    <Folder Include="src\" />
+    <Folder Include="textures\" />
+    <Folder Include="_assets\" />
+    <Folder Include="_curse\" />
+  </ItemGroup>
+  <Import Project="$(DevEnvDir)\Extensions\Tools\MSBuild\AddonStudio\Wow\3.0\WowAddonStudio.targets" />
+  <!--
+  To modify your build process, add your task inside one of the targets below and uncomment it.
+  <Target Name="BeforeClean"></Target>
+  <Target Name="AfterClean"></Target>
+  <Target Name="BeforeRebuild"></Target>
+  <Target Name="AfterRebuild"></Target>
+  <Target Name="BeforeDeploy"></Target>
+  <Target Name="AfterDeploy"></Target>
+  -->
+</Project>

@@ -91,7 +91,7 @@ end
 -- Set the font size for displaying log messages
 function SilentRotate:setHistoryFontSize(fontSize)
     local fontFace = SilentRotate.constants.history.fontFace
-    SilentRotate.historyFrame.backgroundFrame.textFrame:SetFont(fontFace, fontSize)
+    SilentRotate.historyFrame.backgroundFrame.textFrame:SetFont(fontFace, fontSize, "")
 end
 
 -- Track the buff provided by the hunter and trigger history events when the buffs expires or is lost
