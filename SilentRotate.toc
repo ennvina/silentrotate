@@ -1,8 +1,8 @@
 ## Interface: 90200
 ## Title: SilentRotate |cff88aaff1.0.1|r
 ## Notes: Track spell rotation in raid
-## Author: Vinny
-## Version: 1.0.1
+## Author: Vinny, Mimma@PyrewoodVillage
+## Version: 1.0.2
 ## SavedVariables: SilentRotateDb
 ## OptionalDeps: Ace3
 

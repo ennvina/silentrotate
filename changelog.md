@@ -1,5 +1,10 @@
 ## SilentRotate Changelog
 
+#### v1.0.2 (2024-03-07)
+
+- Updated ACE3 libraries to newest version
+- Fixed a few issues with the 1.15.1 client.
+
 #### v1.0.1 (2022-05-11)
 
 - Older versions should no longer cause a lua error to newer versions
